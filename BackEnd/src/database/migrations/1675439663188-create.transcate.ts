@@ -9,7 +9,7 @@ export class CreateTableTransCate1675439663188 implements MigrationInterface {
             new Table({
                 name: this.nameTable,
                 columns: [
-                    { name: 'id', type: 'int', isPrimary: true },
+                    { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment'},
                     { name: 'type_id', type: 'int', isNullable: false },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false },
                 ],

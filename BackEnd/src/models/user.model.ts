@@ -1,29 +1,35 @@
-import { Column, Entity, PrimaryColumn, OneToMany } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Wallet from "./wallet.model";
 
 @Entity()
 
-export class User{
-    
-    @PrimaryColumn({ type: "int", name: "id"})
-    //@ts-ignore
-    id: int;
+export class User {
 
-    @Column({ type: "varchar", name: "email", nullable: false})
+    @PrimaryGeneratedColumn({ name: "id", type: "int" })
+    //@ts-ignore
+    id: number;
+
+    @Column({ name: "email", type: "nvarchar", length: 255, nullable: false, unique: true })
     //@ts-ignore
     email: string;
 
-    @Column({ type: "varchar", name: "password", nullable: false})
+    @Column({ name: "password", type: "nvarchar", length: 255, nullable: false })
     //@ts-ignore
     password: string;
 
-    @Column({ type: "varchar", name: "name", nullable: true})
+    @Column({ name: "name", type: "nvarchar", length: 255, nullable: true })
     //@ts-ignore
     name: string;
 
-    @Column({ type: "varchar", name: "image", nullable: true})
+    @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
     //@ts-ignore
     image: string;
+
+    @OneToMany(() => Wallet, wallet => wallet.user, {
+        cascade: true
+    })
+    //@ts-ignore
+    wallets: Wallet[];
 
 }
 

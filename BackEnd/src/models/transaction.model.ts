@@ -1,37 +1,42 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
+import Wallet from "./wallet.model";
+import TransCate from "./transcate.model";
 
 @Entity()
 
 export class Transaction{
     
-    @PrimaryColumn({ type: "int", name: "id"})
+    @PrimaryGeneratedColumn({ name: "id", type: "int" })
     //@ts-ignore
     id: int;
 
-    @Column({ type: "int", name: "type_id", nullable: false })
+    @ManyToOne(() => Wallet, wallet => wallet.transactions, {
+        onDelete: "CASCADE"
+    })
+    @JoinColumn({name: "wallet_id"})
     //@ts-ignore
-    typeID: int;
+    wallet: Wallet;
 
-    @Column({ type: "int", name: "category_id", nullable: false })
+    @ManyToOne(() => TransCate, transCate => transCate.transactions)
+    @JoinColumn({name: "category_id"})
     //@ts-ignore
-    categoryId: int;
+    category: TransCate;
 
-    @Column({ type: "int", name: "money", nullable: false })
+    @Column({ name: "money", type: "int", nullable: false })
     //@ts-ignore
-    money: int;
+    money: number;
 
-    @Column({ type: "date", name: "date", nullable: true })
+    @Column({ name: "date", type: "date", nullable: false })
     //@ts-ignore
     date: Date;
 
-    @Column({ type: "nvarchar", name: "note", nullable: true })
+    @Column({ name: "note", type: "nvarchar", length: 255, nullable: true })
     //@ts-ignore
     note: string;
 
-    @Column({ type: "nvarchar", name: "image", nullable: true })
+    @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
     //@ts-ignore
     image: string;
-
 
 }
 

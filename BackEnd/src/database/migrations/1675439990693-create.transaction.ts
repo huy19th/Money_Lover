@@ -9,11 +9,11 @@ export class CreateTableTransAction1675439990693 implements MigrationInterface {
             new Table({
                 name: this.nameTable,
                 columns: [
-                    { name: 'id', type: 'int', isPrimary: true , generationStrategy: 'increment'},
+                    { name: 'id', type: 'int', isPrimary: true , isGenerated: true, generationStrategy: 'increment'},
                     { name: 'wallet_id', type: 'int', isNullable: false },
                     { name: 'category_id', type: 'int', isNullable: false },
                     { name: 'money', type: 'int', isNullable: false },
-                    { name: 'date', type: 'date' , isNullable: true},
+                    { name: 'date', type: 'date' , isNullable: false},
                     { name: 'note', type: 'nvarchar(255)' , isNullable: true},
                     { name: 'image', type: 'nvarchar(500)' , isNullable: true},
                 ],

@@ -7,6 +7,10 @@ const TestRouter: Router = express.Router();
 
 const testController = new TestController();
 
+TestRouter.get('/', (req: Request, res: Response) => {
+    res.send("test");
+})
+// TestRouter.get('/wallet', testController.getWallets);
 TestRouter.post('/user', upload.none(), testController.createUser);
 
 

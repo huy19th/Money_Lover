@@ -1,33 +1,45 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, Index } from "typeorm";
+import User from "./user.model";
+import Transaction from "./transaction.model";
 
 @Entity()
 
-export class Wallet{
-    
-    @PrimaryColumn({ type: "int", name: "id"})
-    //@ts-ignore
-    id: int;
+@Index(["user", "name"], { unique: true })
 
-    @Column({ type: "int", name: "user_id", nullable: false})
-    //@ts-ignore
-    userID: string;
+export class Wallet {
 
-    @Column({ type: "nvarchar", name: "name", nullable: false})
+    @PrimaryGeneratedColumn({ name: "id", type: "int" })
+    //@ts-ignore
+    id: number;
+
+    @ManyToOne(() => User, user => user.wallets, {
+        onDelete: "CASCADE"
+    })
+    @JoinColumn({ name: "user_id" })
+    //@ts-ignore
+    user: User;
+
+    @Column({ name: "name", type: "nvarchar", length: 255, nullable: false })
     //@ts-ignore
     name: string;
 
-    @Column({ type: "int", name: "balance", nullable: true})
+    @Column({ name: "balance", type: "int", nullable: true })
     //@ts-ignore
-    balance: string;
+    balance: number;
 
-    @Column({ type: "boolean", name: "include_total", nullable: true})
+    @Column({ name: "include_total", type: "boolean", default: true})
     //@ts-ignore
     includeTotal: boolean;
 
-    @Column({ type: "boolean", name: "active", nullable: true})
+    @Column({ name: "active", type: "boolean", default: true })
     //@ts-ignore
     active: boolean;
 
+    @OneToMany(() => Transaction, transaction => transaction.wallet, {
+        cascade: true
+    })
+    //@ts-ignore
+    transactions: Transaction[];
 }
 
 export default Wallet;

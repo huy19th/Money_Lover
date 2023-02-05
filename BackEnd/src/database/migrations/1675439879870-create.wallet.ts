@@ -9,7 +9,7 @@ export class CreateTableWallet1675439879870 implements MigrationInterface {
             new Table({
                 name: this.nameTable,
                 columns: [
-                    { name: 'id', type: 'int', generationStrategy: 'increment', isPrimary: true },
+                    { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'user_id', type: 'int',  isNullable: false },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false },
                     { name: 'balance', type: 'int', isNullable: false },

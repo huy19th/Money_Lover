@@ -1,20 +1,29 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, Index } from "typeorm";
+import TransType from "./transtype.model";
+import Transaction from "./transaction.model";
 
 @Entity()
 
-export class TransCate{
-    
-    @PrimaryColumn({ type: "int", name: "id"})
-    //@ts-ignore
-    id: int;
+@Index(["name", "transType"], { unique: true })
 
-    @Column({ type: "int", name: "type_id", nullable: false})
-    //@ts-ignore
-    typeID: int;
+export class TransCate {
 
-    @Column({ type: "nvarchar", name: "name", nullable: false})
+    @PrimaryGeneratedColumn({ name: "id", type: "int" })
+    //@ts-ignore
+    id: number;
+
+    @Column({ name: "name", type: "nvarchar", length: 255, nullable: false })
     //@ts-ignore
     name: string;
+
+    @ManyToOne(() => TransType, transType => transType.transCates)
+    @JoinColumn({ name: "type_id" })
+    //@ts-ignore
+    transType: TransType;
+
+    @OneToMany(() => Transaction, transaction => transaction.category)
+    //@ts-ignore
+    transactions: Transaction[];
 
 }
 

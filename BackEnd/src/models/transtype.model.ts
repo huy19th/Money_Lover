@@ -1,17 +1,21 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import TransCate from "./transcate.model";
 
 @Entity()
 
 export class TransType{
     
-    @PrimaryColumn({ type: "int", name: "id"})
+    @PrimaryGeneratedColumn({ name: "id", type: "int" })
     //@ts-ignore
-    id: int;
+    id: number;
 
-    @Column({ type: "varchar", name: "name", nullable: false})
+    @Column({ name: "name", type: "nvarchar", length: 255, nullable: false, unique: true})
     //@ts-ignore
     name: string;
-
+    
+    @OneToMany(() => TransCate, transCate => transCate.transType)
+    //@ts-ignore
+    transCates: TransCate[]
 }
 
 export default TransType;
