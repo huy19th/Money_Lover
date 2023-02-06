@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // "strictPropertyInitialization": false,
+     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "module": "commonjs",
     "target": "es6",
@@ -9,7 +9,6 @@
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "strict": true,
     "moduleResolution": "node",
     "paths": {
       "*": [

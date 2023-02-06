@@ -1,12 +1,13 @@
 import express, {Router} from 'express';
 import AuthController from "../controllers/auth.controller";
-import { Request, Response } from "express";
+import AuthMiddleware from "../middlewares/auth.middlewares";
 const AuthRouter: Router = express.Router();
 
 const authController = new AuthController();
 
-AuthRouter.get('/', (req: Request, res : Response) => {
-    res.send('auth router');
-});
+AuthRouter.post('/register', authController.register);
+AuthRouter.post('/login', authController.login);
+AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
+AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
 
 export default AuthRouter;
