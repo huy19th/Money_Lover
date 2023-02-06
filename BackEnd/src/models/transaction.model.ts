@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import Wallet from "./wallet.model";
-import TransCate from "./transcate.model";
+import TransCate from "./trans.cate.model";
 
 @Entity()
 

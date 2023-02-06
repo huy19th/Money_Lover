@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, Index } from "typeorm";
-import TransType from "./transtype.model";
+import TransType from "./trans.type.model";
 import Transaction from "./transaction.model";
+import TransSubCate from "./trans.subcate";
 
 @Entity()
 
@@ -24,6 +25,10 @@ export class TransCate {
     @OneToMany(() => Transaction, transaction => transaction.category)
     //@ts-ignore
     transactions: Transaction[];
+
+    @OneToMany(() => TransSubCate, transSubCate => transSubCate.category)
+    //@ts-ignore
+    subCategories: TransSubCate[];
 
 }
 

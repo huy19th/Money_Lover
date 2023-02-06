@@ -31,6 +31,10 @@ export class User {
     //@ts-ignore
     wallets: Wallet[];
 
+    @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
+    //@ts-ignore
+    refreshToken: string;
+
 }
 
 export default User;

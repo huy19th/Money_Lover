@@ -1,5 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import TransCate from "./transcate.model";
+import TransCate from "./trans.cate.model";
 
 @Entity()
 

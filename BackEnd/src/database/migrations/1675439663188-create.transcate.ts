@@ -1,17 +1,18 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey , TableIndex} from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
 
 export class CreateTableTransCate1675439663188 implements MigrationInterface {
 
     nameTable: string = 'trans_cate';
 
-    public async up (queryRunner: QueryRunner): Promise<void> {
+    public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
                 name: this.nameTable,
                 columns: [
-                    { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment'},
+                    { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'type_id', type: 'int', isNullable: false },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false },
+                    { name: 'user_id', type: 'int', isNullable: false }
                 ],
             }),
         )
@@ -22,15 +23,22 @@ export class CreateTableTransCate1675439663188 implements MigrationInterface {
             referencedTableName: 'trans_type'
         });
 
+        let fk_user_case = new TableForeignKey({
+            columnNames: ['user_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'user'
+        })
+
         let cate_index = new TableIndex({
             columnNames: ['type_id', 'name']
         })
 
         await queryRunner.createForeignKey(this.nameTable, fk_type_case);
+        await queryRunner.createForeignKey(this.nameTable, fk_user_case);
         await queryRunner.createIndex(this.nameTable, cate_index);
     }
 
-    public async down (queryRunner: QueryRunner): Promise<void>{
+    public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.dropTable(this.nameTable);
     }
 

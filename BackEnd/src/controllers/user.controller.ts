@@ -3,8 +3,8 @@ import { Request, Response } from "express";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
 import Wallet from "../models/wallet.model";
-import TransType from "../models/transtype.model";
-import TransCate from "../models/transcate.model";
+import TransType from "../models/trans.type.model";
+import TransCate from "../models/trans.cate.model";
 import Transaction from "../models/transaction.model";
 
 let userRepo = dataSource.getRepository(User);
