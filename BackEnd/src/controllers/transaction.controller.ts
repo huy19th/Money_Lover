@@ -47,7 +47,32 @@ class TransactionController extends BaseController {
         transaction.image = image
         transaction.note = note
         try {
-            console.log(transaction)
+            await transactionRepo.save(transaction);
+            res.status(200).json(transaction);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    }
+    async updateTransaction(req,res){
+        let transaction = await transactionRepo.findOneBy({id:req.params.id})
+        let {walletId, subcategoryId, money, date, image, note} = req.body
+        let wallet = await walletRepo.findOneBy({id: walletId})
+        if (!wallet) {
+            return res.status(404).json({message: 'Wallet not found'});
+        }
+
+        let subCate = await subCateRepo.findOneBy({id: subcategoryId});
+
+        if (!subCate) {
+            return res.status(404).json({message: 'Wallet not found'});
+        }
+        transaction.wallet = wallet;
+        transaction.subCategory = subCate;
+        transaction.money = money ? +money : null
+        transaction.date = date ? date : null
+        transaction.image = image
+        transaction.note = note
+        try {
             await transactionRepo.save(transaction);
             res.status(200).json(transaction);
         } catch (err) {
