@@ -1,28 +1,24 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Wallet from "./wallet.model";
+import TransCate from "./trans.cate.model";
 
 @Entity()
 
 export class User {
 
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
     id: number;
 
     @Column({ name: "email", type: "nvarchar", length: 255, nullable: false, unique: true })
-    //@ts-ignore
     email: string;
 
     @Column({ name: "password", type: "nvarchar", length: 255, nullable: false })
-    //@ts-ignore
     password: string;
 
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: true })
-    //@ts-ignore
     name: string;
 
     @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
-    //@ts-ignore
     image: string;
 
     @Column({ name: "google_id", type: "nvarchar", length: 500, nullable: true })
@@ -40,11 +36,16 @@ export class User {
     @OneToMany(() => Wallet, wallet => wallet.user, {
         cascade: true
     })
-    //@ts-ignore
     wallets: Wallet[];
 
-    @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
+    @OneToMany(() => TransCate, transCate => transCate.user, {
+        cascade: true
+    })
     //@ts-ignore
+    transCates: TransCate[];
+    
+
+    @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
     refreshToken: string;
 
 }

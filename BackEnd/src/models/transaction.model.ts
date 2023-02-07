@@ -23,19 +23,15 @@ export class Transaction{
     category: TransCate;
 
     @Column({ name: "money", type: "int", nullable: false })
-    //@ts-ignore
     money: number;
 
     @Column({ name: "date", type: "date", nullable: false })
-    //@ts-ignore
     date: Date;
 
     @Column({ name: "note", type: "nvarchar", length: 255, nullable: true })
-    //@ts-ignore
     note: string;
 
     @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
-    //@ts-ignore
     image: string;
 
 }
