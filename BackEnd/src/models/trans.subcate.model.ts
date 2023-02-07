@@ -2,7 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Index, O
 import TransCate from "./trans.cate.model";
 import Transaction from "./transaction.model";
 
-@Entity()
+@Entity("trans_subcate")
 
 @Index(["category", "name"], { unique: true })
 

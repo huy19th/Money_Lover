@@ -19,7 +19,7 @@ export class Transaction{
     wallet: Wallet;
 
     @ManyToOne(() => TransSubCate, transSubCate => transSubCate.transactions)
-    @JoinColumn({name: "category_id"})
+    @JoinColumn({name: "subcategory_id"})
     //@ts-ignore
     subCategory: TransSubCate;
 
