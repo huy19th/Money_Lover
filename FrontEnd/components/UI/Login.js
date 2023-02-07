@@ -25,10 +25,6 @@ const Login = () => {
     return (<MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>
         <MDBRow className='d-flex justify-content-center align-items-center'>
             <MDBCol style={{backgroundColor: 'lightgray', height: "100vh"}} col='12'>
-                {/*<div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}><img*/}
-                {/*    style={{width: '300px', marginLeft: '550px', marginTop: '25px',zIndex:999}}*/}
-                {/*    src="https://f27-zpc.zdn.vn/478914099736103095/426f0e7760c9bb97e2d8.jpg" alt=""/>*/}
-                {/*</div>*/}
                 <div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}>
                     <Logo/>
                 </div>
