@@ -1,4 +1,3 @@
-import exp from "constants";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import DataBaseConfig from "../config/database.config";
