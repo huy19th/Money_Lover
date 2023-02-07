@@ -5,8 +5,6 @@ import Link from "next/link";
 import { FaGoogle } from "react-icons/fa";
 import { FaFacebook } from "react-icons/fa";
 
-
-
 function Register() {
     return (<MDBContainer fluid>
         <MDBRow className='d-flex justify-content-center align-items-center h-100'>

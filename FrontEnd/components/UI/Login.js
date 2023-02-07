@@ -6,8 +6,17 @@ import {FaFacebook, FaGoogle} from "react-icons/fa";
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
+import axios from 'axios';
+import useRouter from 'next/router'
 
 const Login = () => {
+
+    const router = useRouter
+
+    const google = () => {
+        window.open('http://localhost:8000/auth/google', '_self')
+    }
+
     const formik = useFormik({
         initialValues: {
             email: '', password: ''
@@ -19,7 +28,11 @@ const Login = () => {
                 .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            axios.post('http://localhost:8000/auth/login', values)
+                .then((res) => {
+                    localStorage.setItem('token', res.data.accessToken)
+                    router.push('/home')
+                })
         }
     })
     return (<MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>
@@ -42,7 +55,7 @@ const Login = () => {
                                 <MDBCol style={{marginTop: '40px'}}>
                                     <p>Using social networking accounts</p>
 
-                                    <Button style={{borderWidth: '2px'}} variant='outline-danger'
+                                    <Button style={{borderWidth: '2px'}} variant='outline-danger' onClick={google}
                                             className="mb-2 w-100 d-flex align-items-center" size="lg">
                                         <FaGoogle style={{marginRight: '19px'}}/>
                                         Connect with google
@@ -86,3 +99,4 @@ const Login = () => {
     </MDBContainer>);
 }
 export default Login;
+
