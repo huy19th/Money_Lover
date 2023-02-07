@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Wallet from "./wallet.model";
+import TransCate from "./trans.cate.model";
 
 @Entity()
 
@@ -24,6 +25,13 @@ export class User {
         cascade: true
     })
     wallets: Wallet[];
+
+    @OneToMany(() => TransCate, transCate => transCate.user, {
+        cascade: true
+    })
+    //@ts-ignore
+    transCates: TransCate[];
+    
 
     @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
     refreshToken: string;
