@@ -2,6 +2,7 @@ import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColum
 import TransType from "./trans.type.model";
 import Transaction from "./transaction.model";
 import TransSubCate from "./trans.subcate";
+import User from "./user.model";
 
 @Entity()
 
@@ -29,6 +30,11 @@ export class TransCate {
     @OneToMany(() => TransSubCate, transSubCate => transSubCate.category)
     //@ts-ignore
     subCategories: TransSubCate[];
+
+    @ManyToOne(() => User, user => user.transCates)
+    @JoinColumn({name: "user_id"})
+    //@ts-ignore
+    user: User
 
 }
 
