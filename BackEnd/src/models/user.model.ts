@@ -25,6 +25,18 @@ export class User {
     //@ts-ignore
     image: string;
 
+    @Column({ name: "google_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    googleId: string;
+
+    @Column({ name: "facebook_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    facebookId: string;
+
+    @Column({ name: "github_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    githubId: string;
+
     @OneToMany(() => Wallet, wallet => wallet.user, {
         cascade: true
     })
