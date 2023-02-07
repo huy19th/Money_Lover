@@ -9,7 +9,6 @@
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "strict": true,
     "moduleResolution": "node",
     "paths": {
       "*": [

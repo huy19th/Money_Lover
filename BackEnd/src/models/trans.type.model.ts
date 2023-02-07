@@ -6,15 +6,12 @@ import TransCate from "./trans.cate.model";
 export class TransType{
     
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
     id: number;
 
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: false, unique: true})
-    //@ts-ignore
     name: string;
     
     @OneToMany(() => TransCate, transCate => transCate.transType)
-    //@ts-ignore
     transCates: TransCate[]
 }
 
