@@ -7,29 +7,23 @@ import TransCate from "./trans.cate.model";
 export class User {
 
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
     id: number;
 
     @Column({ name: "email", type: "nvarchar", length: 255, nullable: false, unique: true })
-    //@ts-ignore
     email: string;
 
     @Column({ name: "password", type: "nvarchar", length: 255, nullable: false })
-    //@ts-ignore
     password: string;
 
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: true })
-    //@ts-ignore
     name: string;
 
     @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
-    //@ts-ignore
     image: string;
 
     @OneToMany(() => Wallet, wallet => wallet.user, {
         cascade: true
     })
-    //@ts-ignore
     wallets: Wallet[];
 
     @OneToMany(() => TransCate, transCate => transCate.user, {
@@ -40,7 +34,6 @@ export class User {
     
 
     @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
-    //@ts-ignore
     refreshToken: string;
 
 }

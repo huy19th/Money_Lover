@@ -8,16 +8,13 @@ import TransCate from "./trans.cate.model";
 export class TransSubCate {
 
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
     id: number;
 
     @ManyToOne(() => TransCate, transCate => transCate.subCategories)
     @JoinColumn({name: "cate_id"})
-    //@ts-ignore
     category: TransCate
 
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: false })
-    //@ts-ignore
     name: string;
 
 }
