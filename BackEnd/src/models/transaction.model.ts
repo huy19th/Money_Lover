@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import Wallet from "./wallet.model";
 import TransCate from "./trans.cate.model";
+import TransSubCate from "./trans.subcate.model";
 
 @Entity()
 
@@ -17,10 +18,10 @@ export class Transaction{
     //@ts-ignore
     wallet: Wallet;
 
-    @ManyToOne(() => TransCate, transCate => transCate.transactions)
+    @ManyToOne(() => TransSubCate, transSubCate => transSubCate.transactions)
     @JoinColumn({name: "category_id"})
     //@ts-ignore
-    category: TransCate;
+    subCategory: TransSubCate;
 
     @Column({ name: "money", type: "int", nullable: false })
     money: number;
