@@ -1,8 +1,12 @@
 import express from "express";
+import cors from "cors";
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
 import TransactionRouter from "./routers/transaction.router";
 import fileUpload from "express-fileupload";
+import cookieSession from "cookie-session";
+import passport from 'passport';
+require('./passport')
 
 class App {
 
@@ -31,6 +35,18 @@ class App {
             createParentPath: true
         }))
         this.app.use(express.json())
+        this.app.use(cookieSession({
+            name: "session",
+            keys: ["case-md6"],
+            maxAge: 24 * 60 * 60 * 100
+        }))
+        this.app.use(passport.initialize());
+        this.app.use(passport.session());
+        this.app.use(cors({
+            credentials: true,
+            origin: "http://localhost:3000",
+            methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+        }));
         //
         // this.app.use(bodyParser.urlencoded({ extended: true }));
         // this.app.use(bodyParser.json());
@@ -52,4 +68,6 @@ class App {
 }
 
 new App();
+
+
 
