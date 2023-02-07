@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // "strictPropertyInitialization": false,
+     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "module": "commonjs",
     "target": "es6",
