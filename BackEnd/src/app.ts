@@ -3,6 +3,7 @@ import cors from "cors";
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
 import TransactionRouter from "./routers/transaction.router";
+import WalletRouter from "./routers/wallet.router";
 import fileUpload from "express-fileupload";
 import cookieSession from "cookie-session";
 import passport from 'passport';
@@ -57,7 +58,7 @@ class App {
         this.app.use('/api',TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
-        // this.app.use(WalletRouter);
+        this.app.use('/api',WalletRouter);
     }
 
     private listen(): void {
