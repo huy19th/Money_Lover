@@ -16,7 +16,9 @@ class WalletController extends BaseController {
         try {
             let user = await userRepo.find({
                 relations : {
-                    wallets :true
+
+                   wallets :true
+
                 },
                 where : {
                     id : req.params.userId
@@ -39,7 +41,9 @@ class WalletController extends BaseController {
             res.status(200).json(wallet)
         }
         catch (err) {
-            res.status(500).json(err)
+
+           res.status(500).json(err)
+
         }
     }
     async addMoneyWallet(req, res){

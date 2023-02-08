@@ -16,7 +16,7 @@ AuthRouter.post('/register', authController.register);
 AuthRouter.post('/login', authController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
-
+AuthRouter.post('/resetPassword/:userId', authController.resetPassword)
 // Social Authentication
 const CLIENT_URL = process.env.BASE_URL + 'home'
 AuthRouter.get('/login/success', async (req: any, res) => {
