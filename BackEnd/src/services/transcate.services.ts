@@ -4,4 +4,5 @@ class TransCateServices extends BaseServices {
 
 }
 
+
 export default TransCateServices ;
