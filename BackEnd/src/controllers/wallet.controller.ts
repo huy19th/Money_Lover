@@ -13,7 +13,7 @@ let subCateRepo = dataSource.getRepository(SubCate)
 let transactionRepo = dataSource.getRepository(TransactionModel)
 
 class WalletController extends BaseController {
-    async getAllWallet(req, res) {
+    async getAllWallet(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
 
@@ -34,7 +34,7 @@ class WalletController extends BaseController {
 
     }
 
-    async indexWallet(req, res) {
+    async indexWallet(req: Request, res: Response) {
         try {
             let wallet = await walletRepo.findOneBy({
                 id: req.params.walletId
@@ -46,7 +46,8 @@ class WalletController extends BaseController {
         }
     }
 
-    async addMoneyWallet(req, res) {
+    async addMoneyWallet(req: Request, res: Response) {
+
         try {
             let wallet = await walletRepo.findOneBy({id: req.params.walletId});
             let money = wallet.balance - (+req.body.balance)
@@ -68,6 +69,7 @@ class WalletController extends BaseController {
                     })
                     .execute()
             }
+
             if (money > 0) {
                 await transactionRepo.createQueryBuilder('transaction')
                     .insert()
@@ -94,7 +96,7 @@ class WalletController extends BaseController {
         }
     }
 
-    async getAllMoney(req, res) {
+    async getAllMoney(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
                 relations: {
