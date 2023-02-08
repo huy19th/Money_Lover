@@ -36,13 +36,6 @@ import {TbReportMoney} from "react-icons/tb";
 // import Select from "@/components/UI/DashBoard/DropDown";
 import AddTransactionModal from './Dashboard/AddTransaction/AddTransactionModal';
 
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
-
-
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
