@@ -1,4 +1,3 @@
-
 import Container from "react-bootstrap/Container";
 import {Col, Row, SSRProvider} from "react-bootstrap";
 import LayoutReport from "@/components/UI/LayoutReport";

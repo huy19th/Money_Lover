@@ -25,10 +25,18 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
+
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import AddTrans from "@/components/UI/DashBoard/AddTransactions";
 // import Select from "@/components/UI/DashBoard/DropDown";
+
+import axios from "axios";
+import {authActions} from "@/features/auth/authSlice";
+import jwt_decode from "jwt-decode";
+import useRouter from 'next/router'
+import {useDispatch, useSelector} from "react-redux";
+
 
 const drawerWidth = 240;
 
@@ -97,7 +105,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function UserHome() {
+
+export default function MyHome() {
+
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -108,6 +119,51 @@ export default function UserHome() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const router = useRouter
+
+    const dispatch = useDispatch()
+
+    const user = useSelector(state => state.auth)
+
+    const refreshToken = async () => {
+        try {
+            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            localStorage.setItem('token', res.data.accessToken)
+            dispatch(authActions.loggedIn(res.data.refreshToken))
+            return res.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // RefreshToken
+    const axiosJWT = axios.create();
+    axiosJWT.interceptors.request.use(
+        async (config) => {
+            let currentDate = new Date();
+            const decodedToken = jwt_decode(localStorage.getItem('token'))
+            if (decodedToken.exp*1000 < currentDate.getTime()) {
+                const data = await refreshToken();
+                config.headers['authorization'] = "Bearer " + data.accessToken
+            }
+            console.log(config)
+            return config
+        }, (err) => {
+            return Promise.reject(err)
+        }
+    )
+
+    const logOut = async () => {
+        await axiosJWT.get('http://localhost:8000/auth/logout',{
+            headers: {
+                authorization: 'Bearer ' + localStorage.getItem('token')
+            }}
+        )
+        localStorage.removeItem('token');
+        dispatch(authActions.loggedOut());
+        router.push('/login')
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -189,5 +245,5 @@ export default function UserHome() {
                 </div>
             </Box>
         </Box>
-    );
+    )
 }
