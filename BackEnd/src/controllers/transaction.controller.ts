@@ -7,7 +7,6 @@ import TransactionServices from "../services/transaction.services";
 import WalletService from "../services/wallet.services";
 import { Request, Response } from "express";
 
-
 let transactionRepo = dataSource.getRepository(TransactionModel);
 let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
@@ -63,7 +62,6 @@ class TransactionController extends BaseController {
         let transaction = await transactionRepo.findOneBy({ id: req.params.id })
         let { walletId, subcategoryId, money, date, image, note } = req.body
         let wallet = await walletRepo.findOneBy({ id: walletId })
-
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
@@ -91,6 +89,7 @@ class TransactionController extends BaseController {
         let transactionId = +req.params.transactionId;
         //@ts-ignore
         let userId = req.user.id;
+
         let transaction = await transactionService.getTransactionById(transactionId);
         if (!transaction) {
             return res.status(404).json({ message: "Transaction not found" });
