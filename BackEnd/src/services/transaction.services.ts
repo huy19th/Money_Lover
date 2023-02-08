@@ -12,7 +12,9 @@ class TransactionServices extends BaseServices {
     async getTransactionById(transactionId: number): Promise<Transaction | null> {
         let transactions =  await transactionRepo.find({
             relations: {
-                wallet: true
+                wallet: {
+                    user:true
+                }
             },
             where: {
                 id: transactionId
