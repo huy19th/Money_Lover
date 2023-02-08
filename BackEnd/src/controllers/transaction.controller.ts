@@ -7,6 +7,7 @@ import TransactionServices from "../services/transaction.services";
 import WalletService from "../services/wallet.services";
 import { Request, Response } from "express";
 
+
 let transactionRepo = dataSource.getRepository(TransactionModel);
 let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
@@ -62,10 +63,10 @@ class TransactionController extends BaseController {
         let transaction = await transactionRepo.findOneBy({ id: req.params.id })
         let { walletId, subcategoryId, money, date, image, note } = req.body
         let wallet = await walletRepo.findOneBy({ id: walletId })
+
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
-
 
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
@@ -85,6 +86,7 @@ class TransactionController extends BaseController {
             res.status(500).json(err);
         }
     }
+
     async deleteTransaction(req: Request, res: Response) {
         let transactionId = +req.params.transactionId;
         //@ts-ignore
@@ -94,7 +96,7 @@ class TransactionController extends BaseController {
             return res.status(404).json({ message: "Transaction not found" });
         }
         if (transaction.wallet.user.id !== userId) {
-            return res.status(401).json({message: "You don't have permission to delete"})
+            return res.status(401).json({ message: "You don't have permission to delete" })
         }
         let money = transaction.money;
         let walletId = transaction.wallet.id;

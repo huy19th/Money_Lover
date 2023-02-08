@@ -49,6 +49,8 @@ class App {
             origin: "http://localhost:3000",
             methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
         }));
+        // this.app.use(cors());
+        // this.app.options('*', cors());
         //
         // this.app.use(bodyParser.urlencoded({ extended: true }));
         // this.app.use(bodyParser.json());
@@ -58,6 +60,7 @@ class App {
         this.app.use(AuthMiddleware.checkAuthentication);
 
 
+        this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
@@ -72,6 +75,10 @@ class App {
 }
 
 new App();
+
+
+
+
 
 
 
