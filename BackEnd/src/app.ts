@@ -2,6 +2,7 @@ import express from "express";
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
 import fileUpload from "express-fileupload";
+import TransactionRouter from "./routers/transaction.router";
 
 class App {
 
@@ -37,7 +38,7 @@ class App {
         // this.app.use(passport.session());
         this.app.use('/auth', AuthRouter);
 
-        // this.app.use(TransactionRouter);
+        this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
         // this.app.use(WalletRouter);

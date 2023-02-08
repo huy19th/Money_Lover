@@ -4,4 +4,5 @@ class WalletServices extends BaseServices {
 
 }
 
+
 export default WalletServices;

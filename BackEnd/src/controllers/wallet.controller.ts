@@ -5,7 +5,6 @@ import { Request, Response } from "express";
 class WalletController extends BaseController {
 
     
-   
 }
 
 export default WalletController;
