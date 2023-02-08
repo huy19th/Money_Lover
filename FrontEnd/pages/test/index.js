@@ -156,7 +156,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Home() {
+export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -188,6 +188,7 @@ export default function Home() {
                     <div style={{width:'100%',display:'flex',alignItems:'center', justifyContent: 'space-between'}}>
                         <div>
                             <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
+
                         </div>
                         <div style={{display:'flex',alignItems:'center'}}>
                             <Typography variant="h6" noWrap component="div">
