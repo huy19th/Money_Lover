@@ -137,7 +137,6 @@ export default function MyHome() {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             }
-            console.log(config)
             return config
         }, (err) => {
             return Promise.reject(err)
