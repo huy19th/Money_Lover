@@ -6,7 +6,7 @@ let transactionRepo = dataSource.getRepository(Transaction);
 
 class TransactionServices extends BaseServices {
 
-    async deleteTransaction(transaction): Promise<void> {
+    async deleteTransaction(transaction: Transaction): Promise<void> {
         await transactionRepo.remove(transaction);
     };
     async getTransactionById(transactionId: number): Promise<Transaction | null> {

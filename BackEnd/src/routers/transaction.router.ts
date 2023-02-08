@@ -7,7 +7,6 @@ const TransactionRouter: Router = express.Router();
 const transactionController = new TransActionController();
 
 TransactionRouter.delete('/:transactionId', transactionController.deleteTransaction);
-
 TransactionRouter.get('/',transactionController.getTransactions)
 TransactionRouter.post('/',transactionController.addTransaction)
 TransactionRouter.put('/:transactionId',upload.none(),transactionController.updateTransaction)
