@@ -1,66 +1,3 @@
-// import Navbar from "react-bootstrap/Navbar";
-// import Container from "react-bootstrap/Container";
-// import Nav from "react-bootstrap/Nav";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-// import SideNavBar from "@/components/shares/SideBar";
-// import Button from "react-bootstrap/Button";
-// import {BsCalendarDay} from "react-icons/bs";
-//
-//
-// import {RiFindReplaceLine} from "react-icons/ri";
-// import {Card, Col, Row} from "react-bootstrap";
-//
-//
-//
-// const Layout=({children})=>{
-//     return(
-//         <div style={{backgroundColor:'lightgray',height:'740px'}}>
-//             <Navbar style={{backgroundColor:'white',height:'70px'}} bg="" expand="lg">
-//                 <Container>
-//                     <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-//                     <Navbar.Collapse id="basic-navbar-nav">
-//                         <Nav className="me-auto">
-//                             <NavDropdown title="Total" id="basic-nav-dropdown">
-//                                 <Card style={{width:'300px'}}>
-//                                     <Card.Header as="h5">Select Wallet</Card.Header>
-//                                     <Card.Body>
-//                                         <Row>
-//                                             <Col md={4}>
-//                                                 <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-//                                             </Col>
-//                                             <Col md={8 }>
-//                                                 Total
-//                                                 <p>55252535</p>
-//                                             </Col>
-//                                         </Row>
-//                                         <hr/>
-//                                         <p>Included in total</p>
-//                                         <hr/>
-//                                         <Row>
-//                                             <Col md={4}>
-//                                                 <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/icon.png" alt=""/>
-//                                             </Col>
-//                                             <Col md={8 }>
-//                                                 Yến Đoàn
-//                                                 <p>55252535</p>
-//                                             </Col>
-//                                         </Row>
-//                                     </Card.Body>
-//                                 </Card>
-//                             </NavDropdown>
-//                         </Nav>
-//                     </Navbar.Collapse>
-//                     <BsCalendarDay style={{width:'50px',height:'30px',marginLeft:'100px'}}/>
-//                     <RiFindReplaceLine style={{width:'100px',height:'30px'}}/>
-//                     <Button variant="success">ADD TRANSACTION</Button>
-//                 </Container>
-//             </Navbar>
-//             <SideNavBar/>
-//             {children}
-//         </div>
-//     )
-// }
-// export default Layout
 
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
@@ -88,6 +25,10 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
+import {FaWallet} from "react-icons/fa";
+import {TbReportMoney} from "react-icons/tb";
+import AddTrans from "@/components/UI/DashBoard/AddTransactions";
+// import Select from "@/components/UI/DashBoard/DropDown";
 
 const drawerWidth = 240;
 
@@ -156,7 +97,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Home() {
+export default function UserHome() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -195,7 +136,9 @@ export default function Home() {
                             </Typography>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} variant="success">ADD TRANSACTION</Button>
+                            <Button style={{marginRight:'10px'}} >
+                                <AddTrans/>
+                            </Button>
                         </div>
                     </div>
                 </Toolbar>
@@ -208,7 +151,7 @@ export default function Home() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    {['Transactions', 'Report','Transactions', 'Report'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
@@ -224,7 +167,7 @@ export default function Home() {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    {index % 2 === 0 ? <FaWallet/> : <TbReportMoney/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
@@ -232,34 +175,10 @@ export default function Home() {
                     ))}
                 </List>
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <Typography paragraph>
+                <div>
                     <Container>
                         <Row className="justify-content-md-center">
                             <Col md="auto" >
@@ -267,7 +186,7 @@ export default function Home() {
                             </Col>
                         </Row>
                     </Container>
-                </Typography>
+                </div>
             </Box>
         </Box>
     );
