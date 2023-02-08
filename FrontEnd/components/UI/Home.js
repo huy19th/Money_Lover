@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -24,11 +25,18 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
+
+import {FaWallet} from "react-icons/fa";
+import {TbReportMoney} from "react-icons/tb";
+import AddTrans from "@/components/UI/DashBoard/AddTransactions";
+// import Select from "@/components/UI/DashBoard/DropDown";
+
 import axios from "axios";
 import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 import useRouter from 'next/router'
 import {useDispatch, useSelector} from "react-redux";
+
 
 const drawerWidth = 240;
 
@@ -97,7 +105,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
+
 export default function MyHome() {
+
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -182,7 +192,9 @@ export default function MyHome() {
                             </Typography>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} variant="success">ADD TRANSACTION</Button>
+                            <Button style={{marginRight:'10px'}} >
+                                <AddTrans/>
+                            </Button>
                         </div>
                     </div>
                 </Toolbar>
@@ -195,7 +207,7 @@ export default function MyHome() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                    {['Transactions', 'Report','Transactions', 'Report'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
@@ -211,7 +223,7 @@ export default function MyHome() {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    {index % 2 === 0 ? <FaWallet/> : <TbReportMoney/>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
@@ -219,34 +231,10 @@ export default function MyHome() {
                     ))}
                 </List>
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <Typography paragraph>
+                <div>
                     <Container>
                         <Row className="justify-content-md-center">
                             <Col md="auto" >
@@ -254,7 +242,7 @@ export default function MyHome() {
                             </Col>
                         </Row>
                     </Container>
-                </Typography>
+                </div>
             </Box>
         </Box>
     )
