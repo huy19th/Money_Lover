@@ -45,8 +45,11 @@ class AuthMiddleware {
                     accessToken: newAccessToken,
                     refreshToken: newRefreshToken,
                 });
+            } else {
+                return res.status(403).json("Refresh token is not valid!");
             }
-        });
+            }
+        );
     }
 
 }
