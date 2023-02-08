@@ -1,3 +1,4 @@
+
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import {authActions} from "@/features/auth/authSlice";
@@ -37,6 +38,7 @@ export default function Home() {
             <MyHome/>
         </>
     )
+
 }
 
 
