@@ -41,9 +41,9 @@ export class User {
     @OneToMany(() => TransCate, transCate => transCate.user, {
         cascade: true
     })
-    //@ts-ignore
+        //@ts-ignore
     transCates: TransCate[];
-    
+
 
     @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
     refreshToken: string;
