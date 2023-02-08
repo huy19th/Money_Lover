@@ -7,9 +7,13 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
 import axios from 'axios';
-import useRouter from 'next/router'
+import useRouter from 'next/router';
+import {authActions} from "@/features/auth/authSlice";
+import {useDispatch} from "react-redux";
 
 const Login = () => {
+
+    const dispatch = useDispatch()
 
     const router = useRouter
 
@@ -28,9 +32,15 @@ const Login = () => {
                 .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: values => {
-            axios.post('http://localhost:8000/auth/login', values)
+            const config = {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            };
+            axios.post('http://localhost:8000/auth/login', values, config)
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
+                    dispatch(authActions.loggedIn(res.data.refreshToken))
                     router.push('/home')
                 })
         }
@@ -38,6 +48,10 @@ const Login = () => {
     return (<MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>
         <MDBRow className='d-flex justify-content-center align-items-center'>
             <MDBCol style={{backgroundColor: 'lightgray', height: "100vh"}} col='12'>
+                {/*<div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}><img*/}
+                {/*    style={{width: '300px', marginLeft: '550px', marginTop: '25px',zIndex:999}}*/}
+                {/*    src="https://f27-zpc.zdn.vn/478914099736103095/426f0e7760c9bb97e2d8.jpg" alt=""/>*/}
+                {/*</div>*/}
                 <div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}>
                     <Logo/>
                 </div>
@@ -95,4 +109,5 @@ const Login = () => {
     </MDBContainer>);
 }
 export default Login;
+
 

@@ -4,13 +4,13 @@ import TransCate from "./trans.cate.model";
 @Entity()
 
 export class TransType{
-    
+
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
     id: number;
 
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: false, unique: true})
     name: string;
-    
+
     @OneToMany(() => TransCate, transCate => transCate.transType)
     transCates: TransCate[]
 }

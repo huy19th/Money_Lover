@@ -6,21 +6,21 @@ import TransSubCate from "./trans.subcate.model";
 @Entity()
 
 export class Transaction{
-    
+
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
+        //@ts-ignore
     id: int;
 
     @ManyToOne(() => Wallet, wallet => wallet.transactions, {
         onDelete: "CASCADE"
     })
     @JoinColumn({name: "wallet_id"})
-    //@ts-ignore
+        //@ts-ignore
     wallet: Wallet;
 
     @ManyToOne(() => TransSubCate, transSubCate => transSubCate.transactions)
     @JoinColumn({name: "subcategory_id"})
-    //@ts-ignore
+        //@ts-ignore
     subCategory: TransSubCate;
 
     @Column({ name: "money", type: "int", nullable: false })

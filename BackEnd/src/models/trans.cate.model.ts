@@ -24,7 +24,7 @@ export class TransCate {
 
     @ManyToOne(() => User, user => user.transCates)
     @JoinColumn({name: "user_id"})
-    //@ts-ignore
+        //@ts-ignore
     user: User
 
 }

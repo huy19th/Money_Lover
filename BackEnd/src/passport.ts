@@ -44,7 +44,6 @@ passport.use(new GithubStrategy({
     },
     async (request, accessToken, refreshToken, profile, done) => {
         try {
-            console.log(profile)
             let existingUser = await userRepo.findOneBy({ githubId: profile.id });
             if (existingUser) {
                 return done(null, existingUser);

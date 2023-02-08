@@ -1,67 +1,3 @@
-// import Navbar from "react-bootstrap/Navbar";
-// import Container from "react-bootstrap/Container";
-// import Nav from "react-bootstrap/Nav";
-// import NavDropdown from "react-bootstrap/NavDropdown";
-// import SideNavBar from "@/components/shares/SideBar";
-// import Button from "react-bootstrap/Button";
-// import {BsCalendarDay} from "react-icons/bs";
-//
-//
-// import {RiFindReplaceLine} from "react-icons/ri";
-// import {Card, Col, Row} from "react-bootstrap";
-//
-//
-//
-// const Layout=({children})=>{
-//     return(
-//         <div style={{backgroundColor:'lightgray',height:'740px'}}>
-//             <Navbar style={{backgroundColor:'white',height:'70px'}} bg="" expand="lg">
-//                 <Container>
-//                     <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-//                     <Navbar.Collapse id="basic-navbar-nav">
-//                         <Nav className="me-auto">
-//                             <NavDropdown title="Total" id="basic-nav-dropdown">
-//                                 <Card style={{width:'300px'}}>
-//                                     <Card.Header as="h5">Select Wallet</Card.Header>
-//                                     <Card.Body>
-//                                         <Row>
-//                                             <Col md={4}>
-//                                                 <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-//                                             </Col>
-//                                             <Col md={8 }>
-//                                                 Total
-//                                                 <p>55252535</p>
-//                                             </Col>
-//                                         </Row>
-//                                         <hr/>
-//                                         <p>Included in total</p>
-//                                         <hr/>
-//                                         <Row>
-//                                             <Col md={4}>
-//                                                 <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/icon.png" alt=""/>
-//                                             </Col>
-//                                             <Col md={8 }>
-//                                                 Yến Đoàn
-//                                                 <p>55252535</p>
-//                                             </Col>
-//                                         </Row>
-//                                     </Card.Body>
-//                                 </Card>
-//                             </NavDropdown>
-//                         </Nav>
-//                     </Navbar.Collapse>
-//                     <BsCalendarDay style={{width:'50px',height:'30px',marginLeft:'100px'}}/>
-//                     <RiFindReplaceLine style={{width:'100px',height:'30px'}}/>
-//                     <Button variant="success">ADD TRANSACTION</Button>
-//                 </Container>
-//             </Navbar>
-//             <SideNavBar/>
-//             {children}
-//         </div>
-//     )
-// }
-// export default Layout
-
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -88,6 +24,11 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
+import axios from "axios";
+import {authActions} from "@/features/auth/authSlice";
+import jwt_decode from "jwt-decode";
+import useRouter from 'next/router'
+import {useDispatch, useSelector} from "react-redux";
 
 const drawerWidth = 240;
 
@@ -156,7 +97,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Home() {
+export default function MyHome() {
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -167,6 +109,51 @@ export default function Home() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const router = useRouter
+
+    const dispatch = useDispatch()
+
+    const user = useSelector(state => state.auth)
+
+    const refreshToken = async () => {
+        try {
+            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            localStorage.setItem('token', res.data.accessToken)
+            dispatch(authActions.loggedIn(res.data.refreshToken))
+            return res.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // RefreshToken
+    const axiosJWT = axios.create();
+    axiosJWT.interceptors.request.use(
+        async (config) => {
+            let currentDate = new Date();
+            const decodedToken = jwt_decode(localStorage.getItem('token'))
+            if (decodedToken.exp*1000 < currentDate.getTime()) {
+                const data = await refreshToken();
+                config.headers['authorization'] = "Bearer " + data.accessToken
+            }
+            console.log(config)
+            return config
+        }, (err) => {
+            return Promise.reject(err)
+        }
+    )
+
+    const logOut = async () => {
+        await axiosJWT.get('http://localhost:8000/auth/logout',{
+            headers: {
+                authorization: 'Bearer ' + localStorage.getItem('token')
+            }}
+        )
+        localStorage.removeItem('token');
+        dispatch(authActions.loggedOut());
+        router.push('/login')
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -270,5 +257,5 @@ export default function Home() {
                 </Typography>
             </Box>
         </Box>
-    );
+    )
 }

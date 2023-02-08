@@ -36,10 +36,6 @@ AuthRouter.get('/login/success', async (req: any, res) => {
         )
     }
 })
-AuthRouter.get('/logout', (req: any, res) => {
-    req.logout();
-    res.redirect(CLIENT_URL)
-})
 
 // Google
 AuthRouter.get('/google', passport.authenticate('google', {scope: ["profile", "email"]}));
@@ -56,5 +52,7 @@ AuthRouter.get('/github/callback', passport.authenticate('github', {
 }));
 
 export default AuthRouter;
+
+
 
 
