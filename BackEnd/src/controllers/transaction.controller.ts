@@ -60,7 +60,7 @@ class TransactionController extends BaseController {
         }
     }
     async updateTransaction(req, res) {
-        let transaction = await transactionRepo.findOneBy({ id: req.params.id })
+        let transaction = await transactionRepo.findOneBy({ id: req.params.transactionId })
         let { walletId, subcategoryId, money, date, image, note } = req.body
         let wallet = await walletRepo.findOneBy({ id: walletId })
 

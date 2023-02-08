@@ -61,8 +61,7 @@ class App {
 
 
         this.app.use('/api/transaction', TransactionRouter);
-        this.app.use('/api/transaction', TransactionRouter);
-        // this.app.use(TransCateRouter);
+
         // this.app.use(TransTypeRouter);
         this.app.use('/api', WalletRouter);
     }
