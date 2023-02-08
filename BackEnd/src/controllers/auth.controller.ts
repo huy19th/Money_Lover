@@ -1,6 +1,6 @@
 import BaseController from "./base.controller";
 import User from "../models/user.model";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import dataSource from "../database/data-source";
 
 let userRepo = dataSource.getRepository(User);
