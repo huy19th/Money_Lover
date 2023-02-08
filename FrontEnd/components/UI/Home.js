@@ -28,8 +28,8 @@ import Container from "react-bootstrap/Container";
 
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
-import AddTrans from "@/components/UI/DashBoard/AddTransactions";
 // import Select from "@/components/UI/DashBoard/DropDown";
+import AddTransactionModal from './Dashboard/AddTransaction/AddTransactionModal';
 
 import axios from "axios";
 import {authActions} from "@/features/auth/authSlice";
@@ -192,9 +192,9 @@ export default function MyHome() {
                             </Typography>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} >
-                                <AddTrans/>
-                            </Button>
+                            {/* <Button style={{marginRight:'10px'}} > */}
+                                <AddTransactionModal/>
+                            {/* </Button> */}
                         </div>
                     </div>
                 </Toolbar>

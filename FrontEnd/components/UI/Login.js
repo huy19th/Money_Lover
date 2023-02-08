@@ -29,7 +29,6 @@ const Login = () => {
                 .email('Invalid email address')
                 .required('Email is required'),
             password: Yup.string()
-                .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: values => {
             const config = {
@@ -37,7 +36,7 @@ const Login = () => {
                     "Content-Type": "multipart/form-data",
                 },
             };
-            axios.post('http://localhost:8000/auth/login', values, config)
+            axios.post('http://localhost:8000/api/auth/login', values, config)
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
                     dispatch(authActions.loggedIn(res.data.refreshToken))
