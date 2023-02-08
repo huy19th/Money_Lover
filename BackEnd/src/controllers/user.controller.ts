@@ -13,7 +13,7 @@ let transTypeRepo = dataSource.getRepository(TransType);
 let transCateRepo = dataSource.getRepository(TransCate);
 let transactionRepo = dataSource.getRepository(Transaction);
 
-class WalletController extends BaseController {
+class UserController extends BaseController {
 
     test(req: Request, res: Response) {
 
@@ -21,4 +21,4 @@ class WalletController extends BaseController {
    
 }
 
-export default WalletController;
+export default UserController;

@@ -2,9 +2,9 @@ import express from "express";
 import cors from "cors";
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
+import fileUpload from "express-fileupload";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
-import fileUpload from "express-fileupload";
 import cookieSession from "cookie-session";
 import passport from 'passport';
 require('./passport')
@@ -55,7 +55,7 @@ class App {
         // this.app.use(passport.session());
         this.app.use('/auth', AuthRouter);
 
-        this.app.use('/api',TransactionRouter);
+        this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
         this.app.use('/api',WalletRouter);

@@ -94,7 +94,6 @@ class WalletController extends BaseController {
     }
 
     
-   
 }
 
 export default WalletController;
