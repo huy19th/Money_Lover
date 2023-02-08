@@ -1,6 +1,6 @@
 import BaseController from "./base.controller";
 import User from "../models/user.model";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import dataSource from "../database/data-source";
 
 let userRepo = dataSource.getRepository(User);
@@ -8,7 +8,7 @@ let userRepo = dataSource.getRepository(User);
 class AuthController extends BaseController {
 
     async register(req, res) {
-        let { name, email, password } = req.body;
+        let {name, email, password} = req.body;
         let user = new User();
         user.email = email ? email : null;
         user.password = password ? password : null;
@@ -17,18 +17,17 @@ class AuthController extends BaseController {
             user.password = await bcrypt.hash(password, 10);
             await userRepo.save(user);
             res.status(200).json({message: 'Registered successfully!'});
-        }
-        catch (err: any) {
-            let { sqlMessage } = err;
-            res.status(500).json({ message: sqlMessage })
+        } catch (err: any) {
+            let {sqlMessage} = err;
+            res.status(500).json({message: sqlMessage})
         }
     }
 
     async login(req, res) {
-        let { email, password } = req.body
-        let user = await userRepo.findOneBy({ email: email });
+        let {email, password} = req.body
+        let user = await userRepo.findOneBy({email: email});
         if (!user) {
-            return res.status(401).json({ message: 'Wrong email or password!' });
+            return res.status(401).json({message: 'Wrong email or password!'});
         }
         let match = await bcrypt.compare(password, user.password);
         if (match) {
@@ -43,9 +42,8 @@ class AuthController extends BaseController {
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
-        }
-        else {
-            res.status(401).json({ message: 'Wrong email or password!' });
+        } else {
+            res.status(401).json({message: 'Wrong email or password!'});
         }
     }
 
@@ -53,6 +51,26 @@ class AuthController extends BaseController {
         req.user.refreshToken = null;
         await userRepo.save(req.user);
         res.status(200).json({message: 'Logged out successfully!'});
+    }
+
+    async resetPassword(req, res) {
+        try {
+            let {password, resetPassword} = req.body
+            let user = await userRepo.findOneBy({id: req.params.userId});
+            let newPassword = await bcrypt.compare(password, user.password)
+
+            let resetPasswords = await bcrypt.hash(resetPassword, 10);
+            if (!newPassword) {
+                res.status(401).json({message: 'password mismatch'})
+            } else {
+                user.password = resetPasswords
+                await userRepo.save(user)
+                return res.status(200).json(user)
+            }
+        } catch (err) {
+            console.log(err)
+            res.status(err.status).json({message: err.message})
+        }
     }
 
 }

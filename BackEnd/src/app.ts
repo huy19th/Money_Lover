@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
-import AppConfig from "./config/app.config";
-import AuthRouter from "./routers/auth.router";
 import fileUpload from "express-fileupload";
-import TransactionRouter from "./routers/transaction.router";
-import WalletRouter from "./routers/wallet.router";
 import cookieSession from "cookie-session";
 import passport from 'passport';
 require('./passport')
+import AppConfig from "./config/app.config";
+import AuthRouter from "./routers/auth.router";
+import AuthMiddleware from "./middlewares/auth.middlewares";
+import TransactionRouter from "./routers/transaction.router";
+import WalletRouter from "./routers/wallet.router";
 
 class App {
 
@@ -19,7 +20,7 @@ class App {
         this.bootstrap();
     }
 
-    public bootstrap() : void {
+    public bootstrap(): void {
         this.setupMiddlewares();
         //this.serveStaticFiles();
         this.listen();
@@ -55,12 +56,15 @@ class App {
         // this.app.use(bodyParser.json());
         // this.app.use(passport.initialize());
         // this.app.use(passport.session());
-        this.app.use('/auth', AuthRouter);
+        this.app.use('/api/auth', AuthRouter);
+        this.app.use(AuthMiddleware.checkAuthentication);
 
+
+        this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
-        this.app.use('/api',WalletRouter);
+        this.app.use('/api', WalletRouter);
     }
 
     private listen(): void {
