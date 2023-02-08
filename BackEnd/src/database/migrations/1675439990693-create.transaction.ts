@@ -11,7 +11,7 @@ export class CreateTableTransAction1675439990693 implements MigrationInterface {
                 columns: [
                     { name: 'id', type: 'int', isPrimary: true , isGenerated: true, generationStrategy: 'increment'},
                     { name: 'wallet_id', type: 'int', isNullable: false },
-                    { name: 'category_id', type: 'int', isNullable: false },
+                    { name: 'subcategory_id', type: 'int', isNullable: false },
                     { name: 'money', type: 'int', isNullable: false },
                     { name: 'date', type: 'date' , isNullable: false},
                     { name: 'note', type: 'nvarchar(255)' , isNullable: true},
@@ -27,9 +27,9 @@ export class CreateTableTransAction1675439990693 implements MigrationInterface {
         });
 
         let fk_category_transaction = new TableForeignKey({
-            columnNames: ['category_id'],
+            columnNames: ['subcategory_id'],
             referencedColumnNames: ['id'],
-            referencedTableName: 'trans_cate'
+            referencedTableName: 'trans_subcate'
         });
 
         await queryRunner.createForeignKeys(this.nameTable, [fk_wallet_transaction, fk_category_transaction]);
