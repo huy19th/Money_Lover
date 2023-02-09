@@ -22,11 +22,6 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
 
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";

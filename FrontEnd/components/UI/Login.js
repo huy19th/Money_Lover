@@ -14,12 +14,12 @@ import jwt_decode from "jwt-decode";
 
 const Login = () => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const router = useRouter
 
     const google = () => {
-        window.open('http://localhost:8000/auth/google', '_self')
+        window.open('http://localhost:8000/api/auth/google', '_self')
     }
 
     const formik = useFormik({
