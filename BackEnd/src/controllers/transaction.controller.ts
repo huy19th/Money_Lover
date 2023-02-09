@@ -1,6 +1,6 @@
 import BaseController from "./base.controller";
 import dataSource from "../database/data-source"
-import TransactionModel from "../models/transaction.model";
+import TransactionModel, {Transaction} from "../models/transaction.model";
 import Wallet from "../models/wallet.model";
 import SubCate from "../models/trans.subcate.model";
 import TransactionServices from "../services/transaction.services";
@@ -11,7 +11,6 @@ let transactionRepo = dataSource.getRepository(TransactionModel);
 let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
 let transactionService = new TransactionServices();
-let walletService = new WalletService();
 
 class TransactionController extends BaseController {
 
@@ -43,11 +42,13 @@ class TransactionController extends BaseController {
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
+
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
         if (!subCate) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
+
 
         transaction.wallet = wallet;
         transaction.subCategory = subCate;
@@ -55,6 +56,9 @@ class TransactionController extends BaseController {
         transaction.date = date ? date : null
         transaction.image = image
         transaction.note = note
+       let balance = await (transaction.wallet.balance + (+money))
+        wallet.balance = balance
+        await walletRepo.save(wallet)
         try {
             await transactionRepo.save(transaction);
             res.status(200).json(transaction);
@@ -76,12 +80,10 @@ class TransactionController extends BaseController {
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
-
-
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
         if (!subCate) {
-            return res.status(404).json({message: 'Wallet not found'});
+            return res.status(404).json({ message: 'Wallet not found' });
         }
 
         transaction.wallet = wallet;
@@ -90,7 +92,9 @@ class TransactionController extends BaseController {
         transaction.date = date ? date : null;
         transaction.image = image;
         transaction.note = note;
-
+        let balance = await (transaction.wallet.balance + (+money))
+        wallet.balance = balance
+        await walletRepo.save(wallet)
         try {
             await transactionRepo.save(transaction);
             res.status(200).json(transaction);
@@ -119,7 +123,7 @@ class TransactionController extends BaseController {
         let money = transaction.money;
         let walletId = transaction.wallet.id;
 
-        await walletService.adjustBalance(walletId, money);
+        await WalletService.adjustBalance(walletId, money);
 
         transactionService.deleteTransaction(transaction)
             .then(() => {

@@ -83,7 +83,9 @@ export default function MyHome() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const router = useRouter
+
+    const router = useRouter()
+
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth)
     const refreshToken = async () => {
@@ -98,17 +100,20 @@ export default function MyHome() {
     }
     // RefreshToken
     const axiosJWT = axios.create();
-    axiosJWT.interceptors.request.use(async (config) => {
-        let currentDate = new Date();
-        const decodedToken = jwt_decode(localStorage.getItem('token'))
-        if (decodedToken.exp * 1000 < currentDate.getTime()) {
-            const data = await refreshToken();
-            config.headers['authorization'] = "Bearer " + data.accessToken
+    axiosJWT.interceptors.request.use(
+        async (config) => {
+            let currentDate = new Date();
+            const decodedToken = jwt_decode(localStorage.getItem('token'))
+            if (decodedToken.exp*1000 < currentDate.getTime()) {
+                const data = await refreshToken();
+                config.headers['authorization'] = "Bearer " + data.accessToken
+            }
+            return config
+        }, (err) => {
+            return Promise.reject(err)
         }
-        return config
-    }, (err) => {
-        return Promise.reject(err)
-    })
+    )
+
     const logOut = async () => {
         await axiosJWT.get('http://localhost:8000/auth/logout', {
             headers: {
@@ -144,11 +149,11 @@ export default function MyHome() {
                             <span></span>
                         </div>
 
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <BsCalendarDay style={{color: 'gray', width: '50px', height: '30px', marginRight: '10px'}}/>
-                            <RiFindReplaceLine style={{width: '100px', height: '30px', color: 'gray'}}/>
+                        <div style={{display:'flex',alignItems:'center'}}>
+                            <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
+                            <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
                             {/* <Button style={{marginRight:'10px'}} > */}
-                            <AddTransactionModal/>
+                                <AddTransactionModal/>
                             {/* </Button> */}
                         </div>
                     </div>
@@ -214,7 +219,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
-                {/*<MyAvatar/>*/}
+                <MyAvatar/>
             </Box>
         </Box>)
 }

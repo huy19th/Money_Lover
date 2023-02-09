@@ -2,12 +2,21 @@ import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import Wallet from "../models/wallet.model";
 
-let walletRepo = dataSource.getRepository(Wallet)
+let walletRepo = dataSource.getRepository(Wallet);
 
 class WalletService extends BaseServices {
-    async adjustBalance(walletId: number, money: number): Promise<void> {
+    static async getAllWalletsOfUser(userId: number): Promise<Wallet[] | null> {
+        return await walletRepo.find({
+            where: {
+                user: {
+                    id: userId
+                }
+            }
+        })
+    }
+
+    static async adjustBalance(walletId: number, money: number): Promise<void> {
         let wallet = await walletRepo.findOneBy({id: walletId});
-        console.log(wallet);
         if (!wallet) {
             throw new Error('Wallet not found');
         }

@@ -14,12 +14,12 @@ import jwt_decode from "jwt-decode";
 
 const Login = () => {
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     const router = useRouter
 
     const google = () => {
-        window.open('http://localhost:8000/auth/google', '_self')
+        window.open('http://localhost:8000/api/auth/google', '_self')
     }
 
     const formik = useFormik({
@@ -41,8 +41,10 @@ const Login = () => {
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
                     let user = jwt_decode(res.data.accessToken)
-                    console.log(user)
-                    dispatch(authActions.loggedIn(res.data.refreshToken))
+                    dispatch(authActions.loggedIn({
+                        user: user,
+                        refreshToken: res.data.refreshToken
+                    }))
                     router.push('/home')
                 }).catch(err => {
                 console.log(err)
