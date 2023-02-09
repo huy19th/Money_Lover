@@ -30,7 +30,10 @@ class TransactionController extends BaseController {
         }
     }
 
+
+
     async addTransaction(req: Request, res: Response) {
+
 
         let { walletId, subcategoryId, money, date, image, note } = req.body
         let transaction = new TransactionModel()
@@ -40,6 +43,7 @@ class TransactionController extends BaseController {
         if (!wallet) {
             return res.status(404).json({ message: 'Wallet not found' });
         }
+
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
         if (!subCate) {
@@ -59,6 +63,7 @@ class TransactionController extends BaseController {
             res.status(500).json(err);
         }
     }
+
     
 
     async updateTransaction(req: Request, res: Response) {
@@ -73,6 +78,7 @@ class TransactionController extends BaseController {
             return res.status(404).json({ message: 'Wallet not found' });
         }
         
+
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
         if (!subCate) {
@@ -93,6 +99,7 @@ class TransactionController extends BaseController {
             res.status(500).json(err);
         }
     }
+
 
 
     async deleteTransaction(req: Request, res: Response) {

@@ -6,8 +6,13 @@ import MyBackDrop from "@/components/shares/BackDrop";
 import MyHome from "@/components/UI/Home";
 
 export default function Home() {
+
+
     const [child, setChild] = useState(<MyBackDrop/>)
+
     const dispatch = useDispatch()
+
+
     // useEffect(() => {
     //     const getUser = () => {
     //         axios.get('http://localhost:8000/auth/login/success', {
@@ -35,4 +40,5 @@ export default function Home() {
         </>
     )
 }
+
 
