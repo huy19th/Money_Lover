@@ -27,6 +27,7 @@ import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 import useRouter from 'next/router'
 import {useDispatch, useSelector} from "react-redux";
+
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import Link from "next/link";
@@ -35,6 +36,7 @@ import {GiWallet} from "react-icons/gi";
 import {IoMdArrowDropdown} from "react-icons/io";
 import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
+// import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 const drawerWidth = 240;
 
@@ -143,7 +145,6 @@ export default function MyHome() {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             }
-            console.log(config)
             return config
         }, (err) => {
             return Promise.reject(err)
@@ -263,6 +264,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
+                {/*<MyAvatar/>*/}
             </Box>
         </Box>
     )
