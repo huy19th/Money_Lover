@@ -9,6 +9,7 @@ let userRepo = dataSource.getRepository(User);
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const GithubStrategy = require('passport-github2').Strategy;
 
+
 passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -44,7 +45,6 @@ passport.use(new GithubStrategy({
     },
     async (request, accessToken, refreshToken, profile, done) => {
         try {
-            console.log(profile)
             let existingUser = await userRepo.findOneBy({ githubId: profile.id });
             if (existingUser) {
                 return done(null, existingUser);

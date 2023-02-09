@@ -16,7 +16,7 @@ AuthRouter.post('/register', authController.register);
 AuthRouter.post('/login', authController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
-
+AuthRouter.post('/resetPassword/:userId', authController.resetPassword)
 // Social Authentication
 const CLIENT_URL = process.env.BASE_URL + 'home'
 AuthRouter.get('/login/success', async (req: any, res) => {
@@ -36,10 +36,6 @@ AuthRouter.get('/login/success', async (req: any, res) => {
         )
     }
 })
-AuthRouter.get('/logout', (req: any, res) => {
-    req.logout();
-    res.redirect(CLIENT_URL)
-})
 
 // Google
 AuthRouter.get('/google', passport.authenticate('google', {scope: ["profile", "email"]}));
@@ -56,5 +52,7 @@ AuthRouter.get('/github/callback', passport.authenticate('github', {
 }));
 
 export default AuthRouter;
+
+
 
 

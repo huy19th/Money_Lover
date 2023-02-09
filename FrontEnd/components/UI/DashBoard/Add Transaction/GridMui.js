@@ -6,9 +6,9 @@ import Grid from '@mui/material/Grid';
 import {BsArrowRightShort} from "react-icons/bs";
 import Link from "next/link";
 import Input from '@mui/material/Input';
-import AddWallet from "@/components/UI/DashBoard/SelectWallet";
-import AddCate from "@/components/UI/DashBoard/SelectCate";
-import AddDate from "@/components/UI/DashBoard/SelectDate";
+import AddWallet from "@/components/UI/DashBoard/Add Transaction/SelectWallet";
+import AddCate from "@/components/UI/DashBoard/Add Transaction/SelectCate";
+import AddDate from "@/components/UI/DashBoard/Add Transaction/SelectDate";
 const ariaLabel = { 'aria-label': 'description' };
 
 
@@ -26,10 +26,6 @@ export default function AutoGrid() {
                         <b style={{display:'flex',textAlign:'left'}}>Wallet</b>
                         <p style={{display:'flex',textAlign:'left'}}>
                             <img style={{width: '35px'}} src="https://static.moneylover.me/img/icon/icon.png" alt=""/>
-                        {/*    <span style={{marginTop:'10px'}}>Đoàn Yến*/}
-                        {/*        <Link style={{textDecoration:'none',textAlign:'right',display:'float'}} href='#'>&gt;</Link>*/}
-
-                        {/*    </span>*/}
                             <span>
                                 <AddWallet/>
                             </span>
@@ -41,9 +37,6 @@ export default function AutoGrid() {
                         <b style={{display:'flex',textAlign:'left'}}>Category</b>
                         <p style={{display:'flex',textAlign:'left'}}>
                             <img style={{width: '35px'}} src="https://static.moneylover.me/img/icon/icon.png" alt=""/>
-                        {/*    <span style={{marginTop:'10px'}}> Select Category*/}
-                        {/*        <Link style={{textDecoration:'none',textAlign:'right',display:'float'}} href='#'>&gt;</Link>*/}
-                        {/*    </span>*/}
                             <AddCate/>
                         </p>
 
@@ -70,11 +63,6 @@ export default function AutoGrid() {
             <Grid style={{width: '900px', marginTop: '20px'}} container spacing={3}>
                 <Grid item xs={4}>
                     <Item><b style={{display:'flex',textAlign:'left'}}>Date</b>
-                        {/*<p style={{display:'flex',textAlign:'left'}}>*/}
-                        {/*    <span style={{marginTop:'10px'}}> 08/02/2001*/}
-                        {/*        <Link style={{textDecoration:'none',textAlign:'right',display:'float'}} href='#'>&gt;</Link>*/}
-                        {/*    </span>*/}
-                        {/*</p>*/}
                         <AddDate/>
                     </Item>
                 </Grid>

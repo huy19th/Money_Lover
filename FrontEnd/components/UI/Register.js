@@ -6,8 +6,17 @@ import {FaFacebook, FaGoogle} from "react-icons/fa";
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
+import axios from "axios";
+import {useRouter} from "next/router";
 
 const Register = () => {
+
+    const router = useRouter()
+
+    const google = () => {
+        window.open('http://localhost:8000/auth/google', '_self')
+    }
+
     const formik = useFormik({
         initialValues: {
             name: '', email: '', password: ''
@@ -19,8 +28,9 @@ const Register = () => {
                 .required('Email is required'), password: Yup.string()
                 .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
-        }), onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+        }), onSubmit: async (values) => {
+            await axios.post('http://localhost:8000/auth/register', values)
+            router.push('/login')
         }
     })
     return (<MDBContainer style={{height: '100%', backgroundColor: 'lightgray'}} fluid>
@@ -86,4 +96,5 @@ const Register = () => {
         </MDBRow>
     </MDBContainer>);
 }
+
 export default Register;
