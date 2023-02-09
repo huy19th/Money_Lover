@@ -16,11 +16,9 @@ let userRepo = dataSource.getRepository(User);
 let subCateRepo = dataSource.getRepository(SubCate);
 let transactionRepo = dataSource.getRepository(TransactionModel);
 
-let walletService = new WalletService()
-
 class WalletController extends BaseController {
 
-    async getAllWallet(req: Request, res: Response) {
+    static async getAllWallet(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
 
@@ -41,10 +39,10 @@ class WalletController extends BaseController {
 
     }
 
-    async getAllWalletsOfUser (req: Request, res: Response) {
+    static async getAllWalletsOfUser (req: Request, res: Response) {
         //@ts-ignore
         let userId = req.user.id;
-        walletService.getAllWalletsOfUser(userId)
+        WalletService.getAllWalletsOfUser(userId)
         .then(wallets => {
             res.status(200).json(wallets);
         })
@@ -53,7 +51,7 @@ class WalletController extends BaseController {
         })
     }
 
-    async indexWallet(req: Request, res: Response) {
+    static async indexWallet(req: Request, res: Response) {
         try {
             let wallet = await walletRepo.findOneBy({
                 id: Number(req.params.walletId)
@@ -65,7 +63,7 @@ class WalletController extends BaseController {
         }
     }
 
-    async addMoneyWallet(req: Request, res: Response) {
+    static async addMoneyWallet(req: Request, res: Response) {
 
         try {
             let wallet = await walletRepo.findOneBy({id: Number(req.params.walletId)});
@@ -115,7 +113,7 @@ class WalletController extends BaseController {
         }
     }
 
-    async getAllMoney(req: Request, res: Response) {
+    static async getAllMoney(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
                 relations: {

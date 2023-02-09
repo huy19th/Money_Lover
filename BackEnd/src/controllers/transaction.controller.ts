@@ -11,7 +11,6 @@ let transactionRepo = dataSource.getRepository(TransactionModel);
 let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
 let transactionService = new TransactionServices();
-let walletService = new WalletService();
 
 class TransactionController extends BaseController {
 
@@ -124,7 +123,7 @@ class TransactionController extends BaseController {
         let money = transaction.money;
         let walletId = transaction.wallet.id;
 
-        await walletService.adjustBalance(walletId, money);
+        await WalletService.adjustBalance(walletId, money);
 
         transactionService.deleteTransaction(transaction)
             .then(() => {
