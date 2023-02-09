@@ -11,7 +11,8 @@ class DataBaseConfig{
     synchronize: boolean = false;
     logging:boolean = false;
     entities:string = "./dist/models/*.js";
-    migrations:string = "./dist/database/migrations/*.js"; 
+    migrations:string = "./dist/database/migrations/*.js";
+
 
 }
 

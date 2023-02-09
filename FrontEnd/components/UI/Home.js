@@ -29,10 +29,11 @@ import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
+import {useRouter} from "next/router";
+import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
-;
+
 // import MyAvatar from "@/components/UI/DashBoard/Avatar";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -75,6 +76,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 }),);
 export default function MyHome() {
+    const router = useRouter();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
@@ -84,7 +86,6 @@ export default function MyHome() {
         setOpen(false);
     };
 
-    const router = useRouter()
 
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth)
@@ -179,8 +180,8 @@ export default function MyHome() {
                                         minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney/></Link>}
+                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet  style={{fontSize:'25px'}}/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney  style={{fontSize:'35px'}}/></Link>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
@@ -190,7 +191,7 @@ export default function MyHome() {
                         <ListItem key={text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 1.5,
                                 }}
                             >
                                 <ListItemIcon
@@ -199,8 +200,8 @@ export default function MyHome() {
                                     }}
                                 >
                                     {index % 2 === 0 ?
-                                        <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><GiWallet/></Link>}
+                                        <Link style={{color: 'gray'}} href='/home'><MdAccountCircle style={{fontSize:'30px'}}/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><GiWallet  style={{fontSize:'30px'}}/></Link>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
