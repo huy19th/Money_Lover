@@ -20,7 +20,7 @@ class App {
         this.bootstrap();
     }
 
-    public bootstrap() : void {
+    public bootstrap(): void {
         this.setupMiddlewares();
         //this.serveStaticFiles();
         this.listen();
@@ -58,11 +58,10 @@ class App {
         // this.app.use(passport.session());
         this.app.use('/api/auth', AuthRouter);
         this.app.use(AuthMiddleware.checkAuthentication);
-
         this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
-        this.app.use('/api',WalletRouter);
+        this.app.use('/api', WalletRouter);
     }
 
     private listen(): void {
@@ -73,6 +72,10 @@ class App {
 }
 
 new App();
+
+
+
+
 
 
 
