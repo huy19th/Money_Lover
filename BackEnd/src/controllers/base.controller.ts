@@ -3,7 +3,7 @@ require('dotenv').config();
 
 class BaseController {
 
-    static getRandomString(): string {
+    static getRandomString(): string{
 
         let randomString = '';
 

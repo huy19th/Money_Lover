@@ -113,7 +113,7 @@ export default function MyHome() {
         setOpen(false);
     };
 
-    const router = useRouter
+    const router = useRouter()
 
     const dispatch = useDispatch()
 
