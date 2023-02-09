@@ -5,6 +5,8 @@ import {useDispatch, useSelector} from "react-redux";
 import MyBackDrop from "@/components/shares/BackDrop";
 import MyHome from "@/components/UI/Home";
 import {useRouter} from "next/router";
+import {walletActions} from "@/features/wallet/walletSlice";
+import {transactionActions} from "@/features/transaction/transactionSlice";
 
 export default function Home() {
 
@@ -38,7 +40,12 @@ export default function Home() {
 
     useEffect(() => {
         if (user.isLoggedIn) {
-            setChild(<MyHome/>)
+            axios.get(`http://localhost:8000/tester/${user.currentUser.id}`)
+                .then(res => {
+                    dispatch(walletActions.getWallets(res.data.wallets))
+                    dispatch(transactionActions.getTrans(res.data.trans))
+                    setChild(<MyHome/>)
+                })
         } else {
             router.push('/login')
         }
@@ -50,5 +57,4 @@ export default function Home() {
         </>
     )
 }
-
 

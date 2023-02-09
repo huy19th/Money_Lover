@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -14,104 +14,86 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';;
+import ListItemText from '@mui/material/ListItemText';
 import {BsCalendarDay} from "react-icons/bs";
 import {RiFindReplaceLine} from "react-icons/ri";
 import {Col, Row} from "react-bootstrap";
-import TransDetails from "@/components/UI/DashBoard/TransDetail";
+import TransOverview from "@/components/UI/DashBoard/TransOverview";
 import Container from "react-bootstrap/Container";
-
+import {authActions} from "@/features/auth/authSlice";
+import {useDispatch, useSelector} from "react-redux";
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import Link from "next/link";
 import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
-import {IoMdArrowDropdown} from "react-icons/io";
-import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
-import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
-import { useRouter } from 'next/router';
-import {useDispatch, useSelector} from "react-redux";
 import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
+import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
-
+import {useRouter} from "next/router";
+import Wallets from "@/components/UI/DashBoard/WalletsList";
 const drawerWidth = 240;
-
 const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: 'hidden',
+    width: drawerWidth, transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen,
+    }), overflowX: 'hidden',
 });
-
 const closedMixin = (theme) => ({
     transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: 'hidden',
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
+        easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen,
+    }), overflowX: 'hidden', width: `calc(${theme.spacing(7)} + 1px)`, [theme.breakpoints.up('sm')]: {
         width: `calc(${theme.spacing(8)} + 1px)`,
     },
 });
-
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
+    padding: theme.spacing(0, 1), // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
-
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
+})(({theme, open}) => ({
+    zIndex: theme.zIndex.drawer + 1, transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen,
+    }), ...(open && {
         marginLeft: drawerWidth,
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
+            easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen,
         }),
     }),
 }));
-
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme, open }) => ({
-        width: drawerWidth,
-        flexShrink: 0,
-        whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
-        ...(open && {
-            ...openedMixin(theme),
-            '& .MuiDrawer-paper': openedMixin(theme),
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            '& .MuiDrawer-paper': closedMixin(theme),
-        }),
+const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
+    width: drawerWidth, flexShrink: 0, whiteSpace: 'nowrap', boxSizing: 'border-box', ...(open && {
+        ...openedMixin(theme), '& .MuiDrawer-paper': openedMixin(theme),
+    }), ...(!open && {
+        ...closedMixin(theme), '& .MuiDrawer-paper': closedMixin(theme),
     }),
-);
-
+}),);
 export default function MyHome() {
+
+    // Lấy tất cả các ví và giao dịch
+
+    const myWallet = useSelector(state => state.wallet)
+    const myTrans = useSelector(state => state.transaction)
+
+    let totalBalance = 0
+    myWallet.wallets.map(wallet => {
+        totalBalance += wallet.balance
+    })
+
+    totalBalance = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalBalance)
+
+    //
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
-
     const handleDrawerClose = () => {
         setOpen(false);
     };
@@ -119,20 +101,21 @@ export default function MyHome() {
     const router = useRouter()
 
     const dispatch = useDispatch()
-
     const user = useSelector(state => state.auth)
-
     const refreshToken = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
             localStorage.setItem('token', res.data.accessToken)
-            dispatch(authActions.loggedIn(res.data.refreshToken))
+            let user = jwt_decode(res.data.accessToken)
+            dispatch(authActions.loggedIn({
+                user: user,
+                refreshToken: res.data.refreshToken
+            }))
             return res.data
         } catch (err) {
             console.log(err)
         }
     }
-
     // RefreshToken
     const axiosJWT = axios.create();
     axiosJWT.interceptors.request.use(
@@ -150,19 +133,17 @@ export default function MyHome() {
     )
 
     const logOut = async () => {
-        await axiosJWT.get('http://localhost:8000/auth/logout',{
+        await axiosJWT.get('http://localhost:8000/api/auth/logout', {
             headers: {
                 authorization: 'Bearer ' + localStorage.getItem('token')
-            }}
-        )
+            }
+        })
         localStorage.removeItem('token');
         dispatch(authActions.loggedOut());
         router.push('/login')
     }
-
-    return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
+    return (<Box sx={{display: 'flex'}}>
+            <CssBaseline/>
             <AppBar sx={{backgroundColor: 'white'}} position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
@@ -171,19 +152,29 @@ export default function MyHome() {
                         onClick={handleDrawerOpen}
                         edge="start"
                         sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
+                            marginRight: 5, ...(open && {display: 'none'}),
                         }}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
-                    <div style={{width:'100%',display:'flex',alignItems:'center', justifyContent: 'space-between'}}>
-                        <div style={{color:'black'}}>
-                            <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-                                Total:  -49789723424
-                                {/*<MenuTotal/>*/}
-                            <span></span>
+                    <div
+                        style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <div style={{color: 'black', display: "flex", alignItems: "center"}}>
+                            <div>
+                                <img style={{width: '50px', marginLeft: '20px'}}
+                                     src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
+                            </div>
+                            <div>
+                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.currentWallet.balance)}</p>
+                                <Wallets/>
+                            </div>
                         </div>
+
+                        //
+
+                        {/*<Wallets/>*/}
+
+                        //
 
                         <div style={{display:'flex',alignItems:'center'}}>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
@@ -197,73 +188,66 @@ export default function MyHome() {
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
+                    <MyAvatar/>
+                    <button type='button' onClick={logOut}>Log out</button>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </DrawerHeader>
                 <Divider/>
                 <List>
                     {['Transactions', 'Report'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
                                 }}
                             >
                                 <ListItemIcon
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <Link style={{color:'gray'}} href='/home'><FaWallet/></Link> : <Link  style={{color:'gray'}} href='/report'><TbReportMoney/></Link>}
+                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney/></Link>}
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
-                        </ListItem>
-                    ))},
+                        </ListItem>))},
                     <hr/>
                     {['Account', 'Wallet'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
                                 }}
                             >
                                 <ListItemIcon
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <Link style={{color:'gray'}} href='/home'><MdAccountCircle/></Link> : <Link  style={{color:'gray'}} href='/report'><GiWallet/></Link>}
+                                    {index % 2 === 0 ?
+                                        <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><GiWallet/></Link>}
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
-                        </ListItem>
-                    ))}
+                        </ListItem>))}
                 </List>
-                <Divider />
+                <Divider/>
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
+            <Box style={{backgroundColor: '#e4e4e4', minHeight: '1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
+                <DrawerHeader/>
                 <div>
                     <Container>
                         <Row className="justify-content-md-center">
-                            <Col md="auto" >
-                                <TransDetails/>
+                            <Col md="auto">
+                                <TransOverview/>
                             </Col>
                         </Row>
                     </Container>
                 </div>
-                <MyAvatar/>
             </Box>
-        </Box>
-    )
+        </Box>)
 }

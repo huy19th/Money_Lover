@@ -13,6 +13,10 @@ import TransSubCateRouter from "./routers/transsubcate.router";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
+import dataSource from "./database/data-source";
+import User from "./models/user.model";
+import Transaction from "./models/transaction.model";
+import Wallet from "./models/wallet.model";
 
 require('./passport')
 class App {
@@ -57,7 +61,38 @@ class App {
         }));
 
         this.app.use('/api/auth', AuthRouter);
+
+        // Test
+        this.app.get('/tester/:id', async (req: any, res) => {
+            let userId = +req.params.id
+            let walletRepo = dataSource.getRepository(Wallet);
+            let transactionRepo = dataSource.getRepository(Transaction)
+            let wallets = await walletRepo.createQueryBuilder('wallet')
+                .innerJoin('wallet.user', 'user')
+                .select('wallet.name, wallet.balance, wallet.includeTotal, wallet.active')
+                .where('user.id = :id', {id: userId})
+                .getRawMany();
+            let transactions = await transactionRepo.createQueryBuilder('trans')
+                .innerJoin('trans.wallet', 'wallet')
+                .innerJoin('wallet.user', 'user')
+                .innerJoin('trans.subCategory', 'subCategory')
+                .innerJoin('subCategory.category', 'category')
+                .innerJoin('category.transType', 'type')
+                .select('trans.money, trans.date, trans.note, trans.image')
+                .addSelect('wallet.name', 'wallet_name')
+                .addSelect('subCategory.name', 'subCate_name')
+                .addSelect('type.name', 'type_name')
+                .where('user.id = :id', {id: userId})
+                .getRawMany();
+            res.json({
+                wallets: wallets,
+                trans: transactions
+            })
+        })
+
+
         this.app.use(AuthMiddleware.checkAuthentication);
+        this.app.use('/api/user', UserRouter)
         this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction-subcategory', TransSubCateRouter);
         // this.app.use(TransTypeRouter);
