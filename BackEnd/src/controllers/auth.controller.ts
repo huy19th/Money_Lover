@@ -8,8 +8,10 @@ let userRepo = dataSource.getRepository(User);
 
 //code so bad
 class AuthController extends BaseController {
+
     
     async register(req: Request , res: Response) {
+
         let {name, email, password} = req.body;
         let user = new User();
         user.email = email ? email : null;

@@ -1,6 +1,8 @@
 import BaseController from "./base.controller";
+
 import {Request, Response} from "express";
 import WalletModel, {Wallet} from "../models/wallet.model";
+
 import User from "../models/user.model"
 import dataSource from "../database/data-source";
 import transactionController from "./transaction.controller";
@@ -13,6 +15,7 @@ let subCateRepo = dataSource.getRepository(SubCate)
 let transactionRepo = dataSource.getRepository(TransactionModel)
 
 class WalletController extends BaseController {
+
     async getAllWallet(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
@@ -116,6 +119,7 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
     }
+
 }
 
 export default WalletController;

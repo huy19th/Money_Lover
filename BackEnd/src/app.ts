@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
+
 import fileUpload from "express-fileupload";
+import TransactionRouter from "./routers/transaction.router";
+import WalletRouter from "./routers/wallet.router";
 import cookieSession from "cookie-session";
 import passport from 'passport';
 require('./passport')
@@ -50,12 +53,14 @@ class App {
             methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
         }));
 
+
         this.app.use('/api/auth', AuthRouter);
         this.app.use(AuthMiddleware.checkAuthentication);
         this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
         this.app.use('/api', WalletRouter);
+
     }
 
     private listen(): void {

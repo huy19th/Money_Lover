@@ -15,9 +15,11 @@ class BaseController {
         return randomString;
     }
 
-    static generateAccessToken(payload: number): string {
-        return jwt.sign(payload, `${process.env.JWT_SECRET_KEY}`, { expiresIn: "15m" });
-    };
+
+    static generateAccessToken(payload) {
+        return jwt.sign(payload, `${process.env.JWT_SECRET_KEY}`, { expiresIn: "15m" }
+        );
+    
 
     static generateRefreshToken(user : User): string {
         return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, `${process.env.JWT_REFRESH_KEY}`);
