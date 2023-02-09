@@ -22,9 +22,11 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
-
-import AddTrans from "@/components/UI/DashBoard/AddTransactions";
-// import Select from "@/components/UI/DashBoard/DropDown";
+import axios from "axios";
+import {authActions} from "@/features/auth/authSlice";
+import jwt_decode from "jwt-decode";
+import useRouter from 'next/router'
+import {useDispatch, useSelector} from "react-redux";
 
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
@@ -33,14 +35,8 @@ import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
 import {IoMdArrowDropdown} from "react-icons/io";
 import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
-
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
+import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 // import MyAvatar from "@/components/UI/DashBoard/Avatar";
-
 
 const drawerWidth = 240;
 
@@ -194,9 +190,9 @@ export default function MyHome() {
                         <div style={{display:'flex',alignItems:'center'}}>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} >
-                                <AddTrans/>
-                            </Button>
+                            {/* <Button style={{marginRight:'10px'}} > */}
+                                <AddTransactionModal/>
+                            {/* </Button> */}
                         </div>
                     </div>
                 </Toolbar>
