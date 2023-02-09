@@ -22,15 +22,9 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
 
-import AddTrans from "@/components/UI/DashBoard/Add Transaction/AddTransactions";
-
-
+import AddTrans from "@/components/UI/DashBoard/AddTransactions";
+// import Select from "@/components/UI/DashBoard/DropDown";
 
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
@@ -45,6 +39,7 @@ import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 import useRouter from 'next/router'
 import {useDispatch, useSelector} from "react-redux";
+// import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 
 const drawerWidth = 240;
@@ -154,7 +149,6 @@ export default function MyHome() {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             }
-            console.log(config)
             return config
         }, (err) => {
             return Promise.reject(err)
@@ -274,6 +268,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
+                {/*<MyAvatar/>*/}
             </Box>
         </Box>
     )

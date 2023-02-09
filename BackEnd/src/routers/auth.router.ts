@@ -24,6 +24,9 @@ AuthRouter.get('/login/success', async (req: any, res) => {
     if (req.user) {
         let payload = {
             id: req.user.id,
+            email: req.user.email,
+            name: req.user.name,
+            image: req.user.image
         }
         let accessToken = BaseController.generateAccessToken(payload);
         let refreshToken = BaseController.generateRefreshToken(payload);

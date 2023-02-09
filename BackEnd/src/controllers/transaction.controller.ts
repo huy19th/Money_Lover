@@ -132,5 +132,5 @@ class TransactionController extends BaseController {
     }
 }
 
-
 export default TransactionController;
+

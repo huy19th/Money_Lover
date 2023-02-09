@@ -37,8 +37,14 @@ class AuthMiddleware {
             }
             let user = await userRepo.findOneBy({id: decoded.id});
             if (user.refreshToken === refreshToken) {
-                const newAccessToken = BaseController.generateAccessToken({id: user.id});
-                const newRefreshToken = BaseController.generateRefreshToken({id: user.id});
+                let payload = {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    image: user.image
+                }
+                const newAccessToken = BaseController.generateAccessToken(payload);
+                const newRefreshToken = BaseController.generateRefreshToken(payload);
                 user.refreshToken = newRefreshToken
                 await userRepo.save(user)
                 res.status(200).json({
