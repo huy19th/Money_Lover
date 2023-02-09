@@ -67,7 +67,7 @@ class TransactionController extends BaseController {
         }
     }
 
-    
+
 
     async updateTransaction(req: Request, res: Response) {
 

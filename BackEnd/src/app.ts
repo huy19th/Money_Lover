@@ -12,6 +12,7 @@ import AuthMiddleware from "./middlewares/auth.middlewares";
 import TransSubCateRouter from "./routers/transsubcate.router";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
+import UserRouter from "./routers/user.router";
 
 require('./passport')
 class App {
@@ -41,6 +42,7 @@ class App {
             createParentPath: true
         }))
         this.app.use(express.json())
+        this.app.use(express.urlencoded({extended:true}))
         this.app.use(cookieSession({
             name: "session",
             keys: ["case-md6"],
@@ -72,6 +74,13 @@ class App {
 }
 
 new App();
+
+
+
+
+
+
+
 
 
 

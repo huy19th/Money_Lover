@@ -44,6 +44,7 @@ class AuthController extends BaseController {
             let accessToken = BaseController.generateAccessToken(payload);
             let refreshToken = BaseController.generateRefreshToken(payload);
             user.refreshToken = refreshToken
+            console.log(1)
             await userRepo.save(user)
             res.status(200).json({
                 accessToken: accessToken,
