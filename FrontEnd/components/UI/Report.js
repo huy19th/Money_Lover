@@ -207,7 +207,7 @@ export default function MyHome() {
 
                 <Divider/>
             </Drawer>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
+            <Box style={{backgroundColor:'#e4e4e4',minHeight:'1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
                 <div>
                     <Container>
