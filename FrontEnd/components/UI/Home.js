@@ -31,6 +31,7 @@ import {GiWallet} from "react-icons/gi";
 import {IoMdArrowDropdown} from "react-icons/io";
 import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
+import { useRouter } from 'next/router';
 // import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 const drawerWidth = 240;
@@ -113,7 +114,7 @@ export default function MyHome() {
         setOpen(false);
     };
 
-    const router = useRouter
+    const router = useRouter()
 
     const dispatch = useDispatch()
 
