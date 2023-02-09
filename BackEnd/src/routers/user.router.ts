@@ -7,8 +7,5 @@ const UserRouter: Router = express.Router();
 
 const userController = new UserController();
 
-UserRouter.post('/', userController.test);
-
-
 
 export default UserRouter;

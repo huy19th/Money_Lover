@@ -9,8 +9,7 @@ import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import Grid from "@mui/material/Grid";
-import BasicGrid from "@/components/UI/DashBoard/GridMui";
+import {FaUserCircle} from "react-icons/fa";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -50,7 +49,7 @@ BootstrapDialogTitle.propTypes = {
     onClose: PropTypes.func.isRequired,
 };
 
-export default function AddTrans() {
+export default function AccountUser() {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -62,28 +61,37 @@ export default function AddTrans() {
 
     return (
         <div>
-            <Button variant="success" onClick={handleClickOpen}>
-                ADD TRANSACTION
-            </Button>
-            <form>
-                <BootstrapDialog
-                    onClose={handleClose}
-                    aria-labelledby="customized-dialog-title"
-                    open={open}
-                    maxWidth='md'
-                >
-                    <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                        <b>Add transaction</b>
-                    </BootstrapDialogTitle>
-                    <DialogContent dividers>
-                        <BasicGrid/>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button variant="outlined" color="secondary">Cancel</Button>
-                        <Button variant="outlined" color="success">Save</Button>
-                    </DialogActions>
-                </BootstrapDialog>
-            </form>
+            <FaUserCircle onClick={handleClickOpen}/>
+            <BootstrapDialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+            >
+                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                    Modal title
+                </BootstrapDialogTitle>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+                        dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
+                        consectetur ac, vestibulum at eros.
+                    </Typography>
+                    <Typography gutterBottom>
+                        Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+                        Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
+                    </Typography>
+                    <Typography gutterBottom>
+                        Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
+                        magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
+                        ullamcorper nulla non metus auctor fringilla.
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleClose}>
+                        Save changes
+                    </Button>
+                </DialogActions>
+            </BootstrapDialog>
         </div>
     );
 }

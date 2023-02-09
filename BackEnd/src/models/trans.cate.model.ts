@@ -22,7 +22,7 @@ export class TransCate {
     @OneToMany(() => TransSubCate, transSubCate => transSubCate.category)
     subCategories: TransSubCate[];
 
-    @ManyToOne(() => User, user => user.transCates)
+    @ManyToOne(() => User, (user: User) => user.transCates)
     @JoinColumn({name: "user_id"})
         //@ts-ignore
     user: User

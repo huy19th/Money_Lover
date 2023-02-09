@@ -16,6 +16,7 @@ export default function Home() {
 
     const dispatch = useDispatch()
 
+
     // useEffect(() => {
     //     const getUser = () => {
     //         axios.get('http://localhost:8000/auth/login/success', {
@@ -49,7 +50,6 @@ export default function Home() {
             {child}
         </>
     )
-
 }
 
 
