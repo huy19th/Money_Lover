@@ -9,6 +9,7 @@ require('dotenv').config();
 const AuthRouter: Router = express.Router();
 
 let userRepo = dataSource.getRepository(User);
+const CLIENT_URL = process.env.BASE_URL + 'home';
 
 const authController = new AuthController();
 
@@ -18,11 +19,14 @@ AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
 AuthRouter.post('/resetPassword/:userId', authController.resetPassword)
 // Social Authentication
-const CLIENT_URL = process.env.BASE_URL + 'home'
+
 AuthRouter.get('/login/success', async (req: any, res) => {
     if (req.user) {
         let payload = {
             id: req.user.id,
+            email: req.user.email,
+            name: req.user.name,
+            image: req.user.image
         }
         let accessToken = BaseController.generateAccessToken(payload);
         let refreshToken = BaseController.generateRefreshToken(payload);

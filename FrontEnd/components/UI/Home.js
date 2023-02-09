@@ -15,9 +15,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import ListItemText from '@mui/material/ListItemText';;
 import {BsCalendarDay} from "react-icons/bs";
 import {RiFindReplaceLine} from "react-icons/ri";
 import Button from "react-bootstrap/Button";
@@ -27,15 +25,13 @@ import Container from "react-bootstrap/Container";
 
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
-import AddTrans from "@/components/UI/DashBoard/AddTransactions";
-// import Select from "@/components/UI/DashBoard/DropDown";
-
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
-
+import Link from "next/link";
+import {MdAccountCircle} from "react-icons/md";
+import {GiWallet} from "react-icons/gi";
+import {IoMdArrowDropdown} from "react-icons/io";
+import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
+import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
+// import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 const drawerWidth = 240;
 
@@ -104,8 +100,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-
 export default function MyHome() {
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -144,7 +140,6 @@ export default function MyHome() {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             }
-            console.log(config)
             return config
         }, (err) => {
             return Promise.reject(err)
@@ -180,18 +175,19 @@ export default function MyHome() {
                         <MenuIcon />
                     </IconButton>
                     <div style={{width:'100%',display:'flex',alignItems:'center', justifyContent: 'space-between'}}>
-                        <div>
+                        <div style={{color:'black'}}>
                             <img style={{width:'50px',marginLeft:'20px'}} src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
+                                Total:  -49789723424
+                                {/*<MenuTotal/>*/}
+                            <span></span>
                         </div>
+
                         <div style={{display:'flex',alignItems:'center'}}>
-                            <Typography variant="h6" noWrap component="div">
-                                Mini variant drawer
-                            </Typography>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} >
-                                <AddTrans/>
-                            </Button>
+                            {/* <Button style={{marginRight:'10px'}} > */}
+                                <AddTransactionModal/>
+                            {/* </Button> */}
                         </div>
                     </div>
                 </Toolbar>
@@ -202,9 +198,9 @@ export default function MyHome() {
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
                 </DrawerHeader>
-                <Divider />
+                <Divider/>
                 <List>
-                    {['Transactions', 'Report','Transactions', 'Report'].map((text, index) => (
+                    {['Transactions', 'Report'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
@@ -220,7 +216,30 @@ export default function MyHome() {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <FaWallet/> : <TbReportMoney/>}
+                                    {index % 2 === 0 ? <Link style={{color:'gray'}} href='/home'><FaWallet/></Link> : <Link  style={{color:'gray'}} href='/report'><TbReportMoney/></Link>}
+                                </ListItemIcon>
+                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))},
+                    <hr/>
+                    {['Account', 'Wallet'].map((text, index) => (
+                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                            <ListItemButton
+                                sx={{
+                                    minHeight: 48,
+                                    justifyContent: open ? 'initial' : 'center',
+                                    px: 2.5,
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0,
+                                        mr: open ? 3 : 'auto',
+                                        justifyContent: 'center',
+                                    }}
+                                >
+                                    {index % 2 === 0 ? <Link style={{color:'gray'}} href='/home'><MdAccountCircle/></Link> : <Link  style={{color:'gray'}} href='/report'><GiWallet/></Link>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
@@ -240,6 +259,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
+                {/*<MyAvatar/>*/}
             </Box>
         </Box>
     )
