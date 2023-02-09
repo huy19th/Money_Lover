@@ -7,9 +7,11 @@ import MyHome from "@/components/UI/Home";
 
 export default function Home() {
 
+
     const [child, setChild] = useState(<MyBackDrop/>)
 
     const dispatch = useDispatch()
+
 
     // useEffect(() => {
     //     const getUser = () => {
