@@ -1,13 +1,15 @@
 import BaseController from "./base.controller";
 import User from "../models/user.model";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 import dataSource from "../database/data-source";
+import { Request, Response } from "express";
 
 let userRepo = dataSource.getRepository(User);
 
+//code so bad
 class AuthController extends BaseController {
 
-    async register(req, res) {
+    async register(req: Request , res: Response) {
         let {name, email, password} = req.body;
         let user = new User();
         user.email = email ? email : null;
