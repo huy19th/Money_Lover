@@ -9,10 +9,14 @@ import transactionController from "./transaction.controller";
 import TransactionModel, {Transaction} from "../models/transaction.model";
 import SubCate from "../models/trans.subcate.model";
 
-let walletRepo = dataSource.getRepository(WalletModel)
-let userRepo = dataSource.getRepository(User)
-let subCateRepo = dataSource.getRepository(SubCate)
-let transactionRepo = dataSource.getRepository(TransactionModel)
+import WalletService from "../services/wallet.services";
+
+let walletRepo = dataSource.getRepository(WalletModel);
+let userRepo = dataSource.getRepository(User);
+let subCateRepo = dataSource.getRepository(SubCate);
+let transactionRepo = dataSource.getRepository(TransactionModel);
+
+let walletService = new WalletService()
 
 class WalletController extends BaseController {
 
@@ -35,6 +39,18 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
 
+    }
+
+    async getAllWalletsOfUser (req: Request, res: Response) {
+        //@ts-ignore
+        let userId = req.user.id;
+        walletService.getAllWalletsOfUser(userId)
+        .then(wallets => {
+            res.status(200).json(wallets);
+        })
+        .catch(err => {
+            res.status(500).json(err);
+        })
     }
 
     async indexWallet(req: Request, res: Response) {

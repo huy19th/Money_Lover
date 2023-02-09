@@ -4,7 +4,7 @@ const WalletRouter: Router = express.Router();
 
 const walletController = new WalletController();
 
-WalletRouter.get('/:userId/wallet',walletController.getAllWallet);
+WalletRouter.get('/',walletController.getAllWalletsOfUser);
 
 WalletRouter.get('/wallet/:id',walletController.indexWallet);
 WalletRouter.post('/:walletId/wallet/addMoney',walletController.addMoneyWallet);

@@ -10,8 +10,6 @@ require('./passport')
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
 import AuthMiddleware from "./middlewares/auth.middlewares";
-import TransactionRouter from "./routers/transaction.router";
-import WalletRouter from "./routers/wallet.router";
 
 class App {
 
@@ -59,7 +57,7 @@ class App {
         this.app.use('/api/transaction', TransactionRouter);
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
-        this.app.use('/api', WalletRouter);
+        this.app.use('/api/wallet', WalletRouter);
 
     }
 
