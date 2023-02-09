@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import User from "../models/user.model";
 require('dotenv').config();
 
 class BaseController {
@@ -15,12 +14,19 @@ class BaseController {
         return randomString;
     }
 
-    static generateAccessToken(payload: object): string {
-        return jwt.sign(payload, `${process.env.JWT_SECRET_KEY}`, { expiresIn: "15m" });
-    };
 
-    static generateRefreshToken(payload: object): string {
+
+    static generateAccessToken(payload) {
+        return jwt.sign(payload, `${process.env.JWT_SECRET_KEY}`, { expiresIn: "15m" }
+        );
+    }
+
+
+
+    static generateRefreshToken(payload) {
         return jwt.sign(payload, `${process.env.JWT_REFRESH_KEY}`);
+
+
     };
 
 }

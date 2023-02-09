@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -18,6 +19,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {RiFindReplaceLine} from "react-icons/ri";
 import {Col, Row} from "react-bootstrap";
+
 import Container from "react-bootstrap/Container";
 import axios from "axios";
 import {authActions} from "@/features/auth/authSlice";
@@ -205,7 +207,7 @@ export default function MyHome() {
 
                 <Divider/>
             </Drawer>
-            <Box component="main" sx={{flexGrow: 1, p: 3}}>
+            <Box style={{backgroundColor:'#e4e4e4',minHeight:'1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
                 <DrawerHeader/>
                 <div>
                     <Container>

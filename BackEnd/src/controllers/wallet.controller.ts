@@ -1,6 +1,8 @@
 import BaseController from "./base.controller";
+
 import {Request, Response} from "express";
 import WalletModel, {Wallet} from "../models/wallet.model";
+
 import User from "../models/user.model"
 import dataSource from "../database/data-source";
 import transactionController from "./transaction.controller";
@@ -13,7 +15,8 @@ let subCateRepo = dataSource.getRepository(SubCate)
 let transactionRepo = dataSource.getRepository(TransactionModel)
 
 class WalletController extends BaseController {
-    async getAllWallet(req: any, res: Response) {
+
+    async getAllWallet(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
 
@@ -22,7 +25,7 @@ class WalletController extends BaseController {
 
                 },
                 where: {
-                    id: req.params.userId
+                    id: Number(req.params.userId)
                 }
 
             })
@@ -34,10 +37,10 @@ class WalletController extends BaseController {
 
     }
 
-    async indexWallet(req: any, res: Response) {
+    async indexWallet(req: Request, res: Response) {
         try {
             let wallet = await walletRepo.findOneBy({
-                id: req.params.walletId
+                id: Number(req.params.walletId)
             })
             res.status(200).json(wallet)
 
@@ -46,10 +49,10 @@ class WalletController extends BaseController {
         }
     }
 
-    async addMoneyWallet(req: any, res: Response) {
+    async addMoneyWallet(req: Request, res: Response) {
 
         try {
-            let wallet = await walletRepo.findOneBy({id: req.params.walletId});
+            let wallet = await walletRepo.findOneBy({id: Number(req.params.walletId)});
             let money = wallet.balance - (+req.body.balance)
             if (money < 0) {
                 await transactionRepo.createQueryBuilder('transaction')
@@ -57,7 +60,7 @@ class WalletController extends BaseController {
                     .into(Transaction)
                     .values({
                         wallet: {
-                            id: req.params.walletId
+                            id: Number(req.params.walletId)
                         },
                         subCategory: {
                             id: 34
@@ -76,7 +79,7 @@ class WalletController extends BaseController {
                     .into(Transaction)
                     .values({
                         wallet: {
-                            id: req.params.walletId
+                            id: Number(req.params.walletId)
                         },
                         subCategory: {
                             id: 20
@@ -96,14 +99,14 @@ class WalletController extends BaseController {
         }
     }
 
-    async getAllMoney(req, res: Response) {
+    async getAllMoney(req: Request, res: Response) {
         try {
             let user = await userRepo.find({
                 relations: {
                     wallets: true
                 },
                 where: {
-                    id: req.params.userId
+                    id: Number(req.params.userId)
                 }
             })
             let sum = 0
@@ -116,6 +119,7 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
     }
+
 }
 
 export default WalletController;

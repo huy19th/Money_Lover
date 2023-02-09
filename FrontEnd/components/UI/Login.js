@@ -10,6 +10,7 @@ import axios from 'axios';
 import useRouter from 'next/router';
 import {authActions} from "@/features/auth/authSlice";
 import {useDispatch} from "react-redux";
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
 
@@ -29,7 +30,6 @@ const Login = () => {
                 .email('Invalid email address')
                 .required('Email is required'),
             password: Yup.string()
-                .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: values => {
             const config = {
@@ -37,21 +37,21 @@ const Login = () => {
                     "Content-Type": "multipart/form-data",
                 },
             };
-            axios.post('http://localhost:8000/auth/login', values, config)
+            axios.post('http://localhost:8000/api/auth/login', values, config)
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
+                    let user = jwt_decode(res.data.accessToken)
+                    console.log(user)
                     dispatch(authActions.loggedIn(res.data.refreshToken))
                     router.push('/home')
-                })
+                }).catch(err => {
+                console.log(err)
+            })
         }
     })
     return (<MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>
         <MDBRow className='d-flex justify-content-center align-items-center'>
             <MDBCol style={{backgroundColor: 'lightgray', height: "100vh"}} col='12'>
-                {/*<div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}><img*/}
-                {/*    style={{width: '300px', marginLeft: '550px', marginTop: '25px',zIndex:999}}*/}
-                {/*    src="https://f27-zpc.zdn.vn/478914099736103095/426f0e7760c9bb97e2d8.jpg" alt=""/>*/}
-                {/*</div>*/}
                 <div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}>
                     <Logo/>
                 </div>

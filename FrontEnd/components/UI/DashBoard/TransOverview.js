@@ -6,7 +6,7 @@ import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
 
 
-const TransDetails = () => {
+const TransOverview = () => {
     return (
         <Card style={{width:'500px',marginTop:'20px'}}>
             <Card.Header>
@@ -62,8 +62,6 @@ const TransDetails = () => {
                             <p style={{float:'right'}}>- 3000000000 </p>
                         </Col>
                     </Row>
-
-
                 </Container>
             </Card.Body>
 
@@ -71,4 +69,4 @@ const TransDetails = () => {
     );
 }
 
-export default TransDetails;
+export default TransOverview;
