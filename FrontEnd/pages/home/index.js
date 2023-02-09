@@ -1,12 +1,16 @@
-
 import {useEffect, useState} from "react";
 import axios from 'axios';
 import {authActions} from "@/features/auth/authSlice";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import MyBackDrop from "@/components/shares/BackDrop";
 import MyHome from "@/components/UI/Home";
+import {useRouter} from "next/router";
 
 export default function Home() {
+
+    const router = useRouter()
+
+    const user = useSelector(state => state.auth);
 
     const [child, setChild] = useState(<MyBackDrop/>)
 
@@ -32,10 +36,17 @@ export default function Home() {
     //     getUser();
     // }, [])
 
+    useEffect(() => {
+        if (user.isLoggedIn) {
+            setChild(<MyHome/>)
+        } else {
+            router.push('/login')
+        }
+    }, [])
+
     return (
         <>
-            {/*{child}*/}
-            <MyHome/>
+            {child}
         </>
     )
 

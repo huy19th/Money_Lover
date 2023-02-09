@@ -33,6 +33,9 @@ class AuthController extends BaseController {
         if (match) {
             let payload = {
                 id: user.id,
+                email: user.email,
+                name: user.name,
+                image: user.image
             }
             let accessToken = BaseController.generateAccessToken(payload);
             let refreshToken = BaseController.generateRefreshToken(payload);

@@ -17,8 +17,8 @@ class BaseController {
         );
     };
 
-    static generateRefreshToken(user) {
-        return jwt.sign({ id: user.id, isAdmin: user.isAdmin }, `${process.env.JWT_REFRESH_KEY}`);
+    static generateRefreshToken(payload) {
+        return jwt.sign(payload, `${process.env.JWT_REFRESH_KEY}`);
     };
 
 }

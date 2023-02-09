@@ -10,6 +10,7 @@ import axios from 'axios';
 import useRouter from 'next/router';
 import {authActions} from "@/features/auth/authSlice";
 import {useDispatch} from "react-redux";
+import jwt_decode from "jwt-decode";
 
 const Login = () => {
 
@@ -37,9 +38,11 @@ const Login = () => {
                     "Content-Type": "multipart/form-data",
                 },
             };
-            axios.post('http://localhost:8000/auth/login', values, config)
+            axios.post('http://localhost:8000/api/auth/login', values, config)
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
+                    let user = jwt_decode(res.data.accessToken)
+                    console.log(user)
                     dispatch(authActions.loggedIn(res.data.refreshToken))
                     router.push('/home')
                 })

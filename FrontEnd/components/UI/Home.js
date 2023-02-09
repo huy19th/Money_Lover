@@ -25,17 +25,16 @@ import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
-
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import AddTrans from "@/components/UI/DashBoard/AddTransactions";
 // import Select from "@/components/UI/DashBoard/DropDown";
-
 import axios from "axios";
 import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 import useRouter from 'next/router'
 import {useDispatch, useSelector} from "react-redux";
+// import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 
 const drawerWidth = 240;
@@ -107,7 +106,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export default function MyHome() {
-
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -242,6 +240,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
+                {/*<MyAvatar/>*/}
             </Box>
         </Box>
     )
