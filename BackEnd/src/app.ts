@@ -56,7 +56,6 @@ class App {
             methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
         }));
 
-
         this.app.use('/api/auth', AuthRouter);
         this.app.use(AuthMiddleware.checkAuthentication);
         this.app.use('/api/transaction', TransactionRouter);
