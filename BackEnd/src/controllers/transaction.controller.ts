@@ -79,6 +79,7 @@ class TransactionController extends BaseController {
         }
 
 
+
         let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
 
         if (!subCate) {
@@ -132,5 +133,5 @@ class TransactionController extends BaseController {
     }
 }
 
-
 export default TransactionController;
+

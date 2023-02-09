@@ -6,7 +6,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -18,27 +17,21 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';;
 import {BsCalendarDay} from "react-icons/bs";
 import {RiFindReplaceLine} from "react-icons/ri";
-import Button from "react-bootstrap/Button";
 import {Col, Row} from "react-bootstrap";
 import TransDetails from "@/components/UI/DashBoard/TransDetail";
 import Container from "react-bootstrap/Container";
-import {FaWallet} from "react-icons/fa";
-import {TbReportMoney} from "react-icons/tb";
-import AddTrans from "@/components/UI/DashBoard/AddTransactions";
-// import Select from "@/components/UI/DashBoard/DropDown";
-import Link from "next/link";
-import {MdAccountCircle} from "react-icons/md";
-import {GiWallet} from "react-icons/gi";
-import {IoMdArrowDropdown} from "react-icons/io";
-import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
-
 import axios from "axios";
 import {authActions} from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 import useRouter from 'next/router'
 import {useDispatch, useSelector} from "react-redux";
-// import MyAvatar from "@/components/UI/DashBoard/Avatar";
-
+import {FaWallet} from "react-icons/fa";
+import {TbReportMoney} from "react-icons/tb";
+import Link from "next/link";
+import {MdAccountCircle} from "react-icons/md";
+import {GiWallet} from "react-icons/gi";
+import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
+import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 const drawerWidth = 240;
 
@@ -192,9 +185,9 @@ export default function MyHome() {
                         <div style={{display:'flex',alignItems:'center'}}>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
                             <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            <Button style={{marginRight:'10px'}} >
-                                <AddTrans/>
-                            </Button>
+                            {/* <Button style={{marginRight:'10px'}} > */}
+                                <AddTransactionModal/>
+                            {/* </Button> */}
                         </div>
                     </div>
                 </Toolbar>
@@ -266,7 +259,7 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
-                {/*<MyAvatar/>*/}
+                <MyAvatar/>
             </Box>
         </Box>
     )

@@ -6,6 +6,7 @@ import Wallet from "../models/wallet.model";
 import TransType from "../models/trans.type.model";
 import TransCate from "../models/trans.cate.model";
 import Transaction from "../models/transaction.model";
+import UserServices from "../services/user.services";
 
 let userRepo = dataSource.getRepository(User);
 let walletRepo = dataSource.getRepository(Wallet);
@@ -15,8 +16,14 @@ let transactionRepo = dataSource.getRepository(Transaction);
 
 class UserController extends BaseController {
 
-    test(req: Request, res: Response) {
-
+    async update(req: any, res: Response) {
+        let id = req.user.id
+        let arr = Object.keys(req.body)
+        let image = arr[0].replace('upload/', 'upload%2F') + '=' + req.body[arr[0]] + '&' + arr[1] + '=' + req.body[arr[1]];
+        await UserServices.updateUser(id, image)
+        res.status(200).json({
+            message: 'Update successfully!'
+        })
     }
    
 }

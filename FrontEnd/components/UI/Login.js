@@ -30,7 +30,6 @@ const Login = () => {
                 .email('Invalid email address')
                 .required('Email is required'),
             password: Yup.string()
-                .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: values => {
             const config = {
@@ -42,10 +41,14 @@ const Login = () => {
                 .then((res) => {
                     localStorage.setItem('token', res.data.accessToken)
                     let user = jwt_decode(res.data.accessToken)
-                    console.log(user)
-                    dispatch(authActions.loggedIn(res.data.refreshToken))
+                    dispatch(authActions.loggedIn({
+                        user: user,
+                        refreshToken: res.data.refreshToken
+                    }))
                     router.push('/home')
-                })
+                }).catch(err => {
+                console.log(err)
+            })
         }
     })
     return (<MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>

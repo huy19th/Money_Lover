@@ -5,17 +5,53 @@ import {useState} from "react";
 import AvatarEdit from 'react-avatar-edit'
 import Button from '@mui/material/Button';
 import storage from "@/configs/firebase";
-import {ref, uploadString, getDownloadURL } from "firebase/storage"
+import {ref, deleteObject, uploadString, getDownloadURL } from "firebase/storage"
 import jwt_decode from "jwt-decode";
+import {useDispatch, useSelector} from "react-redux";
+import {authActions} from "@/features/auth/authSlice";
+import axios from "axios";
 
 export default function MyAvatar() {
 
-    // const user = jwt_decode(localStorage.getItem("token"));
-    // console.log(user)
+    const refreshToken = async () => {
+        try {
+            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            localStorage.setItem('token', res.data.accessToken)
+            let user = jwt_decode(res.data.accessToken)
+            dispatch(authActions.loggedIn({
+                user: user,
+                refreshToken: res.data.refreshToken
+            }))
+            return res.data
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    // RefreshToken
+    const axiosJWT = axios.create();
+    axiosJWT.interceptors.request.use(
+        async (config) => {
+            let currentDate = new Date();
+            const decodedToken = jwt_decode(localStorage.getItem('token'))
+            if (decodedToken.exp*1000 < currentDate.getTime()) {
+                const data = await refreshToken();
+                config.headers['authorization'] = "Bearer " + data.accessToken
+            } else {
+                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
+            }
+            return config
+        }, (err) => {
+            return Promise.reject(err)
+        }
+    )
+
+    const dispatch = useDispatch()
+
+    const user = useSelector(state => state.auth.currentUser)
 
     const [open, setOpen] = React.useState(false);
-    const [imageCrop, setImageCrop] = useState(false);
-    const [storeImage, setStoreImage] = useState([])
+    const [imageCrop, setImageCrop] = useState(user.image);
 
     const onCrop = (view) => {
         setImageCrop(view)
@@ -34,24 +70,43 @@ export default function MyAvatar() {
     };
 
     const saveImage = () => {
-        // Add Firebase
-        const storageRef = ref(storage, `/user-upload/hi`)
-        // Upload ảnh
-        uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
-            // Lấy url firebase
-            let image = await getDownloadURL(storageRef)
-            setStoreImage([{imageCrop}])
-            handleClose()
-        });
+        if (user.image === '') {
+            // Add Firebase
+            const storageRef = ref(storage, `/user-upload/${user.name}`)
+            // Upload ảnh
+            uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
+                // Lấy url firebase
+                let image = await getDownloadURL(storageRef)
+                // Thêm DB
+                await axiosJWT.post('http://localhost:8000/api/user/update', image.toString())
+                // Dispatch
+                dispatch(authActions.updateUser(image))
+                handleClose()
+            });
+        } else {
+            const desertRef = ref(storage, user.image);
+            deleteObject(desertRef).then(() => {
+                const storageRef = ref(storage, `/user-upload/${user.name}`)
+                uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
+                    // Lấy url firebase
+                    let image = await getDownloadURL(storageRef)
+                    // Thêm DB
+                    await axiosJWT.post('http://localhost:8000/api/user/update', image.toString())
+                    // Dispatch
+                    dispatch(authActions.updateUser(image))
+                    handleClose()
+                });
+            }).catch((error) => {
+                console.log('Error!!!')
+            });
+        }
     }
-
-    const profileImageShown = storeImage.map(item => item.imageCrop)
 
     return (
         <div>
             <img
                 alt=""
-                src={profileImageShown.length ? profileImageShown[0] : ''}
+                src={user.image}
                 style={{
                     width: '200px',
                     height: '200px',
@@ -60,7 +115,7 @@ export default function MyAvatar() {
                 onClick={handleClickOpen}
             />
             <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>Update Image</DialogTitle>
+                <DialogTitle>Update {user.name} image</DialogTitle>
                 <AvatarEdit width={400} height={300} onClose={onCLose} onCrop={onCrop} />
                 <Button type='button' onClick={saveImage}>Save</Button>
             </Dialog>

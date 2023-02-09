@@ -23,6 +23,8 @@ class BaseController {
 
     static generateRefreshToken(payload) {
         return jwt.sign(payload, `${process.env.JWT_REFRESH_KEY}`);
+
+
     };
 
 }

@@ -1,9 +1,6 @@
 import express from "express";
 import cors from "cors";
-
 import fileUpload from "express-fileupload";
-import TransactionRouter from "./routers/transaction.router";
-import WalletRouter from "./routers/wallet.router";
 import cookieSession from "cookie-session";
 import passport from 'passport';
 require('./passport')
@@ -12,6 +9,7 @@ import AuthRouter from "./routers/auth.router";
 import AuthMiddleware from "./middlewares/auth.middlewares";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
+import UserRouter from "./routers/user.router";
 
 class App {
 
@@ -40,6 +38,7 @@ class App {
             createParentPath: true
         }))
         this.app.use(express.json())
+        this.app.use(express.urlencoded({extended:true}))
         this.app.use(cookieSession({
             name: "session",
             keys: ["case-md6"],
@@ -60,6 +59,8 @@ class App {
         // this.app.use(TransCateRouter);
         // this.app.use(TransTypeRouter);
         this.app.use('/api', WalletRouter);
+        this.app.use('/api/user', UserRouter)
+
 
     }
 
@@ -71,6 +72,13 @@ class App {
 }
 
 new App();
+
+
+
+
+
+
+
 
 
 

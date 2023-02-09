@@ -25,7 +25,7 @@ class WalletController extends BaseController {
 
                 },
                 where: {
-                    id: req.params.userId
+                    id: Number(req.params.userId)
                 }
 
             })
@@ -40,7 +40,7 @@ class WalletController extends BaseController {
     async indexWallet(req: Request, res: Response) {
         try {
             let wallet = await walletRepo.findOneBy({
-                id: req.params.walletId
+                id: Number(req.params.walletId)
             })
             res.status(200).json(wallet)
 
@@ -52,7 +52,7 @@ class WalletController extends BaseController {
     async addMoneyWallet(req: Request, res: Response) {
 
         try {
-            let wallet = await walletRepo.findOneBy({id: req.params.walletId});
+            let wallet = await walletRepo.findOneBy({id: Number(req.params.walletId)});
             let money = wallet.balance - (+req.body.balance)
             if (money < 0) {
                 await transactionRepo.createQueryBuilder('transaction')
@@ -60,7 +60,7 @@ class WalletController extends BaseController {
                     .into(Transaction)
                     .values({
                         wallet: {
-                            id: req.params.walletId
+                            id: Number(req.params.walletId)
                         },
                         subCategory: {
                             id: 34
@@ -79,7 +79,7 @@ class WalletController extends BaseController {
                     .into(Transaction)
                     .values({
                         wallet: {
-                            id: req.params.walletId
+                            id: Number(req.params.walletId)
                         },
                         subCategory: {
                             id: 20
@@ -106,7 +106,7 @@ class WalletController extends BaseController {
                     wallets: true
                 },
                 where: {
-                    id: req.params.userId
+                    id: Number(req.params.userId)
                 }
             })
             let sum = 0

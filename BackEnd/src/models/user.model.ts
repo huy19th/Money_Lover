@@ -45,7 +45,7 @@ export class User {
     transCates: TransCate[];
 
 
-    @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
+    @Column({name: "refresh_token", type: "longtext", nullable: true})
     refreshToken: string;
 
 }
