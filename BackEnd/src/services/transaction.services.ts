@@ -5,7 +5,9 @@ import dataSource from "../database/data-source";
 let transactionRepo = dataSource.getRepository(Transaction);
 
 class TransactionServices extends BaseServices {
-
+    async addTransaction({walletId, subcategoryId, money, date, image, note}) {
+        let transaction = new Transaction();
+    }
 
     async deleteTransaction(transaction: Transaction): Promise<void> {
 

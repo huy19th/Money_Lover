@@ -8,6 +8,7 @@ import dataSource from "../database/data-source";
 import transactionController from "./transaction.controller";
 import TransactionModel, {Transaction} from "../models/transaction.model";
 import SubCate from "../models/trans.subcate.model";
+import transactionType from "../models/trans.type.model";
 
 import WalletService from "../services/wallet.services";
 
@@ -15,6 +16,7 @@ let walletRepo = dataSource.getRepository(WalletModel);
 let userRepo = dataSource.getRepository(User);
 let subCateRepo = dataSource.getRepository(SubCate);
 let transactionRepo = dataSource.getRepository(TransactionModel);
+let transactionTypeRepo = dataSource.getRepository(transactionType);
 
 class WalletController extends BaseController {
 
@@ -104,6 +106,8 @@ class WalletController extends BaseController {
                     })
                     .execute()
             }
+
+
 
             wallet.balance = +req.body.balance
             await walletRepo.save(wallet)

@@ -32,6 +32,10 @@ import {IoMdArrowDropdown} from "react-icons/io";
 import MenuTotal from "@/components/UI/DashBoard/MenuTotal";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 import { useRouter } from 'next/router';
+import {authActions} from "@/features/auth/authSlice";
+import {useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
+import axios from "axios"
 // import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 const drawerWidth = 240;
