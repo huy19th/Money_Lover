@@ -9,7 +9,7 @@ let userRepo = dataSource.getRepository(User);
 //code so bad
 class AuthController extends BaseController {
 
-    
+
     async register(req: Request , res: Response) {
 
         let {name, email, password} = req.body;
@@ -44,6 +44,7 @@ class AuthController extends BaseController {
             let accessToken = BaseController.generateAccessToken(payload);
             let refreshToken = BaseController.generateRefreshToken(payload);
             user.refreshToken = refreshToken
+            console.log(1)
             await userRepo.save(user)
             res.status(200).json({
                 accessToken: accessToken,

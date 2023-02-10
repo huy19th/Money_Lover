@@ -29,7 +29,7 @@ const Register = () => {
                 .min(8, 'Password must be at least 8 characters')
                 .required('Password is required'),
         }), onSubmit: async (values) => {
-            await axios.post('http://localhost:8000/auth/register', values)
+            await axios.post('http://localhost:8000/api/auth/register', values)
             router.push('/login')
         }
     })

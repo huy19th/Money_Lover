@@ -83,8 +83,6 @@ class WalletController extends BaseController {
                         },
                         money: money * (-1),
                         date: new Date()
-
-
                     })
                     .execute()
             }

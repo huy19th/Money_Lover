@@ -5,6 +5,7 @@ import Wallet from "../models/wallet.model";
 import SubCate from "../models/trans.subcate.model";
 import TransactionServices from "../services/transaction.services";
 import WalletService from "../services/wallet.services";
+import TransTypeServices from "../services/transtype.services";
 import { Request, Response } from "express";
 
 let transactionRepo = dataSource.getRepository(TransactionModel);
@@ -12,62 +13,33 @@ let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
 let transactionService = new TransactionServices();
 
+const [INCOME, EXPENSE] = ["Income", "Expense"];
+
 class TransactionController extends BaseController {
 
-    async getTransactions(req: Request, res: Response) {
-        try {
-            let transaction = await transactionRepo.find({
-                relations: {
-                    wallet: true,
-                    subCategory: true
-                }
-
+    async getTransactions(req: any, res: Response) {
+        let userId = req.user.id;
+        transactionService.getTransactions(userId)
+            .then(transactions => {
+                res.json(transactions)
             })
-            res.status(200).json(transaction)
-        } catch (err) {
-            res.status(500).json(err)
-        }
     }
-
-
 
     async addTransaction(req: Request, res: Response) {
-
-
-        let { walletId, subcategoryId, money, date, image, note } = req.body
-        let transaction = new TransactionModel()
-
-        let wallet = await walletRepo.findOneBy({ id: walletId })
-
-        if (!wallet) {
-            return res.status(404).json({ message: 'Wallet not found' });
-        }
-
-        let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
-
-        if (!subCate) {
-            return res.status(404).json({ message: 'Wallet not found' });
-        }
-
-
-        transaction.wallet = wallet;
-        transaction.subCategory = subCate;
-        transaction.money = money ? +money : null
-        transaction.date = date ? date : null
-        transaction.image = image
-        transaction.note = note
-       let balance = await (transaction.wallet.balance + (+money))
-        wallet.balance = balance
-        await walletRepo.save(wallet)
         try {
-            await transactionRepo.save(transaction);
-            res.status(200).json(transaction);
-        } catch (err) {
-            res.status(500).json(err);
+            let {walletId, subcategoryId, money} = req.body
+            await transactionService.addTransaction(req.body);
+            let transactionType = await TransTypeServices.getTransactionTypeBySubCate(req.body.subcategoryId);
+            let balanceChange = transactionType.name == INCOME ? money : -money;
+            await WalletService.adjustBalance(walletId, balanceChange);
+            res.status(200).json({message: "Add Transaction Successfully"})
+        }
+        catch (err) {
+            res.status(500).json({message: err.message})
         }
     }
 
-    
+
 
     async updateTransaction(req: Request, res: Response) {
 

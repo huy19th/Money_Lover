@@ -24,6 +24,14 @@ class TransSubCateServices extends BaseServices {
 
         return transSubCates;
     }
+
+    static async getSubCateById(subCateId: number): Promise<TransSubCate | null> {
+        let transSubCate = await transSubCateRepo.findOneBy({id: subCateId});
+        if (transSubCate) {
+            throw new Error("Transaction subcategory not found")
+        }
+        return transSubCate;
+    }
 }
 
 
