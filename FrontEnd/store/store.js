@@ -4,6 +4,8 @@ import { persistReducer, persistStore } from 'redux-persist';
 import autoMergeLevel2 from "reduxjs-toolkit-persist/lib/stateReconciler/autoMergeLevel2";
 import {combineReducers} from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage'
+import walletSlice from "@/features/wallet/walletSlice";
+import transactionSlice from "@/features/transaction/transactionSlice";
 
 const persistConfig = {
     key: 'root',
@@ -12,7 +14,9 @@ const persistConfig = {
 }
 
 const reducer = combineReducers({
-    auth: authSlice.reducer
+    auth: authSlice.reducer,
+    wallet: walletSlice.reducer,
+    transaction: transactionSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

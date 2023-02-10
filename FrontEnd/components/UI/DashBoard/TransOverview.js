@@ -4,6 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import Container from "react-bootstrap/Container";
 import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
+
+import {useSelector} from "react-redux";
+
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
@@ -18,21 +21,55 @@ import Cloud from '@mui/icons-material/Cloud';
 
 
 const TransOverview = () => {
+
+
+    // Add Transaction
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+    const myTrans = useSelector(state => state.transaction)
+
+    let trans = []
+
+    myTrans.map(transaction => {
+        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
+            trans.push(transaction)
+        }
+    })
+
+    let inflow = 0;
+    let outflow = 0;
+    trans.map(tran => {
+        if (tran.type_name === 'Expenese') {
+            outflow += tran.money
+        } else {
+            inflow += tran.money
+        }
+    })
+
+    let newBalance = myWallet.balance+inflow-outflow
+
+    inflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow)
+    outflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow)
+    newBalance = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)
+
+    //
+
     return (
-        <Card style={{width:'600px',marginTop:'20px'}}>
+        <Card style={{width:'540px',marginTop:'20px'}}>
             <Card.Header>
-                <Nav variant="tabs" defaultActiveKey="#link">
-                    <Nav.Item>
+                <Nav variant="tabs" defaultActiveKey="#link" style={{width: '100%'}}>
+                    <div style={{width: 'calc(100% / 3)', textAlign: "center"}}>
                         <Nav.Link href="#first">LAST MONTH</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
+                    </div>
+                    <div style={{width: 'calc(100% / 3)', textAlign: "center"}}>
                         <Nav.Link href="#link">THIS MONTH</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
+                    </div>
+                    <div style={{width: 'calc(100% / 3)', textAlign: "center"}}>
                         <Nav.Link href="#disabled" disabled>
                             FUTURE
                         </Nav.Link>
-                    </Nav.Item>
+                    </div>
+
                 </Nav>
             </Card.Header>
             <Card.Body>
@@ -43,145 +80,32 @@ const TransOverview = () => {
                             <p>Outflow</p>
                         </Col>
                         <Col>
-                            <p style={{color:'blue',marginLeft:'100px'}}>+ 111222333333</p>
-                            <p style={{color:'red',marginLeft:'100px'}}>- 38333333333</p>
+
+                            <p style={{color:'blue',marginLeft:'124px'}}>+ {inflow}</p>
+                            <p style={{color:'red',marginLeft:'124px'}}>- {outflow}</p>
                             <hr/>
-                            <p style={{marginLeft:'100px'}}>+ 33534555253333</p>
+                            <p style={{marginLeft:'124px'}}>{newBalance}</p>
+
                         </Col>
                         <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                     </Row>
                     <hr/>
-                    <Row>
-                        <Col sm={2}>
-                            <img style={{width:'60px'}} src="https://static.moneylover.me/img/icon/ic_category_transport.png" alt=""/>
-                        </Col>
-                        <Col>
-                            <p>Transportation</p>
-                        </Col>
-                        <Col>
-                            <p style={{float:'right'}}>- 3000000000 </p>
-                        </Col>
-                    </Row>
-                    <Paper sx={{ width: 600, maxWidth: '100%',padding:'0px' }}>
-                        <MenuList>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>06</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -242325525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    +2423234355525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -24232453535525
-                                </Typography>
-                            </MenuItem>
-                            <Divider />
-                        </MenuList>
-                    </Paper>
-                    <hr/>
-                    <Row>
-                        <Col sm={2}>
-                            <img style={{width:'60px'}} src="https://static.moneylover.me/img/icon/ic_category_transport.png" alt=""/>
-                        </Col>
-                        <Col>
-                            <p>Transportation</p>
-                        </Col>
-                        <Col>
-                            <p style={{float:'right'}}>- 3000000000 </p>
-                        </Col>
-                    </Row>
-                    <Paper sx={{ width: 600, maxWidth: '100%',padding:'0px' }}>
-                        <MenuList>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>06</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -242325525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    +2423234355525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -24232453535525
-                                </Typography>
-                            </MenuItem>
-                            <Divider />
-                        </MenuList>
-                    </Paper>
-                    <hr/>
-                    <Row>
-                        <Col sm={2}>
-                            <img style={{width:'60px'}} src="https://static.moneylover.me/img/icon/ic_category_transport.png" alt=""/>
-                        </Col>
-                        <Col>
-                            <p>Transportation</p>
-                        </Col>
-                        <Col>
-                            <p style={{float:'right'}}>- 3000000000 </p>
-                        </Col>
-                    </Row>
-                    <Paper sx={{ width: 600, maxWidth: '100%',padding:'0px' }}>
-                        <MenuList>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>06</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -242325525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    +2423234355525
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem>
-                                <ListItemIcon >
-                                    <h1>07</h1>
-                                </ListItemIcon>
-                                <ListItemText style={{marginLeft:'10px'}}>Monday,February 2023</ListItemText>
-                                <Typography variant="body1" color="text.secondary">
-                                    -24232453535525
-                                </Typography>
-                            </MenuItem>
-                            <Divider />
-                        </MenuList>
-                    </Paper>
+
+                    {trans.map(tran => {
+                        return (
+                            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}}>
+                                <div>
+                                    <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
+                                    <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>
+                                </div>
+                                {tran.type_name === 'Expenese' ? (
+                                    <div style={{color: 'red'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
+                                ) : (
+                                    <div style={{color: "dodgerblue"}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
+                                )}
+                            </div>
+                        )
+                    })}
                 </Container>
             </Card.Body>
 

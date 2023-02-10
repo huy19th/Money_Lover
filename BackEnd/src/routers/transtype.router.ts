@@ -4,6 +4,6 @@ const TransTypeRouter: Router = express.Router();
 
 const transTypeController = new TransTypeController();
 
-
+TransTypeRouter.get('/', transTypeController.getAllTypes)
 
 export default TransTypeRouter;

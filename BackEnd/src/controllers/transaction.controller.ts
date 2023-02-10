@@ -14,22 +14,13 @@ let transactionService = new TransactionServices();
 
 class TransactionController extends BaseController {
 
-    async getTransactions(req: Request, res: Response) {
-        try {
-            let transaction = await transactionRepo.find({
-                relations: {
-                    wallet: true,
-                    subCategory: true
-                }
-
+    async getTransactions(req: any, res: Response) {
+        let userId = req.user.id;
+        transactionService.getTransactions(userId)
+            .then(transactions => {
+                res.json(transactions)
             })
-            res.status(200).json(transaction)
-        } catch (err) {
-            res.status(500).json(err)
-        }
     }
-
-
 
     async addTransaction(req: Request, res: Response) {
 
@@ -53,10 +44,10 @@ class TransactionController extends BaseController {
         transaction.wallet = wallet;
         transaction.subCategory = subCate;
         transaction.money = money ? +money : null
-        transaction.date = date ? date : null
+        transaction.date = typeof date == 'string' ? date.substring(0, 9) : date
         transaction.image = image
         transaction.note = note
-       let balance = await (transaction.wallet.balance + (+money))
+       let balance = (transaction.wallet.balance + (+money))
         wallet.balance = balance
         await walletRepo.save(wallet)
         try {

@@ -15,7 +15,7 @@ export default function MyAvatar() {
 
     const refreshToken = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
             localStorage.setItem('token', res.data.accessToken)
             let user = jwt_decode(res.data.accessToken)
             dispatch(authActions.loggedIn({
@@ -82,6 +82,8 @@ export default function MyAvatar() {
                 // Dispatch
                 dispatch(authActions.updateUser(image))
                 handleClose()
+            }).catch(err => {
+                console.log(err)
             });
         } else {
             const desertRef = ref(storage, user.image);
@@ -108,8 +110,8 @@ export default function MyAvatar() {
                 alt=""
                 src={user.image}
                 style={{
-                    width: '200px',
-                    height: '200px',
+                    width: '80px',
+                    height: '80px',
                     borderRadius: '50%',
                 }}
                 onClick={handleClickOpen}

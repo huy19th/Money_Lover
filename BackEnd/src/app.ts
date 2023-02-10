@@ -13,6 +13,9 @@ import TransSubCateRouter from "./routers/transsubcate.router";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
+import dataSource from "./database/data-source";
+import TransType from "./models/trans.type.model";
+import TransTypeRouter from "./routers/transtype.router";
 
 require('./passport')
 class App {
@@ -56,13 +59,14 @@ class App {
             methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
         }));
 
-
         this.app.use('/api/auth', AuthRouter);
         this.app.use(AuthMiddleware.checkAuthentication);
+        this.app.use('/api/user', UserRouter)
         this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction-subcategory', TransSubCateRouter);
         // this.app.use(TransTypeRouter);
         this.app.use('/api/wallet', WalletRouter);
+        this.app.use('/api/type', TransTypeRouter);
 
     }
 

@@ -30,11 +30,14 @@ import {GiWallet} from "react-icons/gi";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
-import {useRouter} from "next/router";
+
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
+import {useRouter} from "next/router";
+import Wallets from "@/components/UI/DashBoard/WalletsList";
+import {walletActions} from "@/features/wallet/walletSlice";
+import {transactionActions} from "@/features/transaction/transactionSlice";
+import AccountUser from "@/components/shares/Account";
 
-
-// import MyAvatar from "@/components/UI/DashBoard/Avatar";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth, transition: theme.transitions.create('width', {
@@ -76,7 +79,34 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
     }),
 }),);
 export default function MyHome() {
-    const router = useRouter();
+
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+    const myTrans = useSelector(state => state.transaction)
+
+    let trans = []
+
+    myTrans.map(transaction => {
+        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
+            trans.push(transaction)
+        }
+    })
+
+    let inflow = 0;
+    let outflow = 0;
+    trans.map(tran => {
+        if (tran.type_name === 'Expenese') {
+            outflow += tran.money
+        } else {
+            inflow += tran.money
+        }
+    })
+
+    let newBalance = myWallet.balance+inflow-outflow
+
+    //
+
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
@@ -88,12 +118,19 @@ export default function MyHome() {
 
 
     const dispatch = useDispatch()
+
+    const router = useRouter()
+
     const user = useSelector(state => state.auth)
     const refreshToken = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
+            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
             localStorage.setItem('token', res.data.accessToken)
-            dispatch(authActions.loggedIn(res.data.refreshToken))
+            let user = jwt_decode(res.data.accessToken)
+            dispatch(authActions.loggedIn({
+                user: user,
+                refreshToken: res.data.refreshToken
+            }))
             return res.data
         } catch (err) {
             console.log(err)
@@ -108,6 +145,8 @@ export default function MyHome() {
             if (decodedToken.exp*1000 < currentDate.getTime()) {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
+            } else {
+                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
             }
             return config
         }, (err) => {
@@ -116,13 +155,17 @@ export default function MyHome() {
     )
 
     const logOut = async () => {
-        await axiosJWT.get('http://localhost:8000/auth/logout', {
+
+        await axiosJWT.get('http://localhost:8000/api/auth/logout', {
+
             headers: {
                 authorization: 'Bearer ' + localStorage.getItem('token')
             }
         })
         localStorage.removeItem('token');
         dispatch(authActions.loggedOut());
+        dispatch(walletActions.resetWallet())
+        dispatch(transactionActions.resetTrans())
         router.push('/login')
     }
     return (<Box sx={{display: 'flex'}}>
@@ -142,12 +185,22 @@ export default function MyHome() {
                     </IconButton>
                     <div
                         style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-                        <div style={{color: 'black'}}>
-                            <img style={{width: '50px', marginLeft: '20px'}}
-                                 src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-                            Total: -49789723424
-                            {/*<MenuTotal/>*/}
-                            <span></span>
+
+                        <div style={{color: 'black', display: "flex", alignItems: "center"}}>
+                            <div style={{color: 'black', display: "flex", alignItems: "center"}}>
+                                <div>
+                                    <img style={{width: '50px', marginRight: '8px'}}
+                                         src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
+                                </div>
+                                <div>
+                                    <p className='m-0'>Name: {myWallet.name}</p>
+                                    <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)}</p>
+                                </div>
+                                <div>
+                                    <Wallets/>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div style={{display:'flex',alignItems:'center'}}>
@@ -180,8 +233,10 @@ export default function MyHome() {
                                         minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet  style={{fontSize:'25px'}}/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney  style={{fontSize:'35px'}}/></Link>}
+
+                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet  style={{fontSize:'30px'}}/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney  style={{fontSize:'30px'}}/></Link>}
+
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
@@ -191,7 +246,9 @@ export default function MyHome() {
                         <ListItem key={text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
                                 sx={{
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 1.5,
+
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+
                                 }}
                             >
                                 <ListItemIcon
@@ -200,8 +257,11 @@ export default function MyHome() {
                                     }}
                                 >
                                     {index % 2 === 0 ?
-                                        <Link style={{color: 'gray'}} href='/home'><MdAccountCircle style={{fontSize:'30px'}}/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><GiWallet  style={{fontSize:'30px'}}/></Link>}
+
+                                        <AccountUser/> :
+                                        // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
+
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
@@ -220,7 +280,6 @@ export default function MyHome() {
                         </Row>
                     </Container>
                 </div>
-                <MyAvatar/>
             </Box>
         </Box>)
 }
