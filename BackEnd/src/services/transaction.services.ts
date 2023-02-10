@@ -6,6 +6,20 @@ let transactionRepo = dataSource.getRepository(Transaction);
 
 class TransactionServices extends BaseServices {
 
+    async getTransactions(userId) {
+        return await transactionRepo.createQueryBuilder('trans')
+            .innerJoin('trans.wallet', 'wallet')
+            .innerJoin('wallet.user', 'user')
+            .innerJoin('trans.subCategory', 'subCategory')
+            .innerJoin('subCategory.category', 'category')
+            .innerJoin('category.transType', 'type')
+            .select('trans.money, trans.date, trans.note')
+            .addSelect('wallet.name', 'wallet_name')
+            .addSelect('subCategory.name', 'subCate_name')
+            .addSelect('type.name', 'type_name')
+            .where('user.id = :id', {id: userId})
+            .getRawMany();
+    }
 
     async deleteTransaction(transaction: Transaction): Promise<void> {
 

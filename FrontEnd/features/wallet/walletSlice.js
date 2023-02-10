@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 let initialState = {
     currentWallet: {
+        id: '',
         name: '',
         balance: '',
         include_total: '',
@@ -21,6 +22,25 @@ export const walletSlice = createSlice({
         changeCurrentWallet(state, action) {
             state = {...state, currentWallet: action.payload}
             return state
+        },
+        resetWallet(state, action) {
+            state = initialState
+            return state
+        },
+        changeWallets(state, action) {
+            const change = +action.payload
+            let allWallet = [];
+            let others = [];
+            state.wallets.map(wallet => {
+                if (wallet.id === state.currentWallet.id) {
+                    allWallet.push(wallet)
+                } else {
+                    others.push(wallet)
+                }
+            })
+            allWallet[0].balance += change
+            state.wallets = [...others, ...allWallet]
+            state.currentWallet.balance = allWallet[0].balance
         }
     }
 })

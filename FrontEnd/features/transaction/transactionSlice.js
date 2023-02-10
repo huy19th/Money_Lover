@@ -9,6 +9,14 @@ export const transactionSlice = createSlice({
         getTrans(state, action) {
             state = action.payload
             return state
+        },
+        addTran(state, action) {
+            state = [...state, action.payload]
+            return state
+        },
+        resetTrans(state, action) {
+            state = initialState
+            return state
         }
     }
 })

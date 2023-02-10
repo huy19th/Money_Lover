@@ -1,14 +1,26 @@
+import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Nav from 'react-bootstrap/Nav';
 import Container from "react-bootstrap/Container";
 import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
 import {useSelector} from "react-redux";
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Typography from '@mui/material/Typography';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import Cloud from '@mui/icons-material/Cloud';
 
 
 const TransOverview = () => {
 
-    // Test
+    // Add Transaction
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
     const myTrans = useSelector(state => state.transaction)
@@ -21,8 +33,6 @@ const TransOverview = () => {
         }
     })
 
-    console.log(trans)
-
     let inflow = 0;
     let outflow = 0;
     trans.map(tran => {
@@ -33,8 +43,11 @@ const TransOverview = () => {
         }
     })
 
+    let newBalance = myWallet.balance+inflow-outflow
+
     inflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow)
     outflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow)
+    newBalance = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)
 
     //
 
@@ -56,42 +69,36 @@ const TransOverview = () => {
                 </Nav>
             </Card.Header>
             <Card.Body>
-                <Container>
-                    <Row>
-                        <Col className='col-md-9'>
+                <Container style={{padding:'0px'}}>
+                    <Row style={{padding:'10px'}}>
+                        <Col>
                             <p>Inflow</p>
                             <p>Outflow</p>
                         </Col>
                         <Col>
-                            <p style={{color: 'dodgerblue'}}>+{inflow}</p>
-                            <p style={{color: "red"}}>-{outflow}</p>
+                            <p style={{color:'blue',marginLeft:'124px'}}>+ {inflow}</p>
+                            <p style={{color:'red',marginLeft:'124px'}}>- {outflow}</p>
+                            <hr/>
+                            <p style={{marginLeft:'124px'}}>{newBalance}</p>
                         </Col>
                         <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                     </Row>
-                    <div style={{backgroundColor:'#00000009',margin:'10px'}}>Hello</div>
-                    <Row>
-                        <Col>
-                            <h2>06</h2>
-                        </Col>
-                        <Col>
-                            <p>Monday/February 2023</p>
-                        </Col>
-                        <Col>
-                            <p style={{float:'right'}}>- 3000000000</p>
-                        </Col>
-                    </Row>
                     <hr/>
-                    <Row>
-                        <Col>
-                            <img style={{width:'60px'}} src="https://static.moneylover.me/img/icon/ic_category_transport.png" alt=""/>
-                        </Col>
-                        <Col>
-                            <p>Transportation</p>
-                        </Col>
-                        <Col>
-                            <p style={{float:'right'}}>- 3000000000 </p>
-                        </Col>
-                    </Row>
+                    {trans.map(tran => {
+                        return (
+                            <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}}>
+                                <div>
+                                    <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
+                                    <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>
+                                </div>
+                                {tran.type_name === 'Expenese' ? (
+                                    <div style={{color: 'red'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
+                                ) : (
+                                    <div style={{color: "dodgerblue"}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
+                                )}
+                            </div>
+                        )
+                    })}
                 </Container>
             </Card.Body>
         </Card>

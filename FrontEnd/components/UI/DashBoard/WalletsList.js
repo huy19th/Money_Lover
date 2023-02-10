@@ -8,7 +8,28 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function Wallets() {
 
+    const myTrans = useSelector(state => state.transaction)
+
     const dispatch = useDispatch()
+
+    const getBalance = (name, value) => {
+
+        let trans = []
+
+        myTrans.map(transaction => {
+            if (transaction.wallet_name === name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
+                trans.push(transaction)
+            }
+        })
+        trans.map(tran => {
+            if (tran.type_name === 'Expenese') {
+                value -= tran.money
+            } else {
+                value += tran.money
+            }
+        })
+        return value
+    }
 
     const myWallet = useSelector(state => state.wallet)
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -35,14 +56,6 @@ export default function Wallets() {
             >
                 {myWallet.wallets.map(wallet => {
                     return <MenuItem onClick={() => handleClose(wallet)}>
-                        {/*<div style={{color: 'black'}}>*/}
-                        {/*    <img style={{width: '50px', marginLeft: '20px'}}*/}
-                        {/*         src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>*/}
-                        {/*    Name: {wallet.name}*/}
-                        {/*    Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(wallet.balance)}*/}
-                        {/*    /!*<MenuTotal/>*!/*/}
-                        {/*    <span></span>*/}
-                        {/*</div>*/}
                         <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                             <div>
                                 <img style={{width: '50px', marginRight: '8px'}}
@@ -50,7 +63,7 @@ export default function Wallets() {
                             </div>
                             <div>
                                 <p className='m-0'>Name: {wallet.name}</p>
-                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(wallet.balance)}</p>
+                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(getBalance(wallet.name, wallet.balance))}</p>
                             </div>
                         </div>
                     </MenuItem>

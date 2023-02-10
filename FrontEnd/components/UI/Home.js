@@ -33,6 +33,9 @@ import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTra
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
 import {useRouter} from "next/router";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
+import {walletActions} from "@/features/wallet/walletSlice";
+import {transactionActions} from "@/features/transaction/transactionSlice";
+import AccountUser from "@/components/shares/Account";
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth, transition: theme.transitions.create('width', {
@@ -75,17 +78,28 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 }),);
 export default function MyHome() {
 
-    // Lấy tất cả các ví và giao dịch
-
-    const myWallet = useSelector(state => state.wallet)
+    const myWallet = useSelector(state => state.wallet.currentWallet)
     const myTrans = useSelector(state => state.transaction)
 
-    let totalBalance = 0
-    myWallet.wallets.map(wallet => {
-        totalBalance += wallet.balance
+    let trans = []
+
+    myTrans.map(transaction => {
+        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
+            trans.push(transaction)
+        }
     })
 
-    totalBalance = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalBalance)
+    let inflow = 0;
+    let outflow = 0;
+    trans.map(tran => {
+        if (tran.type_name === 'Expenese') {
+            outflow += tran.money
+        } else {
+            inflow += tran.money
+        }
+    })
+
+    let newBalance = myWallet.balance+inflow-outflow
 
     //
 
@@ -98,9 +112,9 @@ export default function MyHome() {
         setOpen(false);
     };
 
-    const router = useRouter()
 
     const dispatch = useDispatch()
+    const router = useRouter()
     const user = useSelector(state => state.auth)
     const refreshToken = async () => {
         try {
@@ -125,6 +139,8 @@ export default function MyHome() {
             if (decodedToken.exp*1000 < currentDate.getTime()) {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
+            } else {
+                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
             }
             return config
         }, (err) => {
@@ -140,6 +156,8 @@ export default function MyHome() {
         })
         localStorage.removeItem('token');
         dispatch(authActions.loggedOut());
+        dispatch(walletActions.resetWallet())
+        dispatch(transactionActions.resetTrans())
         router.push('/login')
     }
     return (<Box sx={{display: 'flex'}}>
@@ -160,21 +178,20 @@ export default function MyHome() {
                     <div
                         style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
                         <div style={{color: 'black', display: "flex", alignItems: "center"}}>
-                            <div>
-                                <img style={{width: '50px', marginLeft: '20px'}}
-                                     src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-                            </div>
-                            <div>
-                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.currentWallet.balance)}</p>
-                                <Wallets/>
+                            <div style={{color: 'black', display: "flex", alignItems: "center"}}>
+                                <div>
+                                    <img style={{width: '50px', marginRight: '8px'}}
+                                         src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
+                                </div>
+                                <div>
+                                    <p className='m-0'>Name: {myWallet.name}</p>
+                                    <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)}</p>
+                                </div>
+                                <div>
+                                    <Wallets/>
+                                </div>
                             </div>
                         </div>
-
-                        //
-
-                        {/*<Wallets/>*/}
-
-                        //
 
                         <div style={{display:'flex',alignItems:'center'}}>
                             <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
@@ -188,8 +205,6 @@ export default function MyHome() {
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
-                    <MyAvatar/>
-                    <button type='button' onClick={logOut}>Log out</button>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
@@ -208,8 +223,8 @@ export default function MyHome() {
                                         minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                     }}
                                 >
-                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney/></Link>}
+                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet  style={{fontSize:'30px'}}/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney  style={{fontSize:'30px'}}/></Link>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
@@ -228,8 +243,9 @@ export default function MyHome() {
                                     }}
                                 >
                                     {index % 2 === 0 ?
-                                        <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><GiWallet/></Link>}
+                                        <AccountUser/> :
+                                        // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
+                                        <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
