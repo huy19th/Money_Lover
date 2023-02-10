@@ -29,23 +29,19 @@ class TransactionServices extends BaseServices {
     }
 
     async deleteTransaction(transaction: Transaction): Promise<void> {
-
         await transactionRepo.remove(transaction);
     };
     async getTransactionById(transactionId: number): Promise<Transaction | null> {
         let transactions =  await transactionRepo.find({
             relations: {
-
                 wallet: {
                     user:true
                 }
-
             },
             where: {
                 id: transactionId
             }
         });
-
         return transactions[0];
     }
 
@@ -64,6 +60,21 @@ class TransactionServices extends BaseServices {
         await transactionRepo.save(transaction);
     }
 
+    async updateTransaction(transactionId, { walletId, subcategoryId, money, date, image, note }): Promise<void> {
+        let transaction = await this.getTransactionById(transactionId);
+        let wallet = await WalletServices.getWalletById(walletId);
+        let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
+
+        transaction.subCategory = subcategory;
+        transaction.money = money ? +money : null;
+        transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
+        transaction.image = image;
+        transaction.note = note;
+
+        if (transaction.wallet.id == walletId) {
+
+        }
+    }
 }
 
 export default TransactionServices;

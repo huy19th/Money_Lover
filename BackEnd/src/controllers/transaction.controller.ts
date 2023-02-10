@@ -29,13 +29,13 @@ class TransactionController extends BaseController {
         try {
             let {walletId, subcategoryId, money} = req.body
             await transactionService.addTransaction(req.body);
-            let transactionType = await TransTypeServices.getTransactionTypeBySubCate(req.body.subcategoryId);
+            let transactionType = await TransTypeServices.getTransactionTypeBySubCate(subcategoryId);
             let balanceChange = transactionType.name == INCOME ? money : -money;
             await WalletService.adjustBalance(walletId, balanceChange);
-            res.status(200).json({message: "Add Transaction Successfully"})
+            res.status(200).json({message: "Added transaction successfully"});
         }
         catch (err) {
-            res.status(500).json({message: err.message})
+            res.status(500).json({message: err.message});
         }
     }
 
