@@ -52,6 +52,16 @@ class WalletServices extends BaseServices {
 
         return { totalIncome: totalIncome, totalExpense: totalExpense }
     }
+
+    static async getTotalBalance(userId: number): Promise<number> {
+        let { totalBalance } = await walletRepo.createQueryBuilder("wallet")
+            .innerJoin("wallet.user", "user")
+            .addSelect("SUM(wallet.balance)", "totalBalance")
+            .addGroupBy("user.id")
+            .where("user.id = :id", { id: userId })
+            .getRawOne();
+        return totalBalance;
+    }
 }
 
 export default WalletServices;

@@ -10,6 +10,7 @@ let transactionRepo = dataSource.getRepository(Transaction);
 let transSubCateRepo = dataSource.getRepository(TransSubCate);
 
 const [INCOME, EXPENSE] = ["Income", "Expense"];
+const [OTHER_INCOME_ID, OTHER_EXPENSE_ID] = [34, 20];
 
 class TransactionServices extends BaseServices {
 
@@ -44,7 +45,7 @@ class TransactionServices extends BaseServices {
         return transaction;
     }
 
-    static async addTransaction({ walletId, subcategoryId, money, date, image, note }): Promise<void> {
+    static async addTransaction(walletId, subcategoryId, money, date, image, note): Promise<void> {
         let wallet = await WalletServices.getWalletById(walletId);
         let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
         let transaction = new Transaction();
@@ -72,6 +73,12 @@ class TransactionServices extends BaseServices {
         transaction.note = note;
 
         await transactionRepo.save(transaction);
+    }
+    static async addTransactionToAdjustBalance(walletId: number, balance: number): Promise<void> {
+        let wallet = await WalletServices.getWalletById(walletId);
+        let subcategoryId = balance > wallet.balance ? OTHER_INCOME_ID : OTHER_EXPENSE_ID;
+        let money = Math.abs(balance - wallet.balance)
+        await this.addTransaction(walletId, subcategoryId, money, new Date(), null, "Adjust Balance");
     }
 }
 

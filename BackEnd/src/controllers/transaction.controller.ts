@@ -22,8 +22,8 @@ class TransactionController extends BaseController {
 
     static async addTransaction(req: Request, res: Response) {
         try {
-            let { walletId, subcategoryId, money } = req.body
-            await TransactionServices.addTransaction(req.body);
+            let { walletId, subcategoryId, money, date, image, note } = req.body
+            await TransactionServices.addTransaction(walletId, subcategoryId, money, date, image, note);
             await WalletServices.updateBalance(walletId);
             res.status(200).json({ message: "Added transaction successfully" });
         }
