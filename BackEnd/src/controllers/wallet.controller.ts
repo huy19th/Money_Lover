@@ -135,7 +135,16 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
     }
-
+    static getTotalIncomeExpenseOfWallet(req: Request, res: Response) {
+        let walletId = Number(req.params.walletId);
+        WalletServices.getTotalIncomeExpenseOfWallet(walletId)
+        .then(result => {
+            res.status(200).json(result);
+        })
+        .catch(err => {
+            res.status(500).json(err.message);
+        })
+    }
 }
 
 export default WalletController;

@@ -8,6 +8,5 @@ TransactionRouter.delete('/:transactionId', TransActionController.deleteTransact
 TransactionRouter.get('/',TransActionController.getTransactions);
 TransactionRouter.post('/',TransActionController.addTransaction);
 TransactionRouter.put('/:transactionId',TransActionController.updateTransaction);
-TransactionRouter.get('/income-expense/:walletId',TransActionController.getTotalIncomeExpenseOfWallet);
 
 export default TransactionRouter;

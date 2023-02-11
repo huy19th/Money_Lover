@@ -3,7 +3,7 @@ import dataSource from "../database/data-source";
 import Wallet from "../models/wallet.model";
 
 let walletRepo = dataSource.getRepository(Wallet);
-const [ INCOME, EXPENSE ] = [1, 2];
+const [INCOME, EXPENSE] = [1, 2];
 
 class WalletServices extends BaseServices {
     static async getAllWalletsOfUser(userId: number): Promise<Wallet[] | null> {
@@ -22,18 +22,7 @@ class WalletServices extends BaseServices {
 
     static async updateBalance(walletId: number): Promise<void> {
         let wallet = await this.getWalletById(walletId);
-        let totalIncomeExpense = await walletRepo.createQueryBuilder("wallet")
-            .innerJoin("wallet.transactions", "transaction")
-            .innerJoin("transaction.subCategory", "subCategory")
-            .innerJoin("subCategory.category", "category")
-            .innerJoin("category.transType", "transType")
-            .addSelect("SUM(transaction.money)", "sum")
-            .addSelect("transType.id", "transType")
-            .addGroupBy("transType.id")
-            .where("wallet.id = :walletId", { walletId: walletId })
-            .getRawMany();
-        let totalIncome = Number(totalIncomeExpense.filter(item => item.transType == INCOME)[0].sum);
-        let totalExpense = Number(totalIncomeExpense.filter(item => item.transType == EXPENSE)[0].sum);
+        let { totalIncome, totalExpense } = await this.getTotalIncomeExpenseOfWallet(walletId);
         wallet.balance = wallet.initialBalance + totalIncome - totalExpense;
         await walletRepo.save(wallet);
     }
@@ -44,6 +33,24 @@ class WalletServices extends BaseServices {
             throw new Error('Wallet not found');
         }
         return wallet;
+    }
+
+    static async getTotalIncomeExpenseOfWallet(walletId: number) {
+        let totalIncomeExpense = await walletRepo.createQueryBuilder("wallet")
+            .innerJoin("wallet.transactions", "transaction")
+            .innerJoin("transaction.subCategory", "subCategory")
+            .innerJoin("subCategory.category", "category")
+            .innerJoin("category.transType", "transType")
+            .addSelect("SUM(transaction.money)", "sum")
+            .addSelect("transType.id", "transType")
+            .addGroupBy("transType.id")
+            .where("wallet.id = :walletId", { walletId: walletId })
+            .getRawMany();
+
+        let totalIncome = Number(totalIncomeExpense.filter(item => item.transType == INCOME)[0].sum);
+        let totalExpense = Number(totalIncomeExpense.filter(item => item.transType == EXPENSE)[0].sum);
+
+        return { totalIncome: totalIncome, totalExpense: totalExpense }
     }
 }
 

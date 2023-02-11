@@ -68,20 +68,6 @@ class TransactionController extends BaseController {
         }
     }
 
-    static async getTotalIncomeExpenseOfWallet(req: Request, res: Response) {
-        let walletId = Number(req.params.walletId);
-        let totalIncomeExpense = await transactionRepo.createQueryBuilder("transaction")
-            .innerJoin("transaction.wallet", "wallet")
-            .innerJoin("transaction.subCategory", "subCategory")
-            .innerJoin("subCategory.category", "category")
-            .innerJoin("category.transType", "transType")
-            .addSelect("SUM(transaction.money)", "sum")
-            .addSelect("transType.id", "transType")
-            .addGroupBy("transType.id")
-            .where("wallet.id = :walletId", { walletId: walletId })
-            .getRawMany();
-        res.status(200).json(totalIncomeExpense)
-    }
 }
 
 export default TransactionController;
