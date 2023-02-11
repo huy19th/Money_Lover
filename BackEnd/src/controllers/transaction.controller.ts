@@ -1,88 +1,69 @@
 import BaseController from "./base.controller";
 import dataSource from "../database/data-source"
-import TransactionModel, {Transaction} from "../models/transaction.model";
+import TransactionModel, { Transaction } from "../models/transaction.model";
 import Wallet from "../models/wallet.model";
 import SubCate from "../models/trans.subcate.model";
 import TransactionServices from "../services/transaction.services";
-import WalletService from "../services/wallet.services";
-import TransTypeServices from "../services/transtype.services";
+import WalletServices from "../services/wallet.services";
+
 import { Request, Response } from "express";
 
 let transactionRepo = dataSource.getRepository(TransactionModel);
 let walletRepo = dataSource.getRepository(Wallet);
 let subCateRepo = dataSource.getRepository(SubCate);
-let transactionService = new TransactionServices();
 
 const [INCOME, EXPENSE] = ["Income", "Expense"];
 
 class TransactionController extends BaseController {
 
-    async getTransactions(req: any, res: Response) {
+    static async getTransactions(req: any, res: Response) {
         let userId = req.user.id;
-        transactionService.getTransactions(userId)
+        TransactionServices.getTransactions(userId)
             .then(transactions => {
                 res.json(transactions)
             })
     }
 
-    async addTransaction(req: Request, res: Response) {
+    static async addTransaction(req: Request, res: Response) {
         try {
-            let {walletId, subcategoryId, money} = req.body
-            await transactionService.addTransaction(req.body);
-            let transactionType = await TransTypeServices.getTransactionTypeBySubCate(subcategoryId);
-            let balanceChange = transactionType.name == INCOME ? money : -money;
-            await WalletService.adjustBalance(walletId, balanceChange);
-            res.status(200).json({message: "Added transaction successfully"});
+            let { walletId, subcategoryId, money } = req.body
+            await TransactionServices.addTransaction(req.body);
+            await WalletServices.updateBalance(walletId);
+            res.status(200).json({ message: "Added transaction successfully" });
         }
         catch (err) {
-            res.status(500).json({message: err.message});
+            res.status(500).json({ message: err.message });
         }
     }
 
 
 
-    async updateTransaction(req: Request, res: Response) {
-
-        let transaction = await transactionRepo.findOneBy({ id: req.params.id });
-
-        let { walletId, subcategoryId, money, date, image, note } = req.body;
-
-        let wallet = await walletRepo.findOneBy({ id: walletId });
-
-        if (!wallet) {
-            return res.status(404).json({ message: 'Wallet not found' });
-        }
-        let subCate = await subCateRepo.findOneBy({ id: subcategoryId });
-
-        if (!subCate) {
-            return res.status(404).json({ message: 'Wallet not found' });
-        }
-
-        transaction.wallet = wallet;
-        transaction.subCategory = subCate;
-        transaction.money = money ? Number(money) : null;
-        transaction.date = date ? date : null;
-        transaction.image = image;
-        transaction.note = note;
-        let balance = await (transaction.wallet.balance + (+money))
-        wallet.balance = balance
-        await walletRepo.save(wallet)
+    static async updateTransaction(req: Request, res: Response) {
         try {
-            await transactionRepo.save(transaction);
-            res.status(200).json(transaction);
-        } catch (err) {
-            res.status(500).json(err);
+            let transactionId = Number(req.params.id)
+            let transaction = await TransactionServices.getTransactionById(transactionId);
+            let previousWalletId = transaction.wallet.id;
+            let currentWalletId = req.body.walletId;
+            await TransactionServices.updateTransaction(transactionId, req.body);
+            await WalletServices.updateBalance(previousWalletId);
+            if (previousWalletId !== currentWalletId) {
+                await WalletServices.updateBalance(currentWalletId);
+            }
+            res.status(200).json("Updated transaction successfully");
+        }
+        catch (err) {
+            res.status(500).json(err.message);
         }
     }
 
 
 
-    async deleteTransaction(req: Request, res: Response) {
+    static async deleteTransaction(req: Request, res: Response) {
         let transactionId = Number(req.params.transactionId);
         //@ts-ignore
         let userId = req.user.id;
 
-        let transaction = await transactionService.getTransactionById(transactionId);
+        let transaction = await TransactionServices.getTransactionById(transactionId);
 
         if (!transaction) {
             return res.status(404).json({ message: "Transaction not found" });
@@ -95,9 +76,9 @@ class TransactionController extends BaseController {
         let money = transaction.money;
         let walletId = transaction.wallet.id;
 
-        await WalletService.adjustBalance(walletId, money);
+        await WalletServices.adjustBalance(walletId, money);
 
-        transactionService.deleteTransaction(transaction)
+        TransactionServices.deleteTransaction(transaction)
             .then(() => {
                 res.status(200).json({ message: 'Deleted transaction successfully' });
             })

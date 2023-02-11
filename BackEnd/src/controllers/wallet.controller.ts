@@ -10,7 +10,7 @@ import TransactionModel, {Transaction} from "../models/transaction.model";
 import SubCate from "../models/trans.subcate.model";
 import transactionType from "../models/trans.type.model";
 
-import WalletService from "../services/wallet.services";
+import WalletServices from "../services/wallet.services";
 
 let walletRepo = dataSource.getRepository(WalletModel);
 let userRepo = dataSource.getRepository(User);
@@ -44,7 +44,7 @@ class WalletController extends BaseController {
     static async getAllWalletsOfUser (req: Request, res: Response) {
         //@ts-ignore
         let userId = req.user.id;
-        WalletService.getAllWalletsOfUser(userId)
+        WalletServices.getAllWalletsOfUser(userId)
         .then(wallets => {
             res.status(200).json(wallets);
         })

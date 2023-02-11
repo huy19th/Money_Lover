@@ -13,7 +13,7 @@ export class CreateTableWallet1675439879870 implements MigrationInterface {
                     { name: 'user_id', type: 'int',  isNullable: false },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false },
                     { name: 'balance', type: 'int', isNullable: false },
-                    { name: 'intitial_balance', type: 'int', isNullable: false},
+                    { name: 'initial_balance', type: 'int', isNullable: false},
                     { name: 'include_total', type: 'boolean', default: true },
                     { name: 'active', type: 'boolean', default: true },
                 ],
