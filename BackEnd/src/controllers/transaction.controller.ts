@@ -16,11 +16,11 @@ const [INCOME, EXPENSE] = ["Income", "Expense"];
 
 class TransactionController extends BaseController {
 
-    static async getTransactions(req: any, res: Response) {
+    static getTransactions(req: any, res: Response) {
         let userId = req.user.id;
         TransactionServices.getTransactions(userId)
             .then(transactions => {
-                res.json(transactions)
+                res.json(transactions);
             })
     }
 
@@ -35,8 +35,6 @@ class TransactionController extends BaseController {
             res.status(500).json({ message: err.message });
         }
     }
-
-
 
     static async updateTransaction(req: Request, res: Response) {
         try {
@@ -56,35 +54,33 @@ class TransactionController extends BaseController {
         }
     }
 
-
-
     static async deleteTransaction(req: Request, res: Response) {
-        let transactionId = Number(req.params.transactionId);
-        //@ts-ignore
-        let userId = req.user.id;
-
-        let transaction = await TransactionServices.getTransactionById(transactionId);
-
-        if (!transaction) {
-            return res.status(404).json({ message: "Transaction not found" });
+        try {
+            let transactionId = Number(req.params.transactionId);
+            let transaction = await TransactionServices.getTransactionById(transactionId);
+            let walletId = transaction.wallet.id;
+            await TransactionServices.deleteTransaction(transaction);
+            await WalletServices.updateBalance(walletId);
+            res.status(200).json({message: "Deleted transaction successfully"})
         }
-
-        if (transaction.wallet.user.id !== userId) {
-            return res.status(401).json({ message: "You don't have permission to delete" })
+        catch (err) {
+            res.status(500).json({message: err.message})
         }
+    }
 
-        let money = transaction.money;
-        let walletId = transaction.wallet.id;
-
-        await WalletServices.adjustBalance(walletId, money);
-
-        TransactionServices.deleteTransaction(transaction)
-            .then(() => {
-                res.status(200).json({ message: 'Deleted transaction successfully' });
-            })
-            .catch(err => {
-                res.status(500).json({ message: err.message });
-            })
+    static async getTotalIncomeExpenseOfWallet(req: Request, res: Response) {
+        let walletId = Number(req.params.walletId);
+        let totalIncomeExpense = await transactionRepo.createQueryBuilder("transaction")
+            .innerJoin("transaction.wallet", "wallet")
+            .innerJoin("transaction.subCategory", "subCategory")
+            .innerJoin("subCategory.category", "category")
+            .innerJoin("category.transType", "transType")
+            .addSelect("SUM(transaction.money)", "sum")
+            .addSelect("transType.id", "transType")
+            .addGroupBy("transType.id")
+            .where("wallet.id = :walletId", { walletId: walletId })
+            .getRawMany();
+        res.status(200).json(totalIncomeExpense)
     }
 }
 

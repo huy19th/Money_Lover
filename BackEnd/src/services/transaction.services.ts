@@ -24,7 +24,7 @@ class TransactionServices extends BaseServices {
             .addSelect('wallet.name', 'wallet_name')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
-            .where('user.id = :id', {id: userId})
+            .where('user.id = :id', { id: userId })
             .getRawMany();
     }
 
@@ -32,24 +32,22 @@ class TransactionServices extends BaseServices {
         await transactionRepo.remove(transaction);
     };
 
-    static async getTransactionById(transactionId: number): Promise<Transaction | null> {
-        let transactions =  await transactionRepo.find({
-            relations: {
-                wallet: {
-                    user:true
-                }
-            },
-            where: {
-                id: transactionId
-            }
-        });
-        return transactions[0];
+    static async getTransactionById(transactionId: number): Promise<Transaction> {
+        let transaction = await transactionRepo.createQueryBuilder("transaction")
+            .innerJoinAndSelect("transaction.wallet", "wallet")
+            .where("transaction.id = :id", { id: transactionId })
+            .getOne();
+        if (!transaction) {
+            throw new Error("Transaction not found");
+        }
+        console.log(transaction)
+        return transaction;
     }
 
     static async addTransaction({ walletId, subcategoryId, money, date, image, note }): Promise<void> {
         let wallet = await WalletServices.getWalletById(walletId);
         let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
-        let transaction =  new Transaction();
+        let transaction = new Transaction();
 
         transaction.wallet = wallet;
         transaction.subCategory = subcategory;
@@ -72,7 +70,7 @@ class TransactionServices extends BaseServices {
         transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
         transaction.image = image;
         transaction.note = note;
-        
+
         await transactionRepo.save(transaction);
     }
 }
