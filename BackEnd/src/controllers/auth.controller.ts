@@ -39,23 +39,14 @@ class AuthController extends BaseController {
         res.status(200).json({ message: 'Logged out successfully!' });
     }
 
-    static async resetPassword(req, res) {
+    static async resetPassword(req: Request, res: Response) {
         try {
-            let { password, resetPassword } = req.body
-            let user = await userRepo.findOneBy({ id: req.params.userId });
-            let newPassword = await bcrypt.compare(password, user.password)
-
-            let resetPasswords = await bcrypt.hash(resetPassword, 10);
-            if (!newPassword) {
-                res.status(401).json({ message: 'password mismatch' })
-            } else {
-                user.password = resetPasswords
-                await userRepo.save(user)
-                return res.status(200).json(user)
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(err.status).json({ message: err.message })
+            let { confirmPassword, newPassword } = req.body;
+            await AuthServices.resetPassword(req.user, confirmPassword, newPassword);
+            res.status(200).json({message: 'Reset password successfully!'})
+        }
+        catch (err) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
     }
 

@@ -1,7 +1,6 @@
 import express, {Router} from 'express';
 import TransActionController from "../controllers/transaction.controller";
-import multer from 'multer';
-const upload = multer()
+
 const TransactionRouter: Router = express.Router();
 
 TransactionRouter.delete('/:transactionId', TransActionController.deleteTransaction);

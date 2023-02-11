@@ -5,6 +5,7 @@ import AuthMiddleware from "../middlewares/auth.middlewares";
 import BaseController from "../controllers/base.controller";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
+
 require('dotenv').config();
 const AuthRouter: Router = express.Router();
 
@@ -15,7 +16,7 @@ AuthRouter.post('/register', AuthController.register);
 AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, AuthController.logout);
-AuthRouter.post('/resetPassword/:userId', AuthController.resetPassword)
+AuthRouter.post('/reset-password', AuthMiddleware.checkAuthentication, AuthController.resetPassword);
 // Social Authentication
 
 AuthRouter.get('/login/success', async (req: any, res) => {
