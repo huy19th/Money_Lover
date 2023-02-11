@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 require('dotenv').config();
 
 class BaseController {
+    
+    static defaultErrorMessage = "Something is wrong!";
 
     static getRandomString(): string{
 
@@ -14,19 +16,13 @@ class BaseController {
         return randomString;
     }
 
-
-
     static generateAccessToken(payload) {
         return jwt.sign(payload, `${process.env.JWT_SECRET_KEY}`, {expiresIn: "15m"}
         );
     }
 
-
-
     static generateRefreshToken(payload) {
         return jwt.sign(payload, `${process.env.JWT_REFRESH_KEY}`);
-
-
     };
 
 }

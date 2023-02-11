@@ -8,10 +8,6 @@ import WalletServices from "../services/wallet.services";
 
 import { Request, Response } from "express";
 
-let transactionRepo = dataSource.getRepository(TransactionModel);
-let walletRepo = dataSource.getRepository(Wallet);
-let subCateRepo = dataSource.getRepository(SubCate);
-
 const [INCOME, EXPENSE] = ["Income", "Expense"];
 
 class TransactionController extends BaseController {

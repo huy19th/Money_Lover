@@ -11,13 +11,11 @@ const AuthRouter: Router = express.Router();
 let userRepo = dataSource.getRepository(User);
 const CLIENT_URL = process.env.BASE_URL + 'home';
 
-const authController = new AuthController();
-
-AuthRouter.post('/register', authController.register);
-AuthRouter.post('/login', authController.login);
+AuthRouter.post('/register', AuthController.register);
+AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
-AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
-AuthRouter.post('/resetPassword/:userId', authController.resetPassword)
+AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, AuthController.logout);
+AuthRouter.post('/resetPassword/:userId', AuthController.resetPassword)
 // Social Authentication
 
 AuthRouter.get('/login/success', async (req: any, res) => {
