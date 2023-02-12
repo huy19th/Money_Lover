@@ -48,8 +48,8 @@ class WalletServices extends BaseServices {
             .getRawMany();
         let totalIncomeDetail = totalIncomeExpense.filter(item => item.transType == INCOME)[0];
         let totalExpenseDetail = totalIncomeExpense.filter(item => item.transType == INCOME)[0];
-        let totalIncome = totalIncomeDetail ? totalIncomeDetail.sum : 0;
-        let totalExpense = totalExpenseDetail ? totalExpenseDetail.sum : 0;
+        let totalIncome = totalIncomeDetail ? Number(totalIncomeDetail.sum) : 0;
+        let totalExpense = totalExpenseDetail ? Number(totalExpenseDetail.sum) : 0;
 
         return { totalIncome: totalIncome, totalExpense: totalExpense }
     }
