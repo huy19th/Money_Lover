@@ -28,6 +28,7 @@ class TransactionController extends BaseController {
             res.status(200).json({ message: "Added transaction successfully" });
         }
         catch (err) {
+            console.log(err);
             res.status(500).json({ message: err.message });
         }
     }

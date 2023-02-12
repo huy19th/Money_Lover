@@ -53,7 +53,7 @@ class TransactionServices extends BaseServices {
         transaction.wallet = wallet;
         transaction.subCategory = subcategory;
         transaction.money = money ? Number(money) : null;
-        transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
+        transaction.date = typeof date == 'string' ? date.substring(0, 10) : date;
         transaction.image = image;
         transaction.note = note;
 
