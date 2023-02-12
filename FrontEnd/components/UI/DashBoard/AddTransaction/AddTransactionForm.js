@@ -102,7 +102,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                         message: res.data.message
                     })
                     setOpen(true);
-                    handleClose();
+                    // handleClose();
                 })
                 .catch(err => {
                     setSnackbar({
