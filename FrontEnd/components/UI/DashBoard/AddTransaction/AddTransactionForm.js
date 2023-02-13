@@ -8,9 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
-import {authActions} from "@/features/auth/authSlice";
+import {axiosJWT} from "@/configs/axios";
 import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
 import Button from "react-bootstrap/Button";
 import {useFormik} from "formik";
@@ -24,37 +22,6 @@ export default function AddTransactionForm({ handleClose, data}) {
         severity: "",
         message: ""
     })
-    const refreshToken = async () => {
-        try {
-            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
-            localStorage.setItem('token', res.data.accessToken)
-            let user = jwt_decode(res.data.accessToken)
-            dispatch(authActions.loggedIn({
-                user: user,
-                refreshToken: res.data.refreshToken
-            }))
-            return res.data
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    // RefreshToken
-    const axiosJWT = axios.create();
-    axiosJWT.interceptors.request.use(
-        async (config) => {
-            let currentDate = new Date();
-            const decodedToken = jwt_decode(localStorage.getItem('token'))
-            if (decodedToken.exp*1000 < currentDate.getTime()) {
-                const data = await refreshToken();
-                config.headers['authorization'] = "Bearer " + data.accessToken
-            } else {
-                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
-            }
-            return config
-        }, (err) => {
-            return Promise.reject(err)
-        }
-    )
 
     const dispatch = useDispatch()
 
