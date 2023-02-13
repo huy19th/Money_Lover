@@ -17,6 +17,7 @@ AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, AuthController.logout);
 AuthRouter.post('/reset-password', AuthMiddleware.checkAuthentication, AuthController.resetPassword);
+AuthRouter.post('/login/google', authController.loginWithGoogle);
 // Social Authentication
 
 AuthRouter.get('/login/success', async (req: any, res) => {

@@ -6,45 +6,11 @@ import AvatarEdit from 'react-avatar-edit'
 import Button from '@mui/material/Button';
 import storage from "@/configs/firebase";
 import {ref, deleteObject, uploadString, getDownloadURL } from "firebase/storage"
-import jwt_decode from "jwt-decode";
 import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "@/features/auth/authSlice";
-import axios from "axios";
+import {axiosJWT} from "@/configs/axios";
 
 export default function MyAvatar() {
-
-    const refreshToken = async () => {
-        try {
-            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
-            localStorage.setItem('token', res.data.accessToken)
-            let user = jwt_decode(res.data.accessToken)
-            dispatch(authActions.loggedIn({
-                user: user,
-                refreshToken: res.data.refreshToken
-            }))
-            return res.data
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-    // RefreshToken
-    const axiosJWT = axios.create();
-    axiosJWT.interceptors.request.use(
-        async (config) => {
-            let currentDate = new Date();
-            const decodedToken = jwt_decode(localStorage.getItem('token'))
-            if (decodedToken.exp*1000 < currentDate.getTime()) {
-                const data = await refreshToken();
-                config.headers['authorization'] = "Bearer " + data.accessToken
-            } else {
-                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
-            }
-            return config
-        }, (err) => {
-            return Promise.reject(err)
-        }
-    )
 
     const dispatch = useDispatch()
 

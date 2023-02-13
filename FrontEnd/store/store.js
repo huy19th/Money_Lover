@@ -6,6 +6,7 @@ import {combineReducers} from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage'
 import walletSlice from "@/features/wallet/walletSlice";
 import transactionSlice from "@/features/transaction/transactionSlice";
+import testSlice from "@/features/test/testSlice";
 
 const persistConfig = {
     key: 'root',
@@ -16,7 +17,8 @@ const persistConfig = {
 const reducer = combineReducers({
     auth: authSlice.reducer,
     wallet: walletSlice.reducer,
-    transaction: transactionSlice.reducer
+    transaction: transactionSlice.reducer,
+    test: testSlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)
