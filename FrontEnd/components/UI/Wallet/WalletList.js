@@ -7,8 +7,12 @@ import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import SpinnerLoading from '@/components/shares/Spinner';
+import AdjustBalanceDialog from './AdjustBalanceDialog';
 
 function ListItems({ data }) {
+    const [show, setShow] = useState(false);
+    const [selectedItem, setItem] = useState();
+
     return (
         <Table bordered hover>
             <tbody>
@@ -21,10 +25,19 @@ function ListItems({ data }) {
                                         <Col xs={1} className="d-flex align-items-center">
                                             <img src="https://static.moneylover.me/img/icon/icon.png" alt="" style={{ height: "40px" }} />
                                         </Col>
-                                        <Col xs={11}>
+                                        <Col xs={8}>
                                             <p className="mb-0 fw-bolder text-bottom">{item.name}</p>
                                             <span className="text-secondary" style={{ ["font-size"]: "13px" }}>
                                                 {WalletService.formatMoney(item.balance)}
+                                            </span>
+                                        </Col>
+                                        <Col xs={3}>
+                                            <span className="text-success"
+                                                onClick={() => {
+                                                    setShow(true);
+                                                    setItem(item);
+                                                }}
+                                            >Adjust Balance
                                             </span>
                                         </Col>
                                     </Row>
@@ -37,6 +50,13 @@ function ListItems({ data }) {
                         </tr>
                 }
             </tbody>
+            {
+                show ?
+                <AdjustBalanceDialog setShow={setShow} data={data} selectedItem={selectedItem} />
+                :
+                null
+            }
+            
         </Table>
     )
 }
@@ -92,7 +112,6 @@ export default function WalletLists() {
                         <ListItems data={walletsNotIncludedInTotal.data} />
                 }
             </Card>
-            <SimpleCollapse />
         </div >
     );
 }

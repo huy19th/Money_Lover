@@ -35,6 +35,23 @@ class WalletServices extends BaseServices {
         return wallet;
     }
 
+    static async getALlWalletsInfoOfUser(userId: number) {
+        let allWalletsInfo = []
+        let allWallets = await this.getAllWalletsOfUser(userId);
+        for (let i=0;i<allWallets.length;i++) {
+            let walletInfo = await this.getAllInfoOfWallet(allWallets[i].id)
+            allWalletsInfo.push(walletInfo)
+        }
+        console.log(allWalletsInfo)
+        return allWalletsInfo
+    }
+
+    static async getAllInfoOfWallet(walletId: number) {
+        let wallet = await this.getWalletById(walletId)
+        let { totalIncome, totalExpense } = await this.getTotalIncomeExpenseOfWallet(walletId);
+        return {...wallet, inflow: totalIncome, outflow: totalExpense}
+    }
+
     static async getTotalIncomeExpenseOfWallet(walletId: number) {
         let totalIncomeExpense = await walletRepo.createQueryBuilder("wallet")
             .innerJoin("wallet.transactions", "transaction")

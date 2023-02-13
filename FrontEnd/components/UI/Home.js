@@ -71,29 +71,19 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 }),);
 export default function MyHome() {
 
+    //
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
-    const myTrans = useSelector(state => state.transaction)
+    const myWallets = useSelector(state => state.wallet.wallets)
 
-    let trans = []
-
-    myTrans.map(transaction => {
-        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth() + 1 === new Date().getMonth() + 1 && new Date(transaction.date).getFullYear() === new Date().getFullYear()) {
-            trans.push(transaction)
-        }
-    })
-
+    let balance = 0
     let inflow = 0;
     let outflow = 0;
-    trans.map(tran => {
-        if (tran.type_name === 'Expenese') {
-            outflow += tran.money
-        } else {
-            inflow += tran.money
-        }
+    myWallets.map(wallet => {
+        balance += wallet.balance
+        inflow += wallet.inflow
+        outflow += wallet.outflow
     })
-
-    let newBalance = myWallet.balance + inflow - outflow
 
     //
 
@@ -131,23 +121,23 @@ export default function MyHome() {
                                     src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="" />
                             </div>
                             <div>
-                                <p className='m-0'>Name: {myWallet.name}</p>
-                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)}</p>
+                                <p className='m-0'>Name: {myWallet.name === '' ? 'All' : myWallet.name}</p>
+                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance === '' ? balance : myWallet.balance)}</p>
                             </div>
                             <div>
                                 <Wallets />
                             </div>
                         </div>
-
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <BsCalendarDay style={{ color: 'gray', width: '50px', height: '30px', marginRight: '10px' }} />
-                        <RiFindReplaceLine style={{ width: '100px', height: '30px', color: 'gray' }} />
-                        {/* <Button style={{marginRight:'10px'}} > */}
-                        <AddTransactionModal />
-                        {/* </Button> */}
-                    </div>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <BsCalendarDay style={{ color: 'gray', width: '50px', height: '30px', marginRight: '10px' }} />
+                    <RiFindReplaceLine style={{ width: '100px', height: '30px', color: 'gray' }} />
+                    {/* <Button style={{marginRight:'10px'}} > */}
+                    <AddTransactionModal />
+                    {/* </Button> */}
                 </div>
             </Toolbar>
         </AppBar>
