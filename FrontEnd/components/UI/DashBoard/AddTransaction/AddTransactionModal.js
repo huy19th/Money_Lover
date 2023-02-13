@@ -15,7 +15,7 @@ function ControlledTabs({ handleCLose }) {
     const [cates, setCates] = useState([])
 
     useEffect(() => {
-        axiosJWT.get('http://localhost:8000/api/type')
+        axiosJWT.get('/type')
             .then(res => {
                 setCates(res.data)
             })

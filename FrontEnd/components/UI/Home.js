@@ -15,26 +15,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { BsCalendarDay } from "react-icons/bs";
-import { RiFindReplaceLine } from "react-icons/ri";
-import { Col, Row } from "react-bootstrap";
+import {BsCalendarDay} from "react-icons/bs";
+import {RiFindReplaceLine} from "react-icons/ri";
+import {Row} from "react-bootstrap";
 import TransOverview from "@/components/UI/DashBoard/TransOverview";
 import Container from "react-bootstrap/Container";
-import { authActions } from "@/features/auth/authSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { FaWallet } from "react-icons/fa";
-import { TbReportMoney } from "react-icons/tb";
+import {useSelector} from "react-redux";
+import {FaWallet} from "react-icons/fa";
+import {TbReportMoney} from "react-icons/tb";
 import Link from "next/link";
-import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
-import MyAvatar from "@/components/UI/DashBoard/Avatar";
-import { useRouter } from "next/router";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
-import { walletActions } from "@/features/wallet/walletSlice";
-import { transactionActions } from "@/features/transaction/transactionSlice";
 import AccountUser from "@/components/shares/Account";
-import {axiosJWT} from "@/configs/axios";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -112,11 +105,6 @@ export default function MyHome() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-
-    const dispatch = useDispatch()
-
-    const router = useRouter()
 
     return (<Box sx={{display: 'flex'}}>
             <CssBaseline/>
@@ -213,42 +201,22 @@ export default function MyHome() {
                                     <Link style={{ color: 'gray' }} href='/report'><GiWallet style={{ fontSize: '30px' }} /></Link>
                                 }
 
-                            </ListItemIcon>
-                            <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>))}
-                <ListItem key="Wallets" disablePadding sx={{ display: 'block' }}>
-                    <ListItemButton
-                        sx={{
-                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-                        }}
-                    >
-                        <ListItemIcon
-                            sx={{
-                                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                            }}
-                        >
-                            <Link style={{ color: 'gray' }} href='/wallets'>
-                                <GiWallet style={{ fontSize: '30px' }} />
-                            </Link>
-                        </ListItemIcon>
-                        <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
-                    </ListItemButton>
-                </ListItem>
-            </List>
-            <Divider />
-        </Drawer>
-        <Box style={{ backgroundColor: '#e4e4e4', minHeight: '1000px' }} component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <DrawerHeader />
-            <div>
-                <Container>
-                    <Row className="justify-content-md-center">
-                        <Col md="auto">
-                            <TransOverview />
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-        </Box>
-    </Box>)
+                                </ListItemIcon>
+                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        </ListItem>))}
+                </List>
+                <Divider/>
+            </Drawer>
+            <Box style={{backgroundColor: '#e4e4e4', minHeight: '1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
+                <DrawerHeader/>
+                <div>
+                    <Container>
+                        <Row className="justify-content-md-center">
+                            <TransOverview/>
+                        </Row>
+                    </Container>
+                </div>
+            </Box>
+        </Box>)
 }

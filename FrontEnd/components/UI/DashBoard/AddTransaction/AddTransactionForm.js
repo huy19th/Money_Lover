@@ -59,7 +59,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                 type_name: values.subcategoryId.split(' ')[0],
                 wallet_name: myWallet.currentWallet.name
             }
-            axiosJWT.post('http://localhost:8000/api/transaction', payload)
+            axiosJWT.post('/transaction', payload)
                 .then(res => {
                     console.log(res);
                     dispatch(transactionActions.addTran(newTran));

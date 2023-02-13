@@ -6,7 +6,7 @@ import {FaFacebook, FaGoogle} from "react-icons/fa";
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
-import axios from 'axios';
+import {myAxios} from "@/configs/axios";
 import useRouter from 'next/router';
 import {authActions} from "@/features/auth/authSlice";
 import {useDispatch} from "react-redux";
@@ -19,10 +19,6 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const router = useRouter
-
-    const google = () => {
-        window.open('http://localhost:8000/api/auth/google', '_self')
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -39,10 +35,10 @@ const Login = () => {
                     "Content-Type": "multipart/form-data",
                 },
             };
-            axios.post('http://localhost:8000/api/auth/login', values, config)
+            myAxios.post('/auth/login', values, config)
                 .then((res) => {
                     localStorage.setItem('accessToken', res.data.accessToken)
-                    localStorage.setItem('refreshToken', res.data.accessToken)
+                    localStorage.setItem('refreshToken', res.data.refreshToken)
                     let user = jwt_decode(res.data.accessToken)
                     dispatch(authActions.loggedIn({
                         user: user,
