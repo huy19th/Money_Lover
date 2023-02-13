@@ -14,6 +14,7 @@ const CLIENT_URL = process.env.BASE_URL + 'home';
 const authController = new AuthController();
 
 AuthRouter.post('/register', authController.register);
+AuthRouter.post('/login/google', authController.loginWithGoogle);
 AuthRouter.post('/login', authController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);

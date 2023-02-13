@@ -44,7 +44,6 @@ class AuthController extends BaseController {
             let accessToken = BaseController.generateAccessToken(payload);
             let refreshToken = BaseController.generateRefreshToken(payload);
             user.refreshToken = refreshToken
-            console.log(1)
             await userRepo.save(user)
             res.status(200).json({
                 accessToken: accessToken,
@@ -78,6 +77,48 @@ class AuthController extends BaseController {
         } catch (err) {
             console.log(err)
             res.status(err.status).json({message: err.message})
+        }
+    }
+
+    async loginWithGoogle(req, res) {
+        console.log(req.body)
+        let existingUser = await userRepo.findOneBy({ googleId: req.body.sub });
+        if (existingUser) {
+            let payload = {
+                id: existingUser.id,
+                email: existingUser.email,
+                name: existingUser.name,
+                image: existingUser.image
+            }
+            let accessToken = BaseController.generateAccessToken(payload);
+            let refreshToken = BaseController.generateRefreshToken(payload);
+            existingUser.refreshToken = refreshToken
+            await userRepo.save(existingUser)
+            res.status(200).json({
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
+        } else {
+            let newUser = new User();
+            newUser.name = req.body.name;
+            newUser.email = req.body.email;
+            newUser.password = BaseController.getRandomString();
+            newUser.googleId = req.body.sub;
+            newUser.image = req.body.picture
+            let payload = {
+                id: newUser.id,
+                email: newUser.email,
+                name: newUser.name,
+                image: newUser.image
+            }
+            let accessToken = BaseController.generateAccessToken(payload);
+            let refreshToken = BaseController.generateRefreshToken(payload);
+            newUser.refreshToken = refreshToken
+            await userRepo.save(newUser)
+            res.status(200).json({
+                accessToken: accessToken,
+                refreshToken: refreshToken,
+            });
         }
     }
 
