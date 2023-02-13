@@ -1,58 +1,71 @@
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import dataSource from "../database/data-source";
 import BaseController from "./base.controller";
 import User from "../models/user.model";
-import bcrypt from "bcrypt"
-import dataSource from "../database/data-source";
+import AuthServices from "../services/auth.services";
+import BaseServices from "../services/base.services";
 
 let userRepo = dataSource.getRepository(User);
 
 class AuthController extends BaseController {
 
-    async register(req, res) {
-        let { name, email, password } = req.body;
-        let user = new User();
-        user.email = email ? email : null;
-        user.password = password ? password : null;
-        user.name = name || '';
+    static async register(req: Request, res: Response) {
         try {
-            user.password = await bcrypt.hash(password, 10);
-            await userRepo.save(user);
-            res.status(200).json({message: 'Registered successfully!'});
+            await AuthServices.register(req.body);
+            res.status(200).json({ message: 'Registered successfully!' });
         }
         catch (err: any) {
-            let { sqlMessage } = err;
-            res.status(500).json({ message: sqlMessage })
+            res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
     }
 
-    async login(req, res) {
-        let { email, password } = req.body
-        let user = await userRepo.findOneBy({ email: email });
-        if (!user) {
-            return res.status(401).json({ message: 'Wrong email or password!' });
-        }
-        let match = await bcrypt.compare(password, user.password);
-        if (match) {
-            let payload = {
-                id: user.id,
-            }
-            let accessToken = BaseController.generateAccessToken(payload);
-            let refreshToken = BaseController.generateRefreshToken(payload);
-            user.refreshToken = refreshToken
-            await userRepo.save(user)
+    static async login(req: Request, res: Response) {
+        try {
+            let { email, password } = req.body;
+            let [accessToken, refreshToken] = await AuthServices.checkAuthAndGenerateTokens(email, password);
             res.status(200).json({
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
         }
-        else {
-            res.status(401).json({ message: 'Wrong email or password!' });
+        catch (err: any) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage });
+        }
+    }
+    static async logout(req, res) {
+        req.user.refreshToken = null;
+        await userRepo.save(req.user);
+        res.status(200).json({ message: 'Logged out successfully!' });
+    }
+
+    static async resetPassword(req: Request, res: Response) {
+        try {
+            let { confirmPassword, newPassword } = req.body;
+            await AuthServices.resetPassword(req.user, confirmPassword, newPassword);
+            res.status(200).json({message: 'Reset password successfully!'})
+        }
+        catch (err) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
     }
 
-    async logout(req, res) {
-        req.user.refreshToken = null;
-        await userRepo.save(req.user);
-        res.status(200).json({message: 'Logged out successfully!'});
+    static async loginWithGoogle(req, res) {
+        let user = await userRepo.findOneBy({ googleId: req.body.sub });
+        if (!user) {
+            req.body.password = BaseController.getRandomString();
+            req.body.image = req.body.picture;
+            req.body.googleId = req.body.sub;
+            user = await AuthServices.register(req.body);
+        }
+        let accessToken = BaseServices.generateAccessToken(user);
+        let refreshToken = BaseServices.generateRefreshToken(user);
+        user.refreshToken = refreshToken
+        await userRepo.save(user)
+        res.status(200).json({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+        });
     }
 
 }

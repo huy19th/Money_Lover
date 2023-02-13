@@ -21,6 +21,18 @@ export class User {
     @Column({ name: "image", type: "nvarchar", length: 500, nullable: true })
     image: string;
 
+    @Column({ name: "google_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    googleId: string;
+
+    @Column({ name: "facebook_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    facebookId: string;
+
+    @Column({ name: "github_id", type: "nvarchar", length: 500, nullable: true })
+        //@ts-ignore
+    githubId: string;
+
     @OneToMany(() => Wallet, wallet => wallet.user, {
         cascade: true
     })
@@ -29,11 +41,11 @@ export class User {
     @OneToMany(() => TransCate, transCate => transCate.user, {
         cascade: true
     })
-    //@ts-ignore
+        //@ts-ignore
     transCates: TransCate[];
-    
 
-    @Column({name: "refresh_token", type: "nvarchar", length: 255, nullable: true})
+
+    @Column({name: "refresh_token", type: "longtext", nullable: true})
     refreshToken: string;
 
 }

@@ -18,7 +18,7 @@ class AuthMiddleware {
                 }
                 let user = await userRepo.findOneBy({id: decoded.id});
                 if (!user) {
-                    return res.status(401).json({message: 'Unauthorized!'})
+                    return res.status(401).json({message: 'Unauthorized!'});
                 }
                 req.user = user;
                 next();
@@ -37,16 +37,25 @@ class AuthMiddleware {
             }
             let user = await userRepo.findOneBy({id: decoded.id});
             if (user.refreshToken === refreshToken) {
-                const newAccessToken = BaseController.generateAccessToken({id: user.id});
-                const newRefreshToken = BaseController.generateRefreshToken({id: user.id});
+                let payload = {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    image: user.image
+                }
+                const newAccessToken = BaseController.generateAccessToken(payload);
+                const newRefreshToken = BaseController.generateRefreshToken(payload);
                 user.refreshToken = newRefreshToken
                 await userRepo.save(user)
                 res.status(200).json({
                     accessToken: newAccessToken,
                     refreshToken: newRefreshToken,
                 });
+            } else {
+                return res.status(403).json("Refresh token is not valid!");
             }
-        });
+            }
+        );
     }
 
 }
