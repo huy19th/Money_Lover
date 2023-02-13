@@ -8,7 +8,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import Typography from '@mui/material/Typography';
 import {FaUserCircle} from "react-icons/fa";
 import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
@@ -63,7 +62,7 @@ export default function AccountUser() {
     const dispatch = useDispatch()
 
     const logOut = async () => {
-        await axiosJWT.get('http://localhost:8000/api/auth/logout', {
+        await axiosJWT.get('/auth/logout', {
             headers: {
                 authorization: 'Bearer ' + localStorage.getItem('token')
             }

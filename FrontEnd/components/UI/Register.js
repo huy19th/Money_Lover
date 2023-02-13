@@ -8,14 +8,11 @@ import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
 import axios from "axios";
 import {useRouter} from "next/router";
+import MyGoogleButton from "@/components/shares/GoogleButton";
 
 const Register = () => {
 
     const router = useRouter()
-
-    const google = () => {
-        window.open('http://localhost:8000/auth/google', '_self')
-    }
 
     const formik = useFormik({
         initialValues: {
@@ -49,11 +46,7 @@ const Register = () => {
                                 <MDBCol style={{marginTop: '40px'}}>
                                     <p>Using social networking accounts</p>
 
-                                    <Button style={{borderWidth: '2px'}} variant='outline-danger'
-                                            className="mb-2 w-100 d-flex align-items-center" size="lg">
-                                        <FaGoogle style={{marginRight: '19px'}}/>
-                                        Connect with google
-                                    </Button>
+                                    <MyGoogleButton/>
 
                                     <Button style={{borderWidth: '2px'}} variant='outline-primary'
                                             className="mb-4 w-100 d-flex align-items-center" size="lg">
