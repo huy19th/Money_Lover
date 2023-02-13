@@ -5,20 +5,19 @@ import AuthMiddleware from "../middlewares/auth.middlewares";
 import BaseController from "../controllers/base.controller";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
+
 require('dotenv').config();
 const AuthRouter: Router = express.Router();
 
 let userRepo = dataSource.getRepository(User);
 const CLIENT_URL = process.env.BASE_URL + 'home';
 
-const authController = new AuthController();
-
-AuthRouter.post('/register', authController.register);
-AuthRouter.post('/login/google', authController.loginWithGoogle);
-AuthRouter.post('/login', authController.login);
+AuthRouter.post('/register', AuthController.register);
+AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
-AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, authController.logout);
-AuthRouter.post('/resetPassword/:userId', authController.resetPassword)
+AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, AuthController.logout);
+AuthRouter.post('/reset-password', AuthMiddleware.checkAuthentication, AuthController.resetPassword);
+AuthRouter.post('/login/google', authController.loginWithGoogle);
 // Social Authentication
 
 AuthRouter.get('/login/success', async (req: any, res) => {

@@ -4,7 +4,9 @@ import Nav from 'react-bootstrap/Nav';
 import Container from "react-bootstrap/Container";
 import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
+
 import {useSelector} from "react-redux";
+
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
@@ -19,6 +21,7 @@ import Cloud from '@mui/icons-material/Cloud';
 
 
 const TransOverview = () => {
+
 
     // Add Transaction
 
@@ -66,6 +69,7 @@ const TransOverview = () => {
                             FUTURE
                         </Nav.Link>
                     </div>
+
                 </Nav>
             </Card.Header>
             <Card.Body>
@@ -76,14 +80,17 @@ const TransOverview = () => {
                             <p>Outflow</p>
                         </Col>
                         <Col>
+
                             <p style={{color:'blue',marginLeft:'124px'}}>+ {inflow}</p>
                             <p style={{color:'red',marginLeft:'124px'}}>- {outflow}</p>
                             <hr/>
                             <p style={{marginLeft:'124px'}}>{newBalance}</p>
+
                         </Col>
                         <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                     </Row>
                     <hr/>
+
                     {trans.map(tran => {
                         return (
                             <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}}>
@@ -101,6 +108,7 @@ const TransOverview = () => {
                     })}
                 </Container>
             </Card.Body>
+
         </Card>
     );
 }

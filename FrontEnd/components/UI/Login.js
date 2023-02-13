@@ -41,11 +41,11 @@ const Login = () => {
             };
             axios.post('http://localhost:8000/api/auth/login', values, config)
                 .then((res) => {
-                    localStorage.setItem('token', res.data.accessToken)
+                    localStorage.setItem('accessToken', res.data.accessToken)
+                    localStorage.setItem('refreshToken', res.data.accessToken)
                     let user = jwt_decode(res.data.accessToken)
                     dispatch(authActions.loggedIn({
                         user: user,
-                        refreshToken: res.data.refreshToken
                     }))
                     router.push('/home')
                 }).catch(err => {
