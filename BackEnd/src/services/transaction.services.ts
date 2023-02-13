@@ -21,7 +21,7 @@ class TransactionServices extends BaseServices {
             .innerJoin('trans.subCategory', 'subCategory')
             .innerJoin('subCategory.category', 'category')
             .innerJoin('category.transType', 'type')
-            .select('trans.money, trans.date, trans.note')
+            .select('trans.money, trans.date, trans.note, trans.id')
             .addSelect('wallet.name', 'wallet_name')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
@@ -41,7 +41,6 @@ class TransactionServices extends BaseServices {
         if (!transaction) {
             throw new Error("Transaction not found");
         }
-        console.log(transaction)
         return transaction;
     }
 

@@ -24,7 +24,7 @@ class UserController extends BaseController {
 
     async getInfo(req: any, res: any) {
         let userId = req.user.id;
-        let wallets = await WalletServices.getAllWalletsOfUser(userId)
+        let wallets = await WalletServices.getALlWalletsInfoOfUser(userId)
         let transactions = await TransactionServices.getTransactions(userId)
         res.json({
             wallets: wallets,
