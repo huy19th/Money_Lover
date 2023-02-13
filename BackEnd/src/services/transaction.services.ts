@@ -1,12 +1,20 @@
 import BaseServices from "./base.services";
 import Transaction from "../models/transaction.model";
+import TransSubCate from "../models/trans.subcate.model";
 import dataSource from "../database/data-source";
+import WalletServices from "./wallet.services";
+import TransSubCateServices from "./transsubcate.services";
+import Wallet from "../models/wallet.model";
 
 let transactionRepo = dataSource.getRepository(Transaction);
+let transSubCateRepo = dataSource.getRepository(TransSubCate);
+
+const [INCOME, EXPENSE] = ["Income", "Expense"];
+const [OTHER_INCOME_ID, OTHER_EXPENSE_ID] = [34, 20];
 
 class TransactionServices extends BaseServices {
 
-    async getTransactions(userId) {
+    static async getTransactions(userId) {
         return await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
@@ -17,29 +25,60 @@ class TransactionServices extends BaseServices {
             .addSelect('wallet.name', 'wallet_name')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
-            .where('user.id = :id', {id: userId})
+            .where('user.id = :id', { id: userId })
             .getRawMany();
     }
 
-    async deleteTransaction(transaction: Transaction): Promise<void> {
-
+    static async deleteTransaction(transaction: Transaction): Promise<void> {
         await transactionRepo.remove(transaction);
     };
-    async getTransactionById(transactionId: number): Promise<Transaction | null> {
-        let transactions =  await transactionRepo.find({
-            relations: {
 
-                wallet: {
-                    user:true
-                }
+    static async getTransactionById(transactionId: number): Promise<Transaction> {
+        let transaction = await transactionRepo.createQueryBuilder("transaction")
+            .innerJoinAndSelect("transaction.wallet", "wallet")
+            .where("transaction.id = :id", { id: transactionId })
+            .getOne();
+        if (!transaction) {
+            throw new Error("Transaction not found");
+        }
+        console.log(transaction)
+        return transaction;
+    }
 
-            },
-            where: {
-                id: transactionId
-            }
-        });
+    static async addTransaction(walletId, subcategoryId, money, date, image, note): Promise<void> {
+        let wallet = await WalletServices.getWalletById(walletId);
+        let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
+        let transaction = new Transaction();
 
-        return transactions[0];
+        transaction.wallet = wallet;
+        transaction.subCategory = subcategory;
+        transaction.money = money ? Number(money) : null;
+        transaction.date = typeof date == 'string' ? date.substring(0, 10) : date;
+        transaction.image = image;
+        transaction.note = note;
+
+        await transactionRepo.save(transaction);
+    }
+
+    static async updateTransaction(transactionId, { walletId, subcategoryId, money, date, image, note }): Promise<void> {
+        let transaction = await this.getTransactionById(transactionId);
+        let wallet = await WalletServices.getWalletById(walletId);
+        let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
+
+        transaction.wallet = wallet;
+        transaction.subCategory = subcategory;
+        transaction.money = money ? +money : null;
+        transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
+        transaction.image = image;
+        transaction.note = note;
+
+        await transactionRepo.save(transaction);
+    }
+    static async addTransactionToAdjustBalance(walletId: number, balance: number): Promise<void> {
+        let wallet = await WalletServices.getWalletById(walletId);
+        let subcategoryId = balance > wallet.balance ? OTHER_INCOME_ID : OTHER_EXPENSE_ID;
+        let money = Math.abs(balance - wallet.balance)
+        await this.addTransaction(walletId, subcategoryId, money, new Date(), null, "Adjust Balance");
     }
 }
 

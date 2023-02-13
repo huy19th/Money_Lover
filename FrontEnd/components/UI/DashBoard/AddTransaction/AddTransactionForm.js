@@ -6,7 +6,6 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import * as React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import axios from "axios";
@@ -17,10 +16,14 @@ import Button from "react-bootstrap/Button";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {transactionActions} from "@/features/transaction/transactionSlice";
-import {walletActions} from "@/features/wallet/walletSlice";
+import SnackBar from "@/components/shares/SnackBar";
 
 export default function AddTransactionForm({ handleClose, data}) {
-
+    const [open, setOpen] = useState(false);
+    const [snackbar, setSnackbar] = useState({
+        severity: "",
+        message: ""
+    })
     const refreshToken = async () => {
         try {
             const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
@@ -76,7 +79,7 @@ export default function AddTransactionForm({ handleClose, data}) {
         onSubmit: values => {
             let payload = {
                 date: values.date,
-                money: values.subcategoryId.split(' ')[0] === 'Expenese' ? `-${values.money}` : values.money,
+                money: values.money,
                 note: values.note,
                 walletId: values.walletId,
                 subcategoryId: +values.subcategoryId.split(' ')[1]
@@ -90,10 +93,24 @@ export default function AddTransactionForm({ handleClose, data}) {
                 wallet_name: myWallet.currentWallet.name
             }
             axiosJWT.post('http://localhost:8000/api/transaction', payload)
-                .then(() => {
-                    dispatch(transactionActions.addTran(newTran))
+                .then(res => {
+                    console.log(res);
+                    dispatch(transactionActions.addTran(newTran));
                     // dispatch(walletActions.changeWallets(payload.money))
-                    handleClose()
+                    setSnackbar({
+                        severity: "success",
+                        message: res.data.message
+                    })
+                    setOpen(true);
+                    // handleClose();
+                })
+                .catch(err => {
+                    setSnackbar({
+                        severity: "error",
+                        message: err.response.data.message
+                    });
+                    setOpen(true);
+                    console.log(err)
                 })
         },
     });
@@ -195,7 +212,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                     </Button>
                 </Grid>
             </Grid>
-
+            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message}/>
         </form>
     )
 }

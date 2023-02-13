@@ -23,9 +23,13 @@ export class Wallet {
         //@ts-ignore
     name: string;
 
-    @Column({ name: "balance", type: "int", nullable: true })
+    @Column({ name: "balance", type: "int", nullable: false })
         //@ts-ignore
     balance: number;
+
+    @Column({ name: "initial_balance", type: "int", nullable: false})
+        //@ts-ignore
+    initialBalance: number;    
 
     @Column({ name: "include_total", type: "boolean", default: true})
         //@ts-ignore

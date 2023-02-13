@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Tab from 'react-bootstrap/Tab';
@@ -6,19 +6,19 @@ import Tabs from 'react-bootstrap/Tabs';
 import AddTransactionForm from "@/components/UI/Dashboard/AddTransaction/AddTransactionForm";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
-import {authActions} from "@/features/auth/authSlice";
-import {useDispatch} from "react-redux";
+import { authActions } from "@/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-function ControlledTabs({handleCLose}) {
+function ControlledTabs({ handleCLose }) {
     const [key, setKey] = useState('expense');
 
     const dispatch = useDispatch()
-
+    const user = useSelector(state => state.auth.currentUser)
     const [cates, setCates] = useState([])
 
     const refreshToken = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
+            const res = await axios.post('http://localhost:8000/api/auth/refresh', { token: user.refreshToken });
             localStorage.setItem('token', res.data.accessToken)
             let user = jwt_decode(res.data.accessToken)
             dispatch(authActions.loggedIn({
@@ -36,7 +36,7 @@ function ControlledTabs({handleCLose}) {
         async (config) => {
             let currentDate = new Date();
             const decodedToken = jwt_decode(localStorage.getItem('token'))
-            if (decodedToken.exp*1000 < currentDate.getTime()) {
+            if (decodedToken.exp * 1000 < currentDate.getTime()) {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             } else {
@@ -65,10 +65,10 @@ function ControlledTabs({handleCLose}) {
                 justify
             >
                 <Tab eventKey="expense" title="Expense">
-                    <AddTransactionForm handleClose={handleCLose} data={cates[0]}/>
+                    <AddTransactionForm handleClose={handleCLose} data={cates[0]} />
                 </Tab>
                 <Tab eventKey="income" title="Income">
-                    <AddTransactionForm handleClose={handleCLose} data={cates[1]}/>
+                    <AddTransactionForm handleClose={handleCLose} data={cates[1]} />
                 </Tab>
             </Tabs>
         );
@@ -94,7 +94,7 @@ export default function AddTransactionModal() {
                     <Modal.Title>Add Transaction</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <ControlledTabs handleCLose={handleClose}/>
+                    <ControlledTabs handleCLose={handleClose} />
                 </Modal.Body>
             </Modal>
         </>

@@ -1,83 +1,52 @@
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
+import dataSource from "../database/data-source";
 import BaseController from "./base.controller";
 import User from "../models/user.model";
-import bcrypt from "bcrypt";
-import dataSource from "../database/data-source";
-import { Request, Response } from "express";
+import AuthServices from "../services/auth.services";
 
 let userRepo = dataSource.getRepository(User);
 
-//code so bad
 class AuthController extends BaseController {
 
-
-    async register(req: Request , res: Response) {
-
-        let {name, email, password} = req.body;
-        let user = new User();
-        user.email = email ? email : null;
-        user.password = password ? password : null;
-        user.name = name || '';
+    static async register(req: Request, res: Response) {
         try {
-            user.password = await bcrypt.hash(password, 10);
-            await userRepo.save(user);
-            res.status(200).json({message: 'Registered successfully!'});
-        } catch (err: any) {
-            let {sqlMessage} = err;
-            res.status(500).json({message: sqlMessage})
+            let { name, email, password } = req.body
+            await AuthServices.register(name, email, password);
+            res.status(200).json({ message: 'Registered successfully!' });
+        }
+        catch (err: any) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
     }
 
-    async login(req, res) {
-        let {email, password} = req.body
-        let user = await userRepo.findOneBy({email: email});
-        if (!user) {
-            return res.status(401).json({message: 'Wrong email or password!'});
-        }
-        let match = await bcrypt.compare(password, user.password);
-        if (match) {
-            let payload = {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-                image: user.image
-            }
-            let accessToken = BaseController.generateAccessToken(payload);
-            let refreshToken = BaseController.generateRefreshToken(payload);
-            user.refreshToken = refreshToken
-            console.log(1)
-            await userRepo.save(user)
+    static async login(req: Request, res: Response) {
+        try {
+            let { email, password } = req.body;
+            let [accessToken, refreshToken] = await AuthServices.checkAuthAndGenerateTokens(email, password);
             res.status(200).json({
                 accessToken: accessToken,
                 refreshToken: refreshToken,
             });
-        } else {
-            res.status(401).json({message: 'Wrong email or password!'});
+        }
+        catch (err: any) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage });
         }
     }
-
-    async logout(req, res) {
+    static async logout(req, res) {
         req.user.refreshToken = null;
         await userRepo.save(req.user);
-        res.status(200).json({message: 'Logged out successfully!'});
+        res.status(200).json({ message: 'Logged out successfully!' });
     }
 
-    async resetPassword(req, res) {
+    static async resetPassword(req: Request, res: Response) {
         try {
-            let {password, resetPassword} = req.body
-            let user = await userRepo.findOneBy({id: req.params.userId});
-            let newPassword = await bcrypt.compare(password, user.password)
-
-            let resetPasswords = await bcrypt.hash(resetPassword, 10);
-            if (!newPassword) {
-                res.status(401).json({message: 'password mismatch'})
-            } else {
-                user.password = resetPasswords
-                await userRepo.save(user)
-                return res.status(200).json(user)
-            }
-        } catch (err) {
-            console.log(err)
-            res.status(err.status).json({message: err.message})
+            let { confirmPassword, newPassword } = req.body;
+            await AuthServices.resetPassword(req.user, confirmPassword, newPassword);
+            res.status(200).json({message: 'Reset password successfully!'})
+        }
+        catch (err) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
     }
 
