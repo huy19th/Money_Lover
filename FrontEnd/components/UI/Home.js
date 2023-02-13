@@ -118,20 +118,6 @@ export default function MyHome() {
 
     const router = useRouter()
 
-    const logOut = async () => {
-
-        await axiosJWT.get('http://localhost:8000/api/auth/logout', {
-
-            headers: {
-                authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        localStorage.removeItem('token');
-        dispatch(authActions.loggedOut());
-        dispatch(walletActions.resetWallet())
-        dispatch(transactionActions.resetTrans())
-        router.push('/login')
-    }
     return (<Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <AppBar sx={{backgroundColor: 'white'}} position="fixed" open={open}>

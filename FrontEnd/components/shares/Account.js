@@ -12,8 +12,7 @@ import Typography from '@mui/material/Typography';
 import {FaUserCircle} from "react-icons/fa";
 import {Col, Row} from "react-bootstrap";
 import Link from "next/link";
-import axios from "axios";
-import jwt_decode from "jwt-decode";
+import {axiosJWT} from "@/configs/axios";
 import {authActions} from "@/features/auth/authSlice";
 import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
@@ -62,37 +61,6 @@ export default function AccountUser() {
     const router = useRouter()
     const user = useSelector(state => state.auth.currentUser)
     const dispatch = useDispatch()
-    const refreshToken = async () => {
-        try {
-            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
-            localStorage.setItem('token', res.data.accessToken)
-            let user = jwt_decode(res.data.accessToken)
-            dispatch(authActions.loggedIn({
-                user: user,
-                refreshToken: res.data.refreshToken
-            }))
-            return res.data
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    // RefreshToken
-    const axiosJWT = axios.create();
-    axiosJWT.interceptors.request.use(
-        async (config) => {
-            let currentDate = new Date();
-            const decodedToken = jwt_decode(localStorage.getItem('token'))
-            if (decodedToken.exp*1000 < currentDate.getTime()) {
-                const data = await refreshToken();
-                config.headers['authorization'] = "Bearer " + data.accessToken
-            } else {
-                config.headers['authorization'] = "Bearer " + localStorage.getItem('token')
-            }
-            return config
-        }, (err) => {
-            return Promise.reject(err)
-        }
-    )
 
     const logOut = async () => {
         await axiosJWT.get('http://localhost:8000/api/auth/logout', {
@@ -100,7 +68,8 @@ export default function AccountUser() {
                 authorization: 'Bearer ' + localStorage.getItem('token')
             }
         })
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         dispatch(authActions.loggedOut());
         dispatch(walletActions.resetWallet())
         dispatch(transactionActions.resetTrans())
