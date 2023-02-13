@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import {styled, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -19,22 +18,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {RiFindReplaceLine} from "react-icons/ri";
 import {Col, Row} from "react-bootstrap";
-
 import Container from "react-bootstrap/Container";
-import axios from "axios";
-import {authActions} from "@/features/auth/authSlice";
-import jwt_decode from "jwt-decode";
-import useRouter from 'next/router'
-import {useDispatch, useSelector} from "react-redux";
 import ChartCard from "@/components/UI/Report/Chart";
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import Link from "next/link";
-import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
 import AccountUser from "@/components/UI/Report/Account";
 
-;const drawerWidth = 240;
+const drawerWidth = 240;
 const openedMixin = (theme) => ({
     width: drawerWidth, transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.enteringScreen,
@@ -83,43 +75,7 @@ export default function MyHome() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const router = useRouter
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.auth)
-    const refreshToken = async () => {
-        try {
-            const res = await axios.post('http://localhost:8000/auth/refresh', {token: user.refreshToken});
-            localStorage.setItem('token', res.data.accessToken)
-            dispatch(authActions.loggedIn(res.data.refreshToken))
-            return res.data
-        } catch (err) {
-            console.log(err)
-        }
-    }
-    // RefreshToken
-    const axiosJWT = axios.create();
-    axiosJWT.interceptors.request.use(async (config) => {
-        let currentDate = new Date();
-        const decodedToken = jwt_decode(localStorage.getItem('token'))
-        if (decodedToken.exp * 1000 < currentDate.getTime()) {
-            const data = await refreshToken();
-            config.headers['authorization'] = "Bearer " + data.accessToken
-        }
-        console.log(config)
-        return config
-    }, (err) => {
-        return Promise.reject(err)
-    })
-    const logOut = async () => {
-        await axiosJWT.get('http://localhost:8000/auth/logout', {
-            headers: {
-                authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-        })
-        localStorage.removeItem('token');
-        dispatch(authActions.loggedOut());
-        router.push('/login')
-    }
+
     return (<Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <AppBar sx={{backgroundColor: 'white'}} position="fixed" open={open}>

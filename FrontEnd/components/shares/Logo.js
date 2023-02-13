@@ -1,4 +1,3 @@
-
 export default function Logo(){
     return(
         <div style={{paddingTop:'50px', display: 'flex', alignItems: 'center'}}>
