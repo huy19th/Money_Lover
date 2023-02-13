@@ -2,7 +2,6 @@ import {createSlice} from "@reduxjs/toolkit";
 
 let initialState = {
     isLoggedIn: false,
-    refreshToken: '',
     currentUser: ''
 }
 
@@ -12,7 +11,6 @@ export const authSlice = createSlice({
     reducers: {
         loggedIn: (state, action) => {
             state.isLoggedIn = true;
-            state.refreshToken = action.payload.refreshToken
             state.currentUser = action.payload.user
             return state
         },

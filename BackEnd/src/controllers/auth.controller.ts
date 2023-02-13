@@ -4,6 +4,7 @@ import dataSource from "../database/data-source";
 import BaseController from "./base.controller";
 import User from "../models/user.model";
 import AuthServices from "../services/auth.services";
+import BaseServices from "../services/base.services";
 
 let userRepo = dataSource.getRepository(User);
 
@@ -11,8 +12,7 @@ class AuthController extends BaseController {
 
     static async register(req: Request, res: Response) {
         try {
-            let { name, email, password } = req.body
-            await AuthServices.register(name, email, password);
+            await AuthServices.register(req.body);
             res.status(200).json({ message: 'Registered successfully!' });
         }
         catch (err: any) {
@@ -48,6 +48,24 @@ class AuthController extends BaseController {
         catch (err) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage })
         }
+    }
+
+    static async loginWithGoogle(req, res) {
+        let user = await userRepo.findOneBy({ googleId: req.body.sub });
+        if (!user) {
+            req.body.password = BaseController.getRandomString();
+            req.body.image = req.body.picture;
+            req.body.googleId = req.body.sub;
+            user = await AuthServices.register(req.body);
+        }
+        let accessToken = BaseServices.generateAccessToken(user);
+        let refreshToken = BaseServices.generateRefreshToken(user);
+        user.refreshToken = refreshToken
+        await userRepo.save(user)
+        res.status(200).json({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+        });
     }
 
 }

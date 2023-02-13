@@ -1,6 +1,4 @@
-import store from "@/store/store";
 import axios from "axios";
-import { authActions } from "@/features/auth/authSlice";
 import jwt_decode from "jwt-decode";
 
 const PORT = 8000;
@@ -11,13 +9,9 @@ export default axios.create({
 
 const refreshToken = async () => {
     try {
-        const res = await axios.post('/auth', { token: user.refreshToken });
-        localStorage.setItem('token', res.data.accessToken)
-        let user = jwt_decode(res.data.accessToken)
-        store.dispatch(authActions.loggedIn({
-            user: user,
-            refreshToken: res.data.refreshToken
-        }))
+        const res = await axios.post('/auth', { token: localStorage.getItem('refreshToken') });
+        localStorage.setItem('accessToken', res.data.accessToken)
+        localStorage.setItem('refreshToken', res.data.refreshToken)
         return res.data;
     } catch (err) {
         console.log(err);
