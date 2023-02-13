@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {styled, useTheme} from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
@@ -15,27 +15,27 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {BsCalendarDay} from "react-icons/bs";
-import {RiFindReplaceLine} from "react-icons/ri";
-import {Col, Row} from "react-bootstrap";
+import { BsCalendarDay } from "react-icons/bs";
+import { RiFindReplaceLine } from "react-icons/ri";
+import { Col, Row } from "react-bootstrap";
 import TransOverview from "@/components/UI/DashBoard/TransOverview";
 import Container from "react-bootstrap/Container";
-import {authActions} from "@/features/auth/authSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {FaWallet} from "react-icons/fa";
-import {TbReportMoney} from "react-icons/tb";
+import { authActions } from "@/features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { FaWallet } from "react-icons/fa";
+import { TbReportMoney } from "react-icons/tb";
 import Link from "next/link";
-import {MdAccountCircle} from "react-icons/md";
-import {GiWallet} from "react-icons/gi";
+import { MdAccountCircle } from "react-icons/md";
+import { GiWallet } from "react-icons/gi";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
-import {walletActions} from "@/features/wallet/walletSlice";
-import {transactionActions} from "@/features/transaction/transactionSlice";
+import { walletActions } from "@/features/wallet/walletSlice";
+import { transactionActions } from "@/features/transaction/transactionSlice";
 import AccountUser from "@/components/shares/Account";
 
 const drawerWidth = 240;
@@ -51,7 +51,7 @@ const closedMixin = (theme) => ({
         width: `calc(${theme.spacing(8)} + 1px)`,
     },
 });
-const DrawerHeader = styled('div')(({theme}) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
@@ -60,7 +60,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 }));
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({theme, open}) => ({
+})(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1, transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp, duration: theme.transitions.duration.leavingScreen,
     }), ...(open && {
@@ -71,7 +71,7 @@ const AppBar = styled(MuiAppBar, {
         }),
     }),
 }));
-const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(({theme, open}) => ({
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
     width: drawerWidth, flexShrink: 0, whiteSpace: 'nowrap', boxSizing: 'border-box', ...(open && {
         ...openedMixin(theme), '& .MuiDrawer-paper': openedMixin(theme),
     }), ...(!open && {
@@ -87,7 +87,7 @@ export default function MyHome() {
     let trans = []
 
     myTrans.map(transaction => {
-        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
+        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth() + 1 === new Date().getMonth() + 1 && new Date(transaction.date).getFullYear() === new Date().getFullYear()) {
             trans.push(transaction)
         }
     })
@@ -102,7 +102,7 @@ export default function MyHome() {
         }
     })
 
-    let newBalance = myWallet.balance+inflow-outflow
+    let newBalance = myWallet.balance + inflow - outflow
 
     //
 
@@ -124,7 +124,7 @@ export default function MyHome() {
     const user = useSelector(state => state.auth)
     const refreshToken = async () => {
         try {
-            const res = await axios.post('http://localhost:8000/api/auth/refresh', {token: user.refreshToken});
+            const res = await axios.post('http://localhost:8000/api/auth/refresh', { token: user.refreshToken });
             localStorage.setItem('token', res.data.accessToken)
             let user = jwt_decode(res.data.accessToken)
             dispatch(authActions.loggedIn({
@@ -142,7 +142,7 @@ export default function MyHome() {
         async (config) => {
             let currentDate = new Date();
             const decodedToken = jwt_decode(localStorage.getItem('token'))
-            if (decodedToken.exp*1000 < currentDate.getTime()) {
+            if (decodedToken.exp * 1000 < currentDate.getTime()) {
                 const data = await refreshToken();
                 config.headers['authorization'] = "Bearer " + data.accessToken
             } else {
@@ -168,118 +168,137 @@ export default function MyHome() {
         dispatch(transactionActions.resetTrans())
         router.push('/login')
     }
-    return (<Box sx={{display: 'flex'}}>
-            <CssBaseline/>
-            <AppBar sx={{backgroundColor: 'white'}} position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="gray"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
+    return (<Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBar sx={{ backgroundColor: 'white' }} position="fixed" open={open}>
+            <Toolbar>
+                <IconButton
+                    color="gray"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={{
+                        marginRight: 5, ...(open && { display: 'none' }),
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <div
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+
+                    <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
+                        <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
+                            <div>
+                                <img style={{ width: '50px', marginRight: '8px' }}
+                                    src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="" />
+                            </div>
+                            <div>
+                                <p className='m-0'>Name: {myWallet.name}</p>
+                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)}</p>
+                            </div>
+                            <div>
+                                <Wallets />
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <BsCalendarDay style={{ color: 'gray', width: '50px', height: '30px', marginRight: '10px' }} />
+                        <RiFindReplaceLine style={{ width: '100px', height: '30px', color: 'gray' }} />
+                        {/* <Button style={{marginRight:'10px'}} > */}
+                        <AddTransactionModal />
+                        {/* </Button> */}
+                    </div>
+                </div>
+            </Toolbar>
+        </AppBar>
+        <Drawer variant="permanent" open={open}>
+            <DrawerHeader>
+                <IconButton onClick={handleDrawerClose}>
+                    {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                </IconButton>
+            </DrawerHeader>
+            <Divider />
+            <List>
+                {['Transactions', 'Report'].map((text, index) => (
+                    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            sx={{
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+
+                                {index % 2 === 0 ? <Link style={{ color: 'gray' }} href='/home'><FaWallet style={{ fontSize: '30px' }} /></Link> :
+                                    <Link style={{ color: 'gray' }} href='/report'><TbReportMoney style={{ fontSize: '30px' }} /></Link>}
+
+                            </ListItemIcon>
+                            <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>))},
+                <hr />
+                {['Account', 'Wallet'].map((text, index) => (
+                    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            sx={{
+
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                {index % 2 === 0 ?
+
+                                    <AccountUser /> :
+                                    // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
+                                    <Link style={{ color: 'gray' }} href='/report'><GiWallet style={{ fontSize: '30px' }} /></Link>
+                                }
+
+                            </ListItemIcon>
+                            <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>))}
+                <ListItem key="Wallets" disablePadding sx={{ display: 'block' }}>
+                    <ListItemButton
                         sx={{
-                            marginRight: 5, ...(open && {display: 'none'}),
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
                         }}
                     >
-                        <MenuIcon/>
-                    </IconButton>
-                    <div
-                        style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
-
-                        <div style={{color: 'black', display: "flex", alignItems: "center"}}>
-                            <div style={{color: 'black', display: "flex", alignItems: "center"}}>
-                                <div>
-                                    <img style={{width: '50px', marginRight: '8px'}}
-                                         src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
-                                </div>
-                                <div>
-                                    <p className='m-0'>Name: {myWallet.name}</p>
-                                    <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)}</p>
-                                </div>
-                                <div>
-                                    <Wallets/>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div style={{display:'flex',alignItems:'center'}}>
-                            <BsCalendarDay style={{color: 'gray',width:'50px',height:'30px',marginRight:'10px'}}/>
-                            <RiFindReplaceLine style={{width:'100px',height:'30px',color:'gray'}}/>
-                            {/* <Button style={{marginRight:'10px'}} > */}
-                                <AddTransactionModal/>
-                            {/* </Button> */}
-                        </div>
-                    </div>
-                </Toolbar>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider/>
-                <List>
-                    {['Transactions', 'Report'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                    }}
-                                >
-
-                                    {index % 2 === 0 ? <Link style={{color: 'gray'}} href='/home'><FaWallet  style={{fontSize:'30px'}}/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><TbReportMoney  style={{fontSize:'30px'}}/></Link>}
-
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                            </ListItemButton>
-                        </ListItem>))},
-                    <hr/>
-                    {['Account', 'Wallet'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
-                            <ListItemButton
-                                sx={{
-
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ?
-
-                                        <AccountUser/> :
-                                        // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
-                                        <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
-
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                            </ListItemButton>
-                        </ListItem>))}
-                </List>
-                <Divider/>
-            </Drawer>
-            <Box style={{backgroundColor: '#e4e4e4', minHeight: '1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
-                <DrawerHeader/>
-                <div>
-                    <Container>
-                        <Row className="justify-content-md-center">
-                            <Col md="auto">
-                                <TransOverview/>
-                            </Col>
-                        </Row>
-                    </Container>
-                </div>
-            </Box>
-        </Box>)
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                            }}
+                        >
+                            <Link style={{ color: 'gray' }} href='/wallets'>
+                                <GiWallet style={{ fontSize: '30px' }} />
+                            </Link>
+                        </ListItemIcon>
+                        <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider />
+        </Drawer>
+        <Box style={{ backgroundColor: '#e4e4e4', minHeight: '1000px' }} component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <DrawerHeader />
+            <div>
+                <Container>
+                    <Row className="justify-content-md-center">
+                        <Col md="auto">
+                            <TransOverview />
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
+        </Box>
+    </Box>)
 }
