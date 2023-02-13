@@ -4,11 +4,14 @@ class WalletService {
     static getAllWalletsOfUser() {
         return axiosJWT.get('/wallet');
     }
-    static getWalletsIncludeInTotal() {
-        return axiosJWT.get('/wallet/include-in-total');
+    static getWalletsIncludedInTotal() {
+        return axiosJWT.get('/wallet/included-in-total/true');
     }
-    static getWalletsNotIncludeInTotal() {
-        return axiosJWT.get('/wallet/not-include-in-total');
+    static getWalletsNotIncludedInTotal() {
+        return axiosJWT.get('/wallet/included-in-total/false');
+    }
+    static formatMoney(money) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(money);
     }
 }
 
