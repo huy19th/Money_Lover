@@ -11,7 +11,6 @@ import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
 import TransTypeRouter from "./routers/transtype.router";
 
-require('./passport')
 class App {
 
     private app: express.Application = express();

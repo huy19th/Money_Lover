@@ -15,16 +15,16 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import {BsCalendarDay} from "react-icons/bs";
-import {RiFindReplaceLine} from "react-icons/ri";
-import {Row} from "react-bootstrap";
+import { BsCalendarDay } from "react-icons/bs";
+import { RiFindReplaceLine } from "react-icons/ri";
+import { Row } from "react-bootstrap";
 import TransOverview from "@/components/UI/DashBoard/TransOverview";
 import Container from "react-bootstrap/Container";
-import {useSelector} from "react-redux";
-import {FaWallet} from "react-icons/fa";
-import {TbReportMoney} from "react-icons/tb";
+import { useSelector } from "react-redux";
+import { FaWallet } from "react-icons/fa";
+import { TbReportMoney } from "react-icons/tb";
 import Link from "next/link";
-import {GiWallet} from "react-icons/gi";
+import { GiWallet } from "react-icons/gi";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
 import AccountUser from "@/components/shares/Account";
@@ -106,23 +106,23 @@ export default function MyHome() {
         setOpen(false);
     };
 
-    return (<Box sx={{display: 'flex'}}>
-            <CssBaseline/>
-            <AppBar sx={{backgroundColor: 'white'}} position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="gray"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5, ...(open && {display: 'none'}),
-                        }}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
-                    <div
-                        style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+    return (<Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <AppBar sx={{ backgroundColor: 'white' }} position="fixed" open={open}>
+            <Toolbar>
+                <IconButton
+                    color="gray"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    edge="start"
+                    sx={{
+                        marginRight: 5, ...(open && { display: 'none' }),
+                    }}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <div
+                    style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 
                     <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
                         <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
@@ -180,43 +180,54 @@ export default function MyHome() {
                         </ListItemButton>
                     </ListItem>))},
                 <hr />
-                {['Account', 'Wallet'].map((text, index) => (
-                    <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                        <ListItemButton
+                <ListItem key="Account" disablePadding sx={{ display: 'block' }}>
+                    <ListItemButton
+                        sx={{
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                        }}
+                    >
+                        <ListItemIcon
                             sx={{
-
-                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-
+                                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                             }}
                         >
-                            <ListItemIcon
-                                sx={{
-                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                }}
-                            >
-                                {index % 2 === 0 ?
+                            <AccountUser />
+                        </ListItemIcon>
+                        <ListItemText primary="Account" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem key="Wallets" disablePadding sx={{ display: 'block' }}>
+                    <ListItemButton
+                        sx={{
 
-                                    <AccountUser /> :
-                                    // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
-                                    <Link style={{ color: 'gray' }} href='/report'><GiWallet style={{ fontSize: '30px' }} /></Link>
-                                }
+                            minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                            </ListItemButton>
-                        </ListItem>))}
-                </List>
-                <Divider/>
-            </Drawer>
-            <Box style={{backgroundColor: '#e4e4e4', minHeight: '1000px'}} component="main" sx={{flexGrow: 1, p: 3}}>
-                <DrawerHeader/>
-                <div>
-                    <Container>
-                        <Row className="justify-content-md-center">
-                            <TransOverview/>
-                        </Row>
-                    </Container>
-                </div>
-            </Box>
-        </Box>)
+                        }}
+                    >
+                        <ListItemIcon
+                            sx={{
+                                minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                            }}
+                        >
+                            <Link style={{ color: 'gray' }} href='/wallets'>
+                                <GiWallet style={{ fontSize: '30px' }} />
+                            </Link>
+                        </ListItemIcon>
+                        <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            <Divider />
+        </Drawer>
+        <Box style={{ backgroundColor: '#e4e4e4', minHeight: '1000px' }} component="main" sx={{ flexGrow: 1, p: 3 }}>
+            <DrawerHeader />
+            <div>
+                <Container>
+                    <Row className="justify-content-md-center">
+                        <TransOverview />
+                    </Row>
+                </Container>
+            </div>
+        </Box>
+    </Box>)
 }

@@ -1,12 +1,13 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { useSelector } from 'react-redux';
-import store from '@/store/store';
+import { axiosJWT } from '@/configs/axios';
 
 export default function ListGroupWithHeaderExample() {
 
     const user = useSelector(state => state.auth).currentUser;
 
+    
     return (
         <div className="mt-5 pt-5">
             <Card style={{ width: '18rem' }}>
