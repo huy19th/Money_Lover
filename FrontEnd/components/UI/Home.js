@@ -36,7 +36,7 @@ import {useRouter} from "next/router";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
 import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
-import AccountUser from "@/components/shares/Account";
+import AccountUser from "@/components/shares/Account/Account";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({

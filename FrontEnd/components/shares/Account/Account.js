@@ -19,6 +19,7 @@ import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {useRouter} from "next/router";
+import ChangePassword from "./ChangePassWord";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuiDialogContent-root': {
@@ -146,13 +147,18 @@ export default function AccountUser() {
                                 <p>{user.email}</p>
                             </Col>
                         </Row>
+                        <Row>
+                            <Col style={{textAlign:'right',marginRight:'30px'}}>
+                                <Link style={{textDecoration:'none',color:'green'}} href='#' onClick=''><ChangePassword/></Link>
+                            </Col>
+                        </Row>
                     </div>
                     <hr/>
                     <img style={{width:'500px',height:'200px'}} src="https://i.pinimg.com/originals/c9/bc/9c/c9bc9cde36a08a30cd442cdf5780c9c9.jpg" alt=""/>
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose}>
-                        Save changes
+                        Cancel
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
