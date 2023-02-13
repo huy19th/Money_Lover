@@ -6,7 +6,9 @@ let initialState = {
         name: '',
         balance: '',
         include_total: '',
-        active: ''
+        active: '',
+        inflow: '',
+        outflow: ''
     },
     wallets: []
 }

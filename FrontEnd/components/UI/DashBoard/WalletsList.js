@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import {useDispatch, useSelector} from "react-redux";
@@ -8,28 +7,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function Wallets() {
 
-    const myTrans = useSelector(state => state.transaction)
-
     const dispatch = useDispatch()
-
-    const getBalance = (name, value) => {
-
-        let trans = []
-
-        myTrans.map(transaction => {
-            if (transaction.wallet_name === name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
-                trans.push(transaction)
-            }
-        })
-        trans.map(tran => {
-            if (tran.type_name === 'Expenese') {
-                value -= tran.money
-            } else {
-                value += tran.money
-            }
-        })
-        return value
-    }
 
     const myWallet = useSelector(state => state.wallet)
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -63,7 +41,7 @@ export default function Wallets() {
                             </div>
                             <div>
                                 <p className='m-0'>Name: {wallet.name}</p>
-                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(getBalance(wallet.name, wallet.balance))}</p>
+                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(wallet.balance)}</p>
                             </div>
                         </div>
                     </MenuItem>
