@@ -9,14 +9,18 @@ let userRepo = dataSource.getRepository(User);
 
 class AuthServices extends BaseServices {
 
-    static async register(name: string, email: string, password: string): Promise<void> {
+    static async register({name, email, password, googleId, image, refreshToken}): Promise<User> {
         await this.validateEmail(email);
         await this.validatePassword(password);
         let user = new User();
         user.email = email;
         user.password = await bcrypt.hash(password, 10);
         user.name = name;
+        user.image = image;
+        user.googleId = googleId
+        user.refreshToken = refreshToken
         await userRepo.save(user);
+        return user
     }
 
     static async checkAuthAndGenerateTokens(email, password): Promise<string[]> {
