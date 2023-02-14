@@ -10,6 +10,7 @@ import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
 import TransTypeRouter from "./routers/transtype.router";
+
 class App {
 
     private app: express.Application = express();
@@ -46,7 +47,7 @@ class App {
         this.app.use(cors({
             credentials: true,
             origin: "http://localhost:3000",
-            methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+            methods: ['POST', 'PUT', 'PATCH', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
         }));
 
         this.app.use('/api/auth', AuthRouter);
