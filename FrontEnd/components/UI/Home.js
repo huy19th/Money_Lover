@@ -27,7 +27,7 @@ import Link from "next/link";
 import {GiWallet} from "react-icons/gi";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
-import AccountUser from "@/components/shares/Account";
+import AccountUser from "@/components/shares/Account/Account";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
