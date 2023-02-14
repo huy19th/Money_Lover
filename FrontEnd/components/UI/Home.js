@@ -121,7 +121,7 @@ export default function MyHome() {
                                          src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
                                 </div>
                                 <div>
-                                    <p className='m-0'>Name: {myWallet.name === '' ? 'All' : myWallet.name }</p>
+                                    <p className='m-0'>Name: {myWallet.name === '' ? 'Total' : myWallet.name }</p>
                                     <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance === '' ? balance : myWallet.balance)}</p>
                                 </div>
                                 <div>
@@ -187,7 +187,6 @@ export default function MyHome() {
                                     {index % 2 === 0 ?
 
                                         <AccountUser/> :
-                                        // <Link style={{color: 'gray'}} href='/home'><MdAccountCircle/></Link> :
                                         <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
 
                                 </ListItemIcon>

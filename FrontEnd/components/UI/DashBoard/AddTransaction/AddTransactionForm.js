@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {axiosJWT} from "@/configs/axios";
 import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
 import Button from "react-bootstrap/Button";
@@ -15,6 +15,7 @@ import {useFormik} from "formik";
 import * as Yup from "yup";
 import {transactionActions} from "@/features/transaction/transactionSlice";
 import SnackBar from "@/components/shares/SnackBar";
+import {walletActions} from "@/features/wallet/walletSlice";
 
 export default function AddTransactionForm({ handleClose, data}) {
     const [open, setOpen] = useState(false);
@@ -25,9 +26,8 @@ export default function AddTransactionForm({ handleClose, data}) {
 
     const dispatch = useDispatch()
 
-    const myWallet = useSelector(state => state.wallet)
-
-    const myTrans = useSelector(state => state.transaction)
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+    const myWallets = useSelector(state => state.wallet.wallets)
 
     const formik = useFormik({
         initialValues: {
@@ -39,7 +39,6 @@ export default function AddTransactionForm({ handleClose, data}) {
         },
         validationSchema: Yup.object({
             walletId: Yup.number().required("Required"),
-            // subcategoryId: Yup.number().required("Required"),
             money: Yup.number().required("Required"),
             note: Yup.string().nullable()
         }),
@@ -51,25 +50,33 @@ export default function AddTransactionForm({ handleClose, data}) {
                 walletId: values.walletId,
                 subcategoryId: +values.subcategoryId.split(' ')[1]
             }
-            let newTran = {
-                date: values.date,
-                money: +values.money,
-                note: values.note,
-                subCate_name: values.subcategoryId.split(' ')[2],
-                type_name: values.subcategoryId.split(' ')[0],
-                wallet_name: myWallet.currentWallet.name
-            }
             axiosJWT.post('/transaction', payload)
-                .then(res => {
-                    console.log(res);
-                    dispatch(transactionActions.addTran(newTran));
-                    // dispatch(walletActions.changeWallets(payload.money))
+                .then(async res => {
+                    if (values.walletId === myWallet.id) {
+                        let wallet = (await axiosJWT.get(`/wallet/info/${myWallet.id}`)).data
+                        console.log(wallet)
+                        let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`)).data
+                        dispatch(walletActions.changeCurrentWallet(wallet))
+                        dispatch(transactionActions.getTrans(transactions))
+                        dispatch(walletActions.changeWallets({
+                            walletInfo: wallet,
+                            walletId: myWallet.id
+                        }))
+                    } else {
+                        let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
+                        let transactions = (await axiosJWT.get('/transaction')).data
+                        dispatch(walletActions.changeWallets({
+                            walletInfo: wallet,
+                            walletId: values.walletId
+                        }))
+                        dispatch(transactionActions.getTrans(transactions))
+                        dispatch(walletActions.resetCurrentWallet())
+                    }
                     setSnackbar({
                         severity: "success",
                         message: res.data.message
                     })
                     setOpen(true);
-                    // handleClose();
                 })
                 .catch(err => {
                     setSnackbar({
@@ -77,7 +84,6 @@ export default function AddTransactionForm({ handleClose, data}) {
                         message: err.response.data.message
                     });
                     setOpen(true);
-                    console.log(err)
                 })
         },
     });
@@ -86,7 +92,8 @@ export default function AddTransactionForm({ handleClose, data}) {
         <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
                 <Grid item xs={4}>
-                    <FormControl fullWidth>
+                    {myWallet.name === 'Total' ?
+                        (<FormControl fullWidth>
                         <InputLabel id="select-wallet-label">Wallet</InputLabel>
                         <Select
                             labelId="select-wallet-label"
@@ -96,30 +103,28 @@ export default function AddTransactionForm({ handleClose, data}) {
                             {...formik.getFieldProps('walletId')}
                         >
                             {
-                                myWallet.wallets.map(item =>
+                                myWallets.map(item =>
                                     <MenuItem value={item.id}>{item.name}</MenuItem>
                                 )
                             }
                         </Select>
-                    </FormControl>
+                    </FormControl>)
+                        :
+                        (<FormControl fullWidth>
+                            <InputLabel id="select-wallet-label">Wallet</InputLabel>
+                            <Select
+                                labelId="select-wallet-label"
+                                id="select-wallet"
+                                label="Wallet"
+                                name="walletId"
+                                {...formik.getFieldProps('walletId')}
+                            >
+                                <MenuItem value={myWallet.id}>{myWallet.name}</MenuItem>
+                            </Select>
+                        </FormControl>)
+                    }
                 </Grid>
                 <Grid item xs={4}>
-                    {/*<FormControl fullWidth>*/}
-                    {/*    <InputLabel id="select-wallet-label">Category</InputLabel>*/}
-                    {/*    <Select*/}
-                    {/*        labelId="select-wallet-label"*/}
-                    {/*        id="select-wallet"*/}
-                    {/*        label="Category"*/}
-                    {/*        name="subcategoryId"*/}
-                    {/*        {...formik.getFieldProps('subcategoryId')}*/}
-                    {/*    >*/}
-                    {/*        {*/}
-                    {/*            subcategories.map(item =>*/}
-                    {/*                <MenuItem value={item.id}>{item.name}</MenuItem>*/}
-                    {/*            )*/}
-                    {/*        }*/}
-                    {/*    </Select>*/}
-                    {/*</FormControl>*/}
                     <FormControl fullWidth>
                         <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
                         <Select native defaultValue="" id="grouped-native-select" label="Category" name='subcategoryId' {...formik.getFieldProps('subcategoryId')}>

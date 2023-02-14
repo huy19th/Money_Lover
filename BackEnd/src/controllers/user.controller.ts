@@ -21,16 +21,6 @@ class UserController extends BaseController {
             message: 'Update successfully!'
         })
     }
-
-    async getInfo(req: any, res: any) {
-        let userId = req.user.id;
-        let wallets = await WalletServices.getALlWalletsInfoOfUser(userId)
-        let transactions = await TransactionServices.getTransactions(userId)
-        res.json({
-            wallets: wallets,
-            trans: transactions
-        })
-    }
    
 }
 

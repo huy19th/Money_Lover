@@ -5,6 +5,5 @@ const UserRouter: Router = express.Router();
 
 const userController = new UserController();
 UserRouter.post('/update', userController.update)
-UserRouter.get('/info', userController.getInfo)
 
 export default UserRouter;

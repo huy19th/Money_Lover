@@ -5,13 +5,10 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import AddTransactionForm from "@/components/UI/Dashboard/AddTransaction/AddTransactionForm";
 import {axiosJWT} from "@/configs/axios";
-import { useDispatch, useSelector } from "react-redux";
 
 function ControlledTabs({ handleCLose }) {
     const [key, setKey] = useState('expense');
 
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.auth.currentUser)
     const [cates, setCates] = useState([])
 
     useEffect(() => {
