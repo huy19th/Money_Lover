@@ -29,9 +29,11 @@ export default function AddTransactionForm({ handleClose, data}) {
     const myWallet = useSelector(state => state.wallet.currentWallet)
     const myWallets = useSelector(state => state.wallet.wallets)
 
+    console.log(myWallet)
+
     const formik = useFormik({
         initialValues: {
-            walletId: '',
+            walletId: myWallet.name === 'Total' || myWallet.name === '' ? '' : myWallet.id,
             subcategoryId: '',
             money: '',
             date: new Date(),
@@ -54,7 +56,6 @@ export default function AddTransactionForm({ handleClose, data}) {
                 .then(async res => {
                     if (values.walletId === myWallet.id) {
                         let wallet = (await axiosJWT.get(`/wallet/info/${myWallet.id}`)).data
-                        console.log(wallet)
                         let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`)).data
                         dispatch(walletActions.changeCurrentWallet(wallet))
                         dispatch(transactionActions.getTrans(transactions))
@@ -62,7 +63,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                             walletInfo: wallet,
                             walletId: myWallet.id
                         }))
-                    } else {
+                    } else if (myWallet.id === 'Total') {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
                         let transactions = (await axiosJWT.get('/transaction')).data
                         dispatch(walletActions.changeWallets({
@@ -71,6 +72,12 @@ export default function AddTransactionForm({ handleClose, data}) {
                         }))
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.resetCurrentWallet())
+                    } else {
+                        let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
+                        dispatch(walletActions.changeWallets({
+                            walletInfo: wallet,
+                            walletId: values.walletId
+                        }))
                     }
                     setSnackbar({
                         severity: "success",
@@ -92,8 +99,7 @@ export default function AddTransactionForm({ handleClose, data}) {
         <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
                 <Grid item xs={4}>
-                    {myWallet.name === 'Total' ?
-                        (<FormControl fullWidth>
+                    <FormControl fullWidth>
                         <InputLabel id="select-wallet-label">Wallet</InputLabel>
                         <Select
                             labelId="select-wallet-label"
@@ -108,21 +114,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                                 )
                             }
                         </Select>
-                    </FormControl>)
-                        :
-                        (<FormControl fullWidth>
-                            <InputLabel id="select-wallet-label">Wallet</InputLabel>
-                            <Select
-                                labelId="select-wallet-label"
-                                id="select-wallet"
-                                label="Wallet"
-                                name="walletId"
-                                {...formik.getFieldProps('walletId')}
-                            >
-                                <MenuItem value={myWallet.id}>{myWallet.name}</MenuItem>
-                            </Select>
-                        </FormControl>)
-                    }
+                    </FormControl>
                 </Grid>
                 <Grid item xs={4}>
                     <FormControl fullWidth>
