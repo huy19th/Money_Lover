@@ -1,12 +1,10 @@
 import Card from 'react-bootstrap/Card';
-import { useSelector } from 'react-redux';
-import Spinner from 'react-bootstrap/Spinner';
+import { useSelector, useDispatch } from 'react-redux';
 import WalletService from '@/services/wallet.service';
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import SpinnerLoading from '@/components/shares/Spinner';
 import AdjustBalanceDialog from './AdjustBalanceDialog';
 
 function ListItems({ data, setData }) {
@@ -62,54 +60,27 @@ function ListItems({ data, setData }) {
 }
 
 export default function WalletLists() {
-
-    const user = useSelector(state => state.auth).currentUser;
-    const [walletsIncludedInTotal, setWalletsIncludedInTotal] = useState({
-        isLoading: true,
-        data: []
-    });
-    const [walletsNotIncludedInTotal, setWalletsNotIncludedInTotal] = useState({
-        isLoading: true,
-        data: []
-    });
+    const wallets = useSelector(state => state.wallet).wallets;
+    const [walletsIncludedInTotal, setWalletsIncludedInTotal] = useState(
+        wallets.filter(item => item.includeTotal == true)
+    );
+    
+    const [walletsNotIncludedInTotal, setWalletsNotIncludedInTotal] = useState(
+        wallets.filter(item => item.includeTotal == false)
+    );
 
     useEffect(() => {
-        WalletService.getWalletsIncludedInTotal()
-            .then(res => {
-                setTimeout(() => {
-                    setWalletsIncludedInTotal({
-                        isLoading: false,
-                        data: res.data
-                    });
-                }, 2000)
-            });
-        WalletService.getWalletsNotIncludedInTotal()
-            .then(res => {
-                setTimeout(() => {
-                    setWalletsNotIncludedInTotal({
-                        isLoading: false,
-                        data: res.data
-                    });
-                }, 2000)
-            })
-    }, [])
+        console.log(walletsIncludedInTotal)
+        setWalletsIncludedInTotal(wallets.filter(item => item.includeTotal == true));
+        setWalletsNotIncludedInTotal(wallets.filter(item => item.includeTotal == false));
+    }, [wallets])
 
     return (
         <Card style={{ width: '100%' }}>
             <Card.Header className="ps-4">Included In Total</Card.Header>
-            {
-                walletsIncludedInTotal.isLoading ?
-                    <SpinnerLoading />
-                    :
-                    <ListItems data={walletsIncludedInTotal.data} setData={setWalletsIncludedInTotal} />
-            }
+            <ListItems data={walletsIncludedInTotal} />
             <Card.Header className="ps-4">Not Included In Total</Card.Header>
-            {
-                walletsNotIncludedInTotal.isLoading ?
-                    <SpinnerLoading />
-                    :
-                    <ListItems data={walletsNotIncludedInTotal.data} setData={setWalletsNotIncludedInTotal} />
-            }
+            <ListItems data={walletsNotIncludedInTotal} />
         </Card>
     );
 }

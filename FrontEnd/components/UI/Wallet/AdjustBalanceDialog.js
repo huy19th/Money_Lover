@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import TextField from '@mui/material/TextField';
@@ -7,9 +7,12 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import WalletService from '@/services/wallet.service';
+import { useDispatch, useSelector } from 'react-redux';
+import { walletActions } from '@/features/wallet/walletSlice';
 
 export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
-
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth).currentUser;
     const [values, setValues] = useState({
         walletId: selectedItem.id,
         balance: selectedItem.balance,
@@ -50,10 +53,16 @@ export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = event => {
+        event.preventDefault();
         WalletService.adjustBalance(values)
         .then(res => {
             console.log(res);
+            WalletService.getAllWalletsOfUser(user.id)
+            .then(res => {
+                console.log(res.data)
+                dispatch(walletActions.getWallets(res.data));
+            })
             handleClose();
         })
     }
