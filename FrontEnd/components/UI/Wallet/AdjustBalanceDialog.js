@@ -54,7 +54,7 @@ export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
         WalletService.adjustBalance(values)
         .then(res => {
             console.log(res);
-            setShow(false);
+            handleClose();
         })
     }
 
