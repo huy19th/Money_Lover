@@ -70,7 +70,7 @@ export default function WalletLists() {
     );
 
     useEffect(() => {
-        console.log(walletsIncludedInTotal)
+        console.log(wallets)
         setWalletsIncludedInTotal(wallets.filter(item => item.includeTotal == true));
         setWalletsNotIncludedInTotal(wallets.filter(item => item.includeTotal == false));
     }, [wallets])
