@@ -13,6 +13,9 @@ class WalletService {
     static formatMoney(money) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(money);
     }
+    static adjustBalance({walletId, balance}) {
+        return axiosJWT.patch('/wallet/balance', {walletId, balance});
+    }
 }
 
 export default WalletService;

@@ -9,7 +9,7 @@ import Col from 'react-bootstrap/Col';
 import SpinnerLoading from '@/components/shares/Spinner';
 import AdjustBalanceDialog from './AdjustBalanceDialog';
 
-function ListItems({ data }) {
+function ListItems({ data, setData }) {
     const [show, setShow] = useState(false);
     const [selectedItem, setItem] = useState();
 
@@ -102,14 +102,14 @@ export default function WalletLists() {
                     walletsIncludedInTotal.isLoading ?
                         <SpinnerLoading />
                         :
-                        <ListItems data={walletsIncludedInTotal.data} />
+                        <ListItems data={walletsIncludedInTotal.data} setData={setWalletsIncludedInTotal}/>
                 }
                 <Card.Header className="ps-4">Not Included In Total</Card.Header>
                 {
                     walletsNotIncludedInTotal.isLoading ?
                         <SpinnerLoading />
                         :
-                        <ListItems data={walletsNotIncludedInTotal.data} />
+                        <ListItems data={walletsNotIncludedInTotal.data} setData={setWalletsNotIncludedInTotal}/>
                 }
             </Card>
         </div >
