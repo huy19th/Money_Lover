@@ -54,8 +54,8 @@ export default function Wallets() {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                {myWallet.wallets.map(wallet => {
-                    return <MenuItem onClick={() => handleClose(wallet)}>
+                {myWallet.wallets.map((wallet,index) => {
+                    return <MenuItem key={index} onClick={() => handleClose(wallet)}>
                         <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                             <div>
                                 <img style={{width: '50px', marginRight: '8px'}}

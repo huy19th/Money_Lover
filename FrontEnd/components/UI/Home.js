@@ -17,24 +17,17 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {BsCalendarDay} from "react-icons/bs";
 import {RiFindReplaceLine} from "react-icons/ri";
-import {Col, Row} from "react-bootstrap";
+import {Row} from "react-bootstrap";
 import TransOverview from "@/components/UI/DashBoard/TransOverview";
 import Container from "react-bootstrap/Container";
-import {authActions} from "@/features/auth/authSlice";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import {FaWallet} from "react-icons/fa";
 import {TbReportMoney} from "react-icons/tb";
 import Link from "next/link";
-import {MdAccountCircle} from "react-icons/md";
 import {GiWallet} from "react-icons/gi";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
-import MyAvatar from "@/components/UI/DashBoard/Avatar";
-import {useRouter} from "next/router";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
-import {walletActions} from "@/features/wallet/walletSlice";
-import {transactionActions} from "@/features/transaction/transactionSlice";
 import AccountUser from "@/components/shares/Account/Account";
-import {axiosJWT} from "@/configs/axios";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -112,11 +105,6 @@ export default function MyHome() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-
-
-    const dispatch = useDispatch()
-
-    const router = useRouter()
 
     return (<Box sx={{display: 'flex'}}>
             <CssBaseline/>
@@ -224,9 +212,7 @@ export default function MyHome() {
                 <div>
                     <Container>
                         <Row className="justify-content-md-center">
-                            <Col md="auto">
-                                <TransOverview/>
-                            </Col>
+                            <TransOverview/>
                         </Row>
                     </Container>
                 </div>

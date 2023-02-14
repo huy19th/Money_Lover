@@ -1,6 +1,5 @@
 import { axiosJWT } from "@/configs/axios";
 
-export const  ChangePassword = () =>{
-    return axiosJWT.post('auth/reset-password')
-
+export const  ChangePassword = (value) =>{
+    return axiosJWT.post('/auth/reset-password',value);
 }

@@ -1,11 +1,7 @@
 import express from "express";
 import cors from "cors";
-
 import fileUpload from "express-fileupload";
-
 import cookieSession from "cookie-session";
-import passport from 'passport';
-
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
 import AuthMiddleware from "./middlewares/auth.middlewares";
@@ -13,11 +9,8 @@ import TransSubCateRouter from "./routers/transsubcate.router";
 import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
-import dataSource from "./database/data-source";
-import TransType from "./models/trans.type.model";
 import TransTypeRouter from "./routers/transtype.router";
 
-require('./passport')
 class App {
 
     private app: express.Application = express();
@@ -51,8 +44,6 @@ class App {
             keys: ["case-md6"],
             maxAge: 24 * 60 * 60 * 100
         }))
-        this.app.use(passport.initialize());
-        this.app.use(passport.session());
         this.app.use(cors({
             credentials: true,
             origin: "http://localhost:3000",
@@ -64,7 +55,6 @@ class App {
         this.app.use('/api/user', UserRouter)
         this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction-subcategory', TransSubCateRouter);
-        // this.app.use(TransTypeRouter);
         this.app.use('/api/wallet', WalletRouter);
         this.app.use('/api/type', TransTypeRouter);
 

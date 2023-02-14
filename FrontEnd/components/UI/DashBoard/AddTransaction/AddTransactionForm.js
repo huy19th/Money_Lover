@@ -59,7 +59,7 @@ export default function AddTransactionForm({ handleClose, data}) {
                 type_name: values.subcategoryId.split(' ')[0],
                 wallet_name: myWallet.currentWallet.name
             }
-            axiosJWT.post('http://localhost:8000/api/transaction', payload)
+            axiosJWT.post('/transaction', payload)
                 .then(res => {
                     console.log(res);
                     dispatch(transactionActions.addTran(newTran));
@@ -124,10 +124,10 @@ export default function AddTransactionForm({ handleClose, data}) {
                         <InputLabel htmlFor="grouped-native-select">Category</InputLabel>
                         <Select native defaultValue="" id="grouped-native-select" label="Category" name='subcategoryId' {...formik.getFieldProps('subcategoryId')}>
                             <option aria-label="None" value="" />
-                            {data.transCates.map(transCates => {
+                            {data.transCates.map((transCates,index) => {
                                 return (
                                     <>
-                                        <optgroup label={transCates.name}>
+                                        <optgroup key={index} label={transCates.name}>
                                             {transCates.subCategories.map(subCategory => {
                                                 return (
                                                     <option value={`${data.name} ${subCategory.id} ${subCategory.name}`}>{subCategory.name}</option>

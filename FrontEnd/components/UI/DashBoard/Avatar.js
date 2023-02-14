@@ -44,7 +44,7 @@ export default function MyAvatar() {
                 // Lấy url firebase
                 let image = await getDownloadURL(storageRef)
                 // Thêm DB
-                await axiosJWT.post('http://localhost:8000/api/user/update', image.toString())
+                await axiosJWT.post('/user/update', image.toString())
                 // Dispatch
                 dispatch(authActions.updateUser(image))
                 handleClose()
@@ -59,7 +59,7 @@ export default function MyAvatar() {
                     // Lấy url firebase
                     let image = await getDownloadURL(storageRef)
                     // Thêm DB
-                    await axiosJWT.post('http://localhost:8000/api/user/update', image.toString())
+                    await axiosJWT.post('/user/update', image.toString())
                     // Dispatch
                     dispatch(authActions.updateUser(image))
                     handleClose()

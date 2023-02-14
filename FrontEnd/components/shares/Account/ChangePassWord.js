@@ -3,10 +3,9 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import {useFormik} from 'formik';
+import * as yup from 'yup';
 import TextField from '@mui/material/TextField';
 import {ChangePassword} from '@/services/user.service'
 import InputLabel from "@mui/material/InputLabel";
@@ -14,33 +13,72 @@ import {Visibility, VisibilityOff} from "@mui/icons-material";
 import {InputAdornment, OutlinedInput} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
+import Snackbar from '@mui/material/Snackbar';
 import {useEffect, useState} from "react";
+import {axiosJWT} from "@/configs/axios";
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 
-export default function AlertDialog() {
-    const [open, setOpen] = React.useState(false);
-    const [showPassword, setShowPassword] = React.useState(false);
+const styles = {};
+const contactFormEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT;
 
-    const handleClickShowPassword = () => setShowPassword((show) => !show);
+export default function DialogChangePassWord() {
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
+    const [showPassword, setShowPassword] = useState({
+        oldPassword: false,
+        newPassword: false,
+        confirmPassword: false
+    })
+    const [open, setOpen] = useState(false);
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+
+    const [confirmMessage, setConfirmMessage] = useState({
+        status: "",
+        visible: false,
+        message: ""
+    })
+
+
+    const formik = useFormik({
+        initialValues: {
+            oldPassword: '',
+            newPassword: '',
+            confirmPassword: ''
+        },
+        onSubmit: (values, actions) => {
+            let data = {
+                oldPassword : values.oldPassword,
+                newPassword : values.confirmPassword
+            }
+            let result =checkConfirmPassword();
+            if (result === true){
+                ChangePassword(data).then(() => {
+                    setOpenSnackBar(true)
+                    handleClose()
+                }).catch((err) => {
+                    setConfirmMessage({
+                        status: "danger",
+                        visible: true,
+                        message:err.response.data.message
+                    });
+                })
+            }
+            actions.resetForm();
+        },
+
+
+    });
+
+    const handleClickShowPassword = name => {
+        setShowPassword({
+            ...showPassword,
+            [name]: !showPassword[name]
+        })
     };
-    const [showPassword1, setShowPassword1] = React.useState(false);
-
-    const handleClickShowPassword1 = () => setShowPassword1((show) => !show);
-
-    const handleMouseDownPassword1 = (event) => {
-        event.preventDefault();
-    };
-    const [showPassword2, setShowPassword2] = React.useState(false);
-
-    const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
-
-    const handleMouseDownPassword2 = (event) => {
-        event.preventDefault();
-    };
-
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -49,100 +87,135 @@ export default function AlertDialog() {
     const handleClose = () => {
         setOpen(false);
     };
-    const [changePassword, setChangePassword] = useState([]);
-    useEffect(()=>{
-        ChangePassword().then(result => {
-            setChangePassword(result);
-        })
-    },[])
 
+    const  checkConfirmPassword = () => {
+        let passwordMatch = formik.values.newPassword !== formik.values.confirmPassword;
+        let passwordInserted = formik.values.newPassword !== '' || formik.values.confirmPassword !== '';
+        if (passwordMatch && passwordInserted) {
+            setConfirmMessage({
+                status: "danger",
+                visible: true,
+                message: "Password not matches"
+            });
+            return false;
+        } else {
+            setConfirmMessage({
+                status: "success",
+                visible: true,
+                message: "Password matches"
+            });
+            return true;
+        }
+    }
     return (
-        <div>
+        <>
+            <Snackbar
+                severity="success"
+                open={openSnackBar}
+                autoHideDuration={6000}
+            >
+                <Alert onClose={()=>{setOpenSnackBar(false)}} severity="success" sx={{ width: '100%' }}>
+                    Change password success
+                </Alert>
+            </Snackbar>
             <Button variant="outlined" onClick={handleClickOpen}>
                 Change Password
             </Button>
+
             <Dialog
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
+                <form>
+                    <DialogTitle id="alert-dialog-title">
+                        {"Change PassWord"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <FormControl variant="outlined" className="w-100 pb-3 mt-3">
+                            <InputLabel htmlFor="outlined-adornment-old-password">Password Old</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-old-password"
+                                type={showPassword.oldPassword ? 'text' : 'password'}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={() => handleClickShowPassword("oldPassword")}
+                                            edge="end"
+                                        >
+                                            {showPassword.oldPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password Old"
+                                name="oldPassword"
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                error={formik.touched.oldPassword && Boolean(formik.errors.oldPassword)}
+                            />
+                        </FormControl>
+                        <FormControl variant="outlined" className="w-100 pb-3 mt-3">
+                            <InputLabel htmlFor="outlined-adornment-new-password">Password New</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-new-password"
+                                type={showPassword.newPassword ? 'text' : 'password'}
+                                value={formik.values.password}
+                                onChange={formik.handleChange}
+                                error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
+                                name="newPassword"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={() => handleClickShowPassword("newPassword")}
+                                            edge="end"
+                                        >
+                                            {showPassword.newPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Password New"
 
-                <DialogTitle id="alert-dialog-title">
-                    {"Change PassWord"}
-                </DialogTitle>
-                <DialogContent>
-                    {/*<TextField id="outlined-basic" label="Password old" variant="outlined" className="w-100 pb-3 mt-3"/>*/}
-                    {/*<TextField id="outlined-basic" label="Password new" variant="outlined" className="w-100 pb-3"/>*/}
-                    {/*<TextField id="outlined-basic" label="Confirm password" variant="outlined" className="w-100 pb-3"/>*/}
-                    <FormControl variant="outlined" className="w-100 pb-3 mt-3">
-                        <InputLabel htmlFor="outlined-adornment-password">Password Old</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={showPassword ? 'text' : 'password'}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword}
-                                        onMouseDown={handleMouseDownPassword}
-                                        edge="end"
-                                    >
-                                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password Old"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" className="w-100 pb-3 mt-3">
-                        <InputLabel htmlFor="outlined-adornment-password">Password New</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={showPassword1 ? 'text' : 'password'}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword1}
-                                        onMouseDown={handleMouseDownPassword1}
-                                        edge="end"
-                                    >
-                                        {showPassword1 ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Password New"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" className="w-100 pb-3 mt-3">
-                        <InputLabel htmlFor="outlined-adornment-password">Confirm Password</InputLabel>
-                        <OutlinedInput
-                            id="outlined-adornment-password"
-                            type={showPassword2 ? 'text' : 'password'}
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    <IconButton
-                                        aria-label="toggle password visibility"
-                                        onClick={handleClickShowPassword2}
-                                        onMouseDown={handleMouseDownPassword2}
-                                        edge="end"
-                                    >
-                                        {showPassword2 ? <VisibilityOff /> : <Visibility />}
-                                    </IconButton>
-                                </InputAdornment>
-                            }
-                            label="Confirm PassWord"
-                        />
-                    </FormControl>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose} autoFocus>
-                       Save
-                    </Button>
-                </DialogActions>
+                            />
+                        </FormControl>
+                        <FormControl variant="outlined" className="w-100 pb-3 mt-3">
+                            <InputLabel htmlFor="outlined-adornment-password-confirm">Confirm Password</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-password-confirm"
+                                type={showPassword.confirmPassword ? 'text' : 'password'}
+                                value={formik.values.confirmPassword}
+                                onChange={formik.handleChange}
+                                error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                                name="confirmPassword"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={() => handleClickShowPassword("confirmPassword")}
+                                            edge="end"
+                                        >
+                                            {showPassword.confirmPassword ? <VisibilityOff/> : <Visibility/>}
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                label="Confirm PassWord"
+                            />
+                        </FormControl>
+                        <span
+                           style={{color:"red"}} className={`text-{confirmMessage.status} d-${confirmMessage.visible ? "block" : "none"}`}>{confirmMessage.message}</span>
+
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="button" onClick={handleClose}>Cancel</Button>
+                        <Button type="submit" onClick={formik.handleSubmit}>
+                            Save
+                        </Button>
+                    </DialogActions>
+                </form>
+                {/*</React.Fragment>*/}
             </Dialog>
-        </div>
+        </>
     );
 }
