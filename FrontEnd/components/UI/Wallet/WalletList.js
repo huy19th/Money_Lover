@@ -52,11 +52,11 @@ function ListItems({ data, setData }) {
             </tbody>
             {
                 show ?
-                <AdjustBalanceDialog setShow={setShow} data={data} selectedItem={selectedItem} />
-                :
-                null
+                    <AdjustBalanceDialog setShow={setShow} data={data} selectedItem={selectedItem} />
+                    :
+                    null
             }
-            
+
         </Table>
     )
 }
@@ -95,23 +95,21 @@ export default function WalletLists() {
     }, [])
 
     return (
-        <div className="mt-5 pt-5">
-            <Card style={{ width: '540px' }}>
-                <Card.Header className="ps-4">Included In Total</Card.Header>
-                {
-                    walletsIncludedInTotal.isLoading ?
-                        <SpinnerLoading />
-                        :
-                        <ListItems data={walletsIncludedInTotal.data} setData={setWalletsIncludedInTotal}/>
-                }
-                <Card.Header className="ps-4">Not Included In Total</Card.Header>
-                {
-                    walletsNotIncludedInTotal.isLoading ?
-                        <SpinnerLoading />
-                        :
-                        <ListItems data={walletsNotIncludedInTotal.data} setData={setWalletsNotIncludedInTotal}/>
-                }
-            </Card>
-        </div >
+        <Card style={{ width: '100%' }}>
+            <Card.Header className="ps-4">Included In Total</Card.Header>
+            {
+                walletsIncludedInTotal.isLoading ?
+                    <SpinnerLoading />
+                    :
+                    <ListItems data={walletsIncludedInTotal.data} setData={setWalletsIncludedInTotal} />
+            }
+            <Card.Header className="ps-4">Not Included In Total</Card.Header>
+            {
+                walletsNotIncludedInTotal.isLoading ?
+                    <SpinnerLoading />
+                    :
+                    <ListItems data={walletsNotIncludedInTotal.data} setData={setWalletsNotIncludedInTotal} />
+            }
+        </Card>
     );
 }
