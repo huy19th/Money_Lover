@@ -1,7 +1,15 @@
 import express from "express";
+import cors from "cors";
+import fileUpload from "express-fileupload";
+import cookieSession from "cookie-session";
 import AppConfig from "./config/app.config";
 import AuthRouter from "./routers/auth.router";
-import fileUpload from "express-fileupload";
+import AuthMiddleware from "./middlewares/auth.middlewares";
+import TransSubCateRouter from "./routers/transsubcate.router";
+import TransactionRouter from "./routers/transaction.router";
+import WalletRouter from "./routers/wallet.router";
+import UserRouter from "./routers/user.router";
+import TransTypeRouter from "./routers/transtype.router";
 
 class App {
 
@@ -13,7 +21,7 @@ class App {
         this.bootstrap();
     }
 
-    public bootstrap() : void {
+    public bootstrap(): void {
         this.setupMiddlewares();
         //this.serveStaticFiles();
         this.listen();
@@ -30,17 +38,26 @@ class App {
             createParentPath: true
         }))
         this.app.use(express.json())
-        //
-        // this.app.use(bodyParser.urlencoded({ extended: true }));
-        // this.app.use(bodyParser.json());
-        // this.app.use(passport.initialize());
-        // this.app.use(passport.session());
-        this.app.use('/auth', AuthRouter);
+        this.app.use(express.urlencoded({extended:true}))
+        this.app.use(cookieSession({
+            name: "session",
+            keys: ["case-md6"],
+            maxAge: 24 * 60 * 60 * 100
+        }))
+        this.app.use(cors({
+            credentials: true,
+            origin: "http://localhost:3000",
+            methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD'],
+        }));
 
-        // this.app.use(TransactionRouter);
-        // this.app.use(TransCateRouter);
-        // this.app.use(TransTypeRouter);
-        // this.app.use(WalletRouter);
+        this.app.use('/api/auth', AuthRouter);
+        this.app.use(AuthMiddleware.checkAuthentication);
+        this.app.use('/api/user', UserRouter)
+        this.app.use('/api/transaction', TransactionRouter);
+        this.app.use('/api/transaction-subcategory', TransSubCateRouter);
+        this.app.use('/api/wallet', WalletRouter);
+        this.app.use('/api/type', TransTypeRouter);
+
     }
 
     private listen(): void {
@@ -51,4 +68,18 @@ class App {
 }
 
 new App();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

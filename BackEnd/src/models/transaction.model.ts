@@ -1,26 +1,27 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import Wallet from "./wallet.model";
 import TransCate from "./trans.cate.model";
+import TransSubCate from "./trans.subcate.model";
 
 @Entity()
 
 export class Transaction{
-    
+
     @PrimaryGeneratedColumn({ name: "id", type: "int" })
-    //@ts-ignore
+        //@ts-ignore
     id: int;
 
     @ManyToOne(() => Wallet, wallet => wallet.transactions, {
         onDelete: "CASCADE"
     })
     @JoinColumn({name: "wallet_id"})
-    //@ts-ignore
+        //@ts-ignore
     wallet: Wallet;
 
-    @ManyToOne(() => TransCate, transCate => transCate.transactions)
-    @JoinColumn({name: "category_id"})
-    //@ts-ignore
-    category: TransCate;
+    @ManyToOne(() => TransSubCate, transSubCate => transSubCate.transactions)
+    @JoinColumn({name: "subcategory_id"})
+        //@ts-ignore
+    subCategory: TransSubCate;
 
     @Column({ name: "money", type: "int", nullable: false })
     money: number;

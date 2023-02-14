@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, Index } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Index, OneToMany } from "typeorm";
 import TransCate from "./trans.cate.model";
+import Transaction from "./transaction.model";
 
-@Entity()
+@Entity("trans_subcate")
 
 @Index(["category", "name"], { unique: true })
 
@@ -17,6 +18,8 @@ export class TransSubCate {
     @Column({ name: "name", type: "nvarchar", length: 255, nullable: false })
     name: string;
 
+    @OneToMany(() => Transaction, transaction => transaction.subCategory)
+    transactions: Transaction[];
 }
 
 export default TransSubCate;
