@@ -85,7 +85,12 @@ export default function DialogChangePassWord() {
     };
 
     const handleClose = () => {
-        setOpen(false);
+        setConfirmMessage({
+            status: "",
+            visible: false,
+            message: ""
+        })
+        setOpen(false)
     };
 
     const  checkConfirmPassword = () => {
@@ -100,10 +105,11 @@ export default function DialogChangePassWord() {
             return false;
         } else {
             setConfirmMessage({
-                status: "success",
-                visible: true,
-                message: "Password matches"
-            });
+            status: "",
+            visible: false,
+            message: ""
+        })
+
             return true;
         }
     }
@@ -112,7 +118,8 @@ export default function DialogChangePassWord() {
             <Snackbar
                 severity="success"
                 open={openSnackBar}
-                autoHideDuration={6000}
+                autoHideDuration={2000}
+
             >
                 <Alert onClose={()=>{setOpenSnackBar(false)}} severity="success" sx={{ width: '100%' }}>
                     Change password success
@@ -161,7 +168,7 @@ export default function DialogChangePassWord() {
                             <OutlinedInput
                                 id="outlined-adornment-new-password"
                                 type={showPassword.newPassword ? 'text' : 'password'}
-                                value={formik.values.password}
+                                value={formik.values.newPassword}
                                 onChange={formik.handleChange}
                                 error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
                                 name="newPassword"
