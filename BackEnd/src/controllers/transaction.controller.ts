@@ -43,7 +43,7 @@ class TransactionController extends BaseController {
 
     static async updateTransaction(req: Request, res: Response) {
         try {
-            let transactionId = Number(req.params.id)
+            let transactionId = Number(req.params.transactionId);
             let transaction = await TransactionServices.getTransactionById(transactionId);
             let previousWalletId = transaction.wallet.id;
             let currentWalletId = req.body.walletId;
@@ -52,7 +52,7 @@ class TransactionController extends BaseController {
             if (previousWalletId !== currentWalletId) {
                 await WalletServices.updateBalance(currentWalletId);
             }
-            res.status(200).json("Updated transaction successfully");
+            res.status(200).json({message: "Updated transaction successfully"});
         }
         catch (err) {
             res.status(500).json(err.message);
