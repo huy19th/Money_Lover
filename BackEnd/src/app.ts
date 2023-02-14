@@ -10,7 +10,7 @@ import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
 import TransTypeRouter from "./routers/transtype.router";
-
+import TransCateRouter from "./routers/transcate.router";
 class App {
 
     private app: express.Application = express();
@@ -23,12 +23,12 @@ class App {
 
     public bootstrap(): void {
         this.setupMiddlewares();
-        //this.serveStaticFiles();
+        // this.serveStaticFiles();
         this.listen();
 
     }
 
-    //Static  files
+    // Static  files
     /* private serveStaticFiles(): void {
         this.app.use(express.static(path.join(__dirname, 'FileName'), { maxAge:  this.appConfig.expiredStaticFiles}));
     } */
@@ -52,6 +52,7 @@ class App {
 
         this.app.use('/api/auth', AuthRouter);
         this.app.use(AuthMiddleware.checkAuthentication);
+        this.app.use('/api/transaction-category',TransCateRouter);
         this.app.use('/api/user', UserRouter)
         this.app.use('/api/transaction', TransactionRouter);
         this.app.use('/api/transaction-subcategory', TransSubCateRouter);
@@ -67,6 +68,7 @@ class App {
     }
 }
 
+// tslint:disable-next-line:no-unused-expression
 new App();
 
 
