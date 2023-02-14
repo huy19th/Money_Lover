@@ -41,12 +41,12 @@ class App {
         this.app.use(express.urlencoded({extended:true}))
         this.app.use(cookieSession({
             name: "session",
-            keys: ["case-md6"],
-            maxAge: 24 * 60 * 60 * 100
+            keys: [this.appConfig.sessionKey],
+            maxAge: this.appConfig.sessionMaxAge
         }))
         this.app.use(cors({
             credentials: true,
-            origin: "http://localhost:3000",
+            origin: this.appConfig.baseURL,
             methods: ['POST', 'PUT', 'PATCH', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
         }));
 
