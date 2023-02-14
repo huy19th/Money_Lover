@@ -47,7 +47,7 @@ class App {
         this.app.use(cors({
             credentials: true,
             origin: "http://localhost:3000",
-            methods: ['POST', 'PUT', 'PATCH', 'GET', 'OPTIONS', 'HEAD'],
+            methods: ['POST', 'PUT', 'PATCH', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
         }));
 
         this.app.use('/api/auth', AuthRouter);

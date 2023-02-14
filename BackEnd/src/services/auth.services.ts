@@ -39,18 +39,19 @@ class AuthServices extends BaseServices {
         return [accessToken, refreshToken];
     }
 
-    static async resetPassword(user, confirmPassword, newPassword) {
-        let oldPassword = user.password;
-        let confirmPasswordSuccess = await bcrypt.compare(confirmPassword, oldPassword);
+    static async resetPassword(user, oldPassword, newPassword) {
+        console.log(newPassword)
+        let oldPasswords = user.password;
+        let confirmPasswordSuccess = await bcrypt.compare(oldPassword, oldPasswords);
+        console.log(confirmPasswordSuccess)
         if (confirmPasswordSuccess) {
             user.password = await bcrypt.hash(newPassword, 10);
-            userRepo.save(user);
+            await userRepo.save(user);
         }
         else {
             throw new Error ("Password Mismatch");
         }
     }
 }
-
 
 export default AuthServices;

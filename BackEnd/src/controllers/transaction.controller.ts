@@ -20,6 +20,14 @@ class TransactionController extends BaseController {
             })
     }
 
+    static getTransactionsOfOneWallet(req: Request, res: Response) {
+        let walletId = req.params.walletId;
+        TransactionServices.getTransactionsOfWallet(walletId)
+            .then(transactions => {
+                res.json(transactions);
+            })
+    }
+
     static async addTransaction(req: Request, res: Response) {
         try {
             let { walletId, subcategoryId, money, date, image, note } = req.body
@@ -53,6 +61,7 @@ class TransactionController extends BaseController {
 
     static async deleteTransaction(req: Request, res: Response) {
         try {
+            console.log(req.params.transactionId)
             let transactionId = Number(req.params.transactionId);
             let transaction = await TransactionServices.getTransactionById(transactionId);
             let walletId = transaction.wallet.id;

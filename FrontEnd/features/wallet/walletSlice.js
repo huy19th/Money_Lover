@@ -25,24 +25,28 @@ export const walletSlice = createSlice({
             state = {...state, currentWallet: action.payload}
             return state
         },
-        resetWallet(state, action) {
+        resetWallet(state) {
             state = initialState
             return state
         },
+        resetCurrentWallet(state) {
+            state = {...state, currentWallet: initialState.currentWallet}
+            return state
+        },
         changeWallets(state, action) {
-            const change = +action.payload
+            const id = +action.payload.walletId
+            const value = action.payload.walletInfo
             let allWallet = [];
             let others = [];
             state.wallets.map(wallet => {
-                if (wallet.id === state.currentWallet.id) {
+                if (wallet.id === id) {
                     allWallet.push(wallet)
                 } else {
                     others.push(wallet)
                 }
             })
-            allWallet[0].balance += change
+            allWallet[0] = value
             state.wallets = [...others, ...allWallet]
-            state.currentWallet.balance = allWallet[0].balance
         }
     }
 })

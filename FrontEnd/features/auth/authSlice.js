@@ -14,7 +14,7 @@ export const authSlice = createSlice({
             state.currentUser = action.payload.user
             return state
         },
-        loggedOut: (state, action) => {
+        loggedOut: (state) => {
             state = initialState
             return state
         },

@@ -9,6 +9,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import {axiosJWT} from "@/configs/axios";
+import {walletActions} from "@/features/wallet/walletSlice";
+import {transactionActions} from "@/features/transaction/transactionSlice";
+import {useDispatch, useSelector} from "react-redux";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -16,16 +19,43 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function TranDetail(props) {
 
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+
+    const dispatch = useDispatch()
+
     const handleOver = (event) => {
         event.target.classList.add(styles.changePointer)
+    }
+
+    const handleEdit = () => {
+
     }
 
     const handleDelete = async () => {
         // Gọi api xóa
         await axiosJWT.delete(`/transaction/${props.detail.id}`);
         // Goị api trả lại dữ liệu
-
+        if (myWallet.id === props.detail.wallet_id) {
+            let wallet = (await axiosJWT.get(`/wallet/info/${props.detail.wallet_id}`)).data
+            let transactions = (await axiosJWT.get(`/transaction/${props.detail.wallet_id}`)).data
+            dispatch(walletActions.changeCurrentWallet(wallet))
+            dispatch(transactionActions.getTrans(transactions))
+            dispatch(walletActions.changeWallets({
+                walletInfo: wallet,
+                walletId: props.detail.wallet_id
+            }))
+        } else {
+            let wallet = (await axiosJWT.get(`/wallet/info/${props.detail.wallet_id}`)).data
+            let transactions = (await axiosJWT.get('/transaction')).data
+            dispatch(walletActions.changeWallets({
+                walletInfo: wallet,
+                walletId: props.detail.wallet_id
+            }))
+            dispatch(transactionActions.getTrans(transactions))
+            dispatch(walletActions.resetCurrentWallet())
+        }
         setOpen(false)
+        props.close()
     }
 
     const myHandleCLose = () => {
@@ -52,7 +82,7 @@ export default function TranDetail(props) {
                     </div>
                     <div style={{display: "flex", alignItems: "center"}}>
                         <Button style={{color: 'red'}} onClick={handleClickOpen}>Delete</Button>
-                        <Button style={{color: 'green'}}>Edit</Button>
+                        <Button style={{color: 'green'}} onClick={handleEdit}>Edit</Button>
                     </div>
                 </div>
             </Card.Header>

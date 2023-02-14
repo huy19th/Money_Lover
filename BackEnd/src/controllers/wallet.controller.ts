@@ -32,6 +32,23 @@ class WalletController extends BaseController {
         })
     }
 
+    static getDetailInfoOfWallet(req: Request, res: Response) {
+        let walletId = Number(req.params.walletId);
+        WalletServices.getAllInfoOfWallet(walletId)
+            .then(wallet => {
+                res.json(wallet)
+            })
+    }
+
+    static getDetailInfoOfAllWallets(req: Request, res: Response) {
+        //@ts-ignore
+        let userId = req.user.id;
+        WalletServices.getALlWalletsInfoOfUser(userId)
+            .then(wallets => {
+                res.json(wallets)
+            })
+    }
+
     static getWallet(req: Request, res: Response) {
         let walletId = Number(req.params.walletId);
         WalletServices.getWalletById(walletId)

@@ -92,10 +92,10 @@ const TransOverview = () => {
                                                 </Col>
                                                 <Col>
 
-                                                    <p style={{color:'blue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? inflow : myWallet.inflow }</p>
-                                                    <p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? outflow : myWallet.outflow}</p>
+                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>
+                                                    <p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>
                                                     <hr/>
-                                                    <p style={{marginLeft:'124px'}}>  {myWallet.balance === '' ? balance : myWallet.balance}</p>
+                                                    <p style={{marginLeft:'124px'}}>  {myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>
 
                                                 </Col>
                                                 <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>

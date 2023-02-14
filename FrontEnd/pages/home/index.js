@@ -19,12 +19,14 @@ export default function Home() {
 
     useEffect(() => {
         if (user.isLoggedIn) {
-            axiosJWT.get(`/user/info`)
-                .then(res => {
-                    dispatch(walletActions.getWallets(res.data.wallets))
-                    dispatch(transactionActions.getTrans(res.data.trans))
-                    setChild(<MyHome/>)
-                })
+            async function fetchData() {
+                let wallets = (await axiosJWT.get('/wallet/info')).data
+                let transactions = (await axiosJWT.get('/transaction')).data
+                dispatch(walletActions.getWallets(wallets))
+                dispatch(transactionActions.getTrans(transactions))
+                setChild(<MyHome/>)
+            }
+            fetchData()
         } else {
             router.push('/login')
         }
