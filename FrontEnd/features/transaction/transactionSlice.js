@@ -14,7 +14,7 @@ export const transactionSlice = createSlice({
             state = [...state, action.payload]
             return state
         },
-        resetTrans(state, action) {
+        resetTrans(state) {
             state = initialState
             return state
         }

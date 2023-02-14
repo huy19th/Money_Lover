@@ -23,9 +23,28 @@ class TransactionServices extends BaseServices {
             .innerJoin('category.transType', 'type')
             .select('trans.money, trans.date, trans.note, trans.id')
             .addSelect('wallet.name', 'wallet_name')
+            .addSelect('wallet.id', 'wallet_id')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('user.id = :id', { id: userId })
+            .orderBy('trans.id', 'ASC')
+            .getRawMany();
+    }
+
+    static async getTransactionsOfWallet(walletId) {
+        return await transactionRepo.createQueryBuilder('trans')
+            .innerJoin('trans.wallet', 'wallet')
+            .innerJoin('wallet.user', 'user')
+            .innerJoin('trans.subCategory', 'subCategory')
+            .innerJoin('subCategory.category', 'category')
+            .innerJoin('category.transType', 'type')
+            .select('trans.money, trans.date, trans.note, trans.id')
+            .addSelect('wallet.name', 'wallet_name')
+            .addSelect('wallet.id', 'wallet_id')
+            .addSelect('subCategory.name', 'subCate_name')
+            .addSelect('type.name', 'type_name')
+            .where('wallet.id = :id', { id: walletId })
+            .orderBy('trans.id', 'ASC')
             .getRawMany();
     }
 

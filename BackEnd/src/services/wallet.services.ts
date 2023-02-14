@@ -42,7 +42,6 @@ class WalletServices extends BaseServices {
             let walletInfo = await this.getAllInfoOfWallet(allWallets[i].id)
             allWalletsInfo.push(walletInfo)
         }
-        console.log(allWalletsInfo)
         return allWalletsInfo
     }
 
