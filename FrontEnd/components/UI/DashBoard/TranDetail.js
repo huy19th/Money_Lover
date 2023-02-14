@@ -12,6 +12,7 @@ import {axiosJWT} from "@/configs/axios";
 import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
 import {useDispatch, useSelector} from "react-redux";
+import EditTransactionForm from "@/components/UI/DashBoard/EditTransaction/EditTransactionForm";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -54,7 +55,7 @@ export default function TranDetail(props) {
             dispatch(transactionActions.getTrans(transactions))
             dispatch(walletActions.resetCurrentWallet())
         }
-        setOpen(false)
+        setOpenDeleteDialog(false)
         props.close()
     }
 
@@ -62,14 +63,23 @@ export default function TranDetail(props) {
         props.close()
     }
 
-    const [open, setOpen] = React.useState(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+    const [openEditDialog, setOpenEditDialog] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleClickOpenDeleteDialog = () => {
+        setOpenDeleteDialog(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleClickOpenEditDialog = () => {
+        setOpenEditDialog(true);
+    };
+
+    const handleCloseDeleteDialog = () => {
+        setOpenDeleteDialog(false);
+    };
+
+    const handleCloseEditDialog = () => {
+        setOpenEditDialog(false);
     };
 
     return (
@@ -81,8 +91,8 @@ export default function TranDetail(props) {
                         <p className='m-0 ms-3' style={{fontWeight: "bold", fontSize: '16px'}}>Transaction Details</p>
                     </div>
                     <div style={{display: "flex", alignItems: "center"}}>
-                        <Button style={{color: 'red'}} onClick={handleClickOpen}>Delete</Button>
-                        <Button style={{color: 'green'}} onClick={handleEdit}>Edit</Button>
+                        <Button style={{color: 'red'}} onClick={handleClickOpenDeleteDialog}>Delete</Button>
+                        <Button style={{color: 'green'}} onClick={handleClickOpenEditDialog}>Edit</Button>
                     </div>
                 </div>
             </Card.Header>
@@ -100,12 +110,14 @@ export default function TranDetail(props) {
                     )}
                 </div>
             </Card.Body>
+
+            {/*Delete Dialog*/}
             <Dialog
                 fullWidth='sm'
-                open={open}
+                open={openDeleteDialog}
                 TransitionComponent={Transition}
                 keepMounted
-                onClose={handleClose}
+                onClose={handleCloseDeleteDialog}
                 aria-describedby="alert-dialog-slide-description"
             >
                 <DialogTitle>{"Confirm deletion"}</DialogTitle>
@@ -115,9 +127,19 @@ export default function TranDetail(props) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>No</Button>
+                    <Button onClick={handleCloseDeleteDialog}>No</Button>
                     <Button onClick={handleDelete}>Yes</Button>
                 </DialogActions>
+            </Dialog>
+
+            {/*Edit Dialog*/}
+            <Dialog open={openEditDialog} onClose={handleCloseEditDialog}  fullWidth='sm'>
+                <DialogTitle>Edit Transaction</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        <EditTransactionForm data={props.detail} close={handleCloseEditDialog}/>
+                    </DialogContentText>
+                </DialogContent>
             </Dialog>
         </Card>
     )

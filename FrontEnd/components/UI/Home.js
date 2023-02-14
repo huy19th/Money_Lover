@@ -175,6 +175,7 @@ export default function MyHome() {
                             }}
                         >
                             <ListItemIcon
+
                                 sx={{
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
@@ -209,12 +210,12 @@ export default function MyHome() {
                     {['Account', 'Wallet'].map((text, index) => (
                         <ListItem key={text} disablePadding sx={{display: 'block'}}>
                             <ListItemButton
+
                                 sx={{
-
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
+
                                 <ListItemIcon
                                     sx={{
                                         minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
@@ -229,6 +230,7 @@ export default function MyHome() {
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
                             </ListItemButton>
                         </ListItem>))}
+
                 </List>
                 <Divider />
             </Drawer>

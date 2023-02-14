@@ -23,6 +23,7 @@ class TransactionServices extends BaseServices {
             .innerJoin('category.transType', 'type')
             .select('trans.money, trans.date, trans.note, trans.id')
             .addSelect('wallet.name', 'wallet_name')
+            .addSelect('subCategory.id', 'subCate_id')
             .addSelect('wallet.id', 'wallet_id')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
@@ -40,6 +41,7 @@ class TransactionServices extends BaseServices {
             .innerJoin('category.transType', 'type')
             .select('trans.money, trans.date, trans.note, trans.id')
             .addSelect('wallet.name', 'wallet_name')
+            .addSelect('subCategory.id', 'subCate_id')
             .addSelect('wallet.id', 'wallet_id')
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
@@ -83,12 +85,16 @@ class TransactionServices extends BaseServices {
         let wallet = await WalletServices.getWalletById(walletId);
         let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
 
+        console.log(date)
+
         transaction.wallet = wallet;
         transaction.subCategory = subcategory;
         transaction.money = money ? +money : null;
         transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
         transaction.image = image;
         transaction.note = note;
+
+        console.log(transaction.date)
 
         await transactionRepo.save(transaction);
     }
