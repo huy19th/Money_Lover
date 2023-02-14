@@ -92,6 +92,19 @@ class WalletController extends BaseController {
             res.status(500).json(err.message);
         })
     }
+
+    static getWalletsByIncludedIntotal(req: Request, res: Response) {
+        //@ts-ignore
+        let userId = req.user.id;
+        let isIncluded = req.params.isIncluded == "true" ? true : false;
+        WalletServices.getWalletsByIncludedInTotal(userId, isIncluded)
+        .then(wallets => {
+            res.status(200).json(wallets);
+        })
+        .catch(err => {
+            res.status(500).json(err.message || this.defaultErrorMessage);
+        })
+    }
 }
 
 export default WalletController;
