@@ -16,40 +16,26 @@ import TranDetail from "@/components/UI/DashBoard/TranDetail";
 
 const TransOverview = () => {
 
-
     // Add Transaction
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
     const myTrans = useSelector(state => state.transaction)
+    const myWallets = useSelector(state => state.wallet.wallets)
 
-    let trans = []
-
-    myTrans.map(transaction => {
-        if (transaction.wallet_name === myWallet.name && new Date(transaction.date).getMonth()+1 === new Date().getMonth()+1 && new Date(transaction.date).getFullYear() === new Date().getFullYear() ) {
-            trans.push(transaction)
-        }
-    })
-
+    let balance = 0
     let inflow = 0;
     let outflow = 0;
-    trans.map(tran => {
-        if (tran.type_name === 'Expenese') {
-            outflow += tran.money
-        } else {
-            inflow += tran.money
-        }
+    myWallets.map(wallet => {
+        balance += wallet.balance
+        inflow += wallet.inflow
+        outflow += wallet.outflow
     })
 
-    let newBalance = myWallet.balance+inflow-outflow
-
-    inflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow)
-    outflow = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow)
-    newBalance = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(newBalance)
-
     //
 
     //
 
+    const [tranDetail, setTranDetail] = useState('')
     const [display, setDisplay] = useState(false)
     const [width, setWidth] = useState(0)
 
@@ -57,10 +43,16 @@ const TransOverview = () => {
         event.target.classList.add(styles.changePointer)
     }
 
-    const handleClick = () => {
-        setDisplay(!display)
+    const handleClick = (event, transaction) => {
+        setTranDetail(transaction)
+        setDisplay(true)
         setWidth('100%')
         window.scrollTo(0, 0)
+    }
+
+    const handleClose = () => {
+        setDisplay(false)
+        setWidth(0)
     }
 
     const containerRef = useRef(null);
@@ -100,19 +92,19 @@ const TransOverview = () => {
                                                 </Col>
                                                 <Col>
 
-                                                    <p style={{color:'blue',marginLeft:'124px'}}>+ {inflow}</p>
-                                                    <p style={{color:'red',marginLeft:'124px'}}>- {outflow}</p>
+                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>
+                                                    <p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>
                                                     <hr/>
-                                                    <p style={{marginLeft:'124px'}}>{newBalance}</p>
+                                                    <p style={{marginLeft:'124px'}}>  {myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>
 
                                                 </Col>
                                                 <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                                             </Row>
                                             <hr/>
 
-                                             {trans.map((tran,index) => {
+                                             {myTrans.map(tran => {
                                                 return (
-                                                    <div key={index} style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}} onMouseOver={(event) => handleOver(event)} onClick={handleClick}>
+                                                    <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}} onMouseOver={(event) => handleOver(event)} onClick={(event) => handleClick(event, tran)}>
                                                         <div>
                                                             <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
                                                             <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>
@@ -131,7 +123,7 @@ const TransOverview = () => {
                         </TableCell>
                         <Slide in={display} direction="up" mountOnEnter unmountOnExit container={containerRef.current}>
                             <TableCell style={{width: width, verticalAlign: "unset"}}>
-                                <TranDetail/>
+                                <TranDetail detail={tranDetail} close={handleClose}/>
                             </TableCell>
                         </Slide>
                     </TableRow>

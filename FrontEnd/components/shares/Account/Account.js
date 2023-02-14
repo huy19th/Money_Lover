@@ -65,7 +65,7 @@ export default function AccountUser() {
     const logOut = async () => {
         await axiosJWT.get('/auth/logout', {
             headers: {
-                authorization: 'Bearer ' + localStorage.getItem('token')
+                authorization: 'Bearer ' + localStorage.getItem('accessToken')
             }
         })
         localStorage.removeItem('accessToken');

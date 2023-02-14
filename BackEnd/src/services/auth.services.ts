@@ -54,5 +54,4 @@ class AuthServices extends BaseServices {
     }
 }
 
-
 export default AuthServices;
