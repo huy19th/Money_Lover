@@ -28,6 +28,7 @@ import {GiWallet} from "react-icons/gi";
 import AddTransactionModal from "@/components/UI/Dashboard/AddTransaction/AddTransactionModal";
 import Wallets from "@/components/UI/DashBoard/WalletsList";
 import AccountUser from "@/components/shares/Account/Account";
+import {BiCategory} from "react-icons/bi";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -188,6 +189,29 @@ export default function MyHome() {
 
                                         <AccountUser/> :
                                         <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
+
+                                </ListItemIcon>
+                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
+                            </ListItemButton>
+                        </ListItem>))},
+                    {['Account', 'Wallet'].map((text, index) => (
+                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
+                            <ListItemButton
+                                sx={{
+
+                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                    }}
+                                >
+                                    {index % 2 === 0 ?
+
+                                        <AccountUser/> :
+                                        <Link style={{color: 'gray'}} href='/subCateList'><BiCategory style={{fontSize:'30px'}}/></Link>}
 
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
