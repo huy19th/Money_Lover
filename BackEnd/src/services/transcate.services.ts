@@ -1,8 +1,11 @@
 import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import TransCate from "../models/trans.cate.model";
+import TransSubCate from "../models/trans.subcate.model";
+import TransSubCateServices from "./transsubcate.services";
 
 let transCateRepo = dataSource.getRepository(TransCate);
+let transSubRepo = dataSource.getRepository(TransSubCate);
 
 class TransCateServices extends BaseServices {
     static async getAllCates(): Promise<TransCate[]> {
@@ -12,6 +15,21 @@ class TransCateServices extends BaseServices {
             }
         })
         return result;
+    }
+    static async addCate(subcategoryId, categories): Promise<void>{
+       let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
+        let transCate = new TransCate();
+
+
+
+
+        try {
+
+        }
+        catch (err){
+
+        }
+
     }
 
 
