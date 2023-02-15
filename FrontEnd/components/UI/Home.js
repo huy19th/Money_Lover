@@ -195,6 +195,7 @@ export default function MyHome() {
                             }}
                         >
                             <ListItemIcon
+
                                 sx={{
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
@@ -217,6 +218,7 @@ export default function MyHome() {
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
+
                                 <Link style={{ color: 'gray' }} href='/wallets'>
                                     <GiWallet style={{ fontSize: '30px' }} />
                                 </Link>
@@ -233,10 +235,12 @@ export default function MyHome() {
                             }}
                         >
                             <ListItemIcon
+
                                 sx={{
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
+
                                 <Link style={{ color: 'gray' }} href='/subCateList'>
                                     <BiCategory style={{ fontSize: '30px' }} />
                                 </Link>
@@ -244,6 +248,7 @@ export default function MyHome() {
                             <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
+
                 </List>
                 <Divider />
             </Drawer>
