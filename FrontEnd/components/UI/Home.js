@@ -214,13 +214,14 @@ export default function MyHome() {
             >
               <ListItemIcon
                 sx={{
+                  padding: "10px",
                   minWidth: 0,
                   mr: open ? 3 : "auto",
                   justifyContent: "center",
                 }}
               >
                 <Link style={{ color: "gray" }} href="/home">
-                  <FaWallet style={{ fontSize: "30px" }} />
+                  <FaWallet style={{ fontSize: "25px" }} />
                 </Link>
               </ListItemIcon>
               <ListItemText
@@ -232,6 +233,7 @@ export default function MyHome() {
           <ListItem key="Report" disablePadding sx={{ display: "block" }}>
             <ListItemButton
               sx={{
+                padding: " 10px",
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
@@ -264,6 +266,7 @@ export default function MyHome() {
             >
               <ListItemIcon
                 sx={{
+                  padding: "10px",
                   minWidth: 0,
                   mr: open ? 3 : "auto",
                   justifyContent: "center",
@@ -284,6 +287,7 @@ export default function MyHome() {
             >
               <ListItemIcon
                 sx={{
+                  padding: "10px",
                   minWidth: 0,
                   mr: open ? 3 : "auto",
                   justifyContent: "center",
