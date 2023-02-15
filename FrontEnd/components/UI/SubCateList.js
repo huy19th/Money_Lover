@@ -9,11 +9,12 @@ import Container from "react-bootstrap/Container";
 import Card from 'react-bootstrap/Card';
 import MenuItem from "@mui/material/MenuItem";
 import {ListItemIcon, ListItemText, MenuList, Paper} from "@mui/material";
-import {BsArrowLeftCircle} from "react-icons/bs";
 import Link from "next/link";
 import {useDispatch, useSelector} from "react-redux";
 import {axiosJWT} from "@/configs/axios";
 import {categoryActions} from "@/features/category/categorySlice";
+import {AiOutlineArrowLeft, AiOutlinePlus} from "react-icons/ai";
+import AddSubCategoryForm from "@/components/UI/Category/AddSubCategory/AddSubCategoryForm";
 
 export default function SubCateList() {
     const dispatch = useDispatch();
@@ -27,7 +28,8 @@ export default function SubCateList() {
     }, []);
     console.log(myCates);
     if(myCates!==0){
-        return (<Box sx={{flexGrow: 1, backgroundColor: '#e4e4e4', minHeight: '1000px'}}>
+        return (
+            <Box sx={{flexGrow: 1, backgroundColor: '#e4e4e4', minHeight: '1000px'}}>
             <AppBar style={{backgroundColor: 'white'}} position="static">
                 <Toolbar>
                     <IconButton
@@ -37,9 +39,10 @@ export default function SubCateList() {
                         aria-label="menu"
                         sx={{mr: 2, ml: 5}}
                     >
-                        <Link style={{color: 'gray'}} href='/home'><BsArrowLeftCircle/></Link>
+                        <Link style={{color: 'gray'}} href='/home'><AiOutlineArrowLeft/></Link>
                     </IconButton>
-                    <h4 style={{color: 'black', marginTop: '10px'}}>Categories</h4>
+
+                    <h5 style={{color: 'black', marginTop: '10px'}}>Categories</h5>
                 </Toolbar>
             </AppBar>
             <Container style={{marginTop: '30px'}}>
@@ -49,7 +52,9 @@ export default function SubCateList() {
                             {myCates.categories?.map(category => {
                                 return (
                                     <>
-                                        <Card.Header>{category.name}</Card.Header>
+                                        <Card.Header>
+                                            {category.name}
+                                        </Card.Header>
                                         {category.subCategories?.map(subcategory => {
                                             return <Card.Body style={{padding:'0px'}}>
                                                 <Paper sx={{width: 600, maxWidth: '100%', boxShadow: "none"}}>

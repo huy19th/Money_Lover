@@ -118,9 +118,10 @@ export default function MyHome() {
                             <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
                                 <div>
                                     <img style={{ width: '50px', marginRight: '8px' }}
-                                         src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="" />
+                                        src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="" />
                                 </div>
                                 <div>
+
                                     <p className='m-0'>Name: {myWallet.name === '' ? 'Total' : myWallet.name}</p>
                                     <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance === '' ? balance : myWallet.balance)}</p>
                                 </div>
@@ -194,6 +195,7 @@ export default function MyHome() {
                             }}
                         >
                             <ListItemIcon
+
                                 sx={{
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
@@ -216,6 +218,7 @@ export default function MyHome() {
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
+
                                 <Link style={{ color: 'gray' }} href='/wallets'>
                                     <GiWallet style={{ fontSize: '30px' }} />
                                 </Link>
@@ -232,10 +235,12 @@ export default function MyHome() {
                             }}
                         >
                             <ListItemIcon
+
                                 sx={{
                                     minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
+
                                 <Link style={{ color: 'gray' }} href='/subCateList'>
                                     <BiCategory style={{ fontSize: '30px' }} />
                                 </Link>
@@ -243,6 +248,7 @@ export default function MyHome() {
                             <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
                         </ListItemButton>
                     </ListItem>
+
                 </List>
                 <Divider />
             </Drawer>

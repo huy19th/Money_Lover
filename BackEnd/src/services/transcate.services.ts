@@ -1,36 +1,24 @@
 import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import TransCate from "../models/trans.cate.model";
-import TransSubCate from "../models/trans.subcate.model";
-import TransSubCateServices from "./transsubcate.services";
+import User from "../models/user.model";
 
 let transCateRepo = dataSource.getRepository(TransCate);
-let transSubRepo = dataSource.getRepository(TransSubCate);
 
 class TransCateServices extends BaseServices {
-    static async getAllCates(): Promise<TransCate[]> {
-        let result = await transCateRepo.find({
-            relations: {
-                subCategories: true,
-            }
-        })
-        return result;
-    }
-    static async addCate(subcategoryId, categories): Promise<void>{
-
-
-
-
-        try {
-
-        }
-        catch (err){
-
-        }
-
-    }
-
-
+  static async getAllCates(user: User): Promise<TransCate[]> {
+    let result = await transCateRepo.find({
+      relations: {
+        subCategories: true,
+      },
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
+    return result;
+  }
 }
 
-export default TransCateServices ;
+export default TransCateServices;
