@@ -10,12 +10,12 @@ import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { walletActions } from '@/features/wallet/walletSlice';
 
-export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
+export default function AdjustBalanceDialog({ setShow, data, wallet }) {
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth).currentUser;
     const [values, setValues] = useState({
-        walletId: selectedItem.id,
-        balance: selectedItem.balance,
+        walletId: wallet.id,
+        balance: wallet.balance,
     })
 
     const [isValidated, setIsValidated] = useState(false);

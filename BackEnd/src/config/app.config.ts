@@ -14,7 +14,7 @@ class AppConfig{
 
     sessionMaxAge: number = Number(process.env.SESSION_MAX_AGE);
 
-    baseURL: string = process.env.BASE_URL || 'http://localhost:3000/';
+    baseURL: string = process.env.BASE_URL || 'http://localhost:3000';
 }
 
 export default AppConfig;
