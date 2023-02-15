@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from '@mui/material/Button';
 import Modal from 'react-bootstrap/Modal';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -103,11 +103,11 @@ export default function AdjustBalanceDialog({ setShow, data, wallet }) {
                         </FormControl>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                        <Button color="success" onClick={handleClose} sx={{mr: 2}}>
                             Close
                         </Button>
-                        <Button variant="primary" type="submit" disabled={!isValidated}>
-                            Save Changes
+                        <Button variant="contained" color="success" type="submit" disabled={!isValidated}>
+                            Save
                         </Button>
                     </Modal.Footer>
                 </form>

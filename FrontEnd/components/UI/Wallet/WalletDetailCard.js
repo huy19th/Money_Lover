@@ -9,7 +9,7 @@ import WalletService from "@/services/wallet.service";
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance}) {
-    const {name, balance, include_total, active} = wallet;
+    const {name, balance, includeTotal, active} = wallet;
     
     const handleClose = () => {
         setShowDetail(false);
@@ -46,7 +46,7 @@ function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance}) 
                     </div>
                     <hr/>
                     <div className="ms-5 mb-3 d-flex align-items-center">
-                        <Checkbox {...label} checked={!include_total} color="success" disabled={true} />
+                        <Checkbox {...label} checked={!includeTotal} color="success" disabled={true} />
                         <div className="d-inline-flex flex-column ms-3">
                             <span>Excluded from Total</span>
                             <span className="text-secondary" style={{ "font-size": "12px" }}>

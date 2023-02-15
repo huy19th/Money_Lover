@@ -27,7 +27,7 @@ function ListItems({ data, setShowDetail, setSelectedWallet, include }) {
                     data.length ?
                         data.map(item =>
                             // <tr>
-                            <tr className={item.include_total == include ? "" : "d-none"}>
+                            <tr className={item.includeTotal == include ? "" : "d-none"}>
                                 <td key={item.id} className="ps-3" onClick={() => selectWallet(item.id)}>
                                     <Row>
                                         <Col xs={1} className="d-flex align-items-center me-3">
