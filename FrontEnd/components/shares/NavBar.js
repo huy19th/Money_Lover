@@ -6,6 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
 import WestIcon from '@mui/icons-material/West';
 import { useRouter } from 'next/router';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 
 export default function SimpleAppBar() {
@@ -16,7 +17,7 @@ export default function SimpleAppBar() {
             <CssBaseline />
             <AppBar sx={{ backgroundColor: "white" }}>
                 <Toolbar sx={{ mx: 6 }}>
-                    <WestIcon sx={{ color: "gray", mr: 4 }} onClick={() => router.back()} />
+                    <ArrowBackIcon sx={{ color: "gray", mr: 4 }} onClick={() => router.back()} />
                     <Typography variant="h6" component="div"
                         sx={{ color: "black", fontWeight: "medium" }}>
                         {path}

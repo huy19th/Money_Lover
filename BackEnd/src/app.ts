@@ -12,76 +12,63 @@ import UserRouter from "./routers/user.router";
 import TransTypeRouter from "./routers/transtype.router";
 import TransCateRouter from "./routers/transcate.router";
 class App {
+  private app: express.Application = express();
 
-    private app: express.Application = express();
+  private appConfig = new AppConfig();
 
-    private appConfig = new AppConfig();
+  constructor() {
+    this.bootstrap();
+  }
 
-    constructor() {
-        this.bootstrap();
-    }
+  public bootstrap(): void {
+    this.setupMiddlewares();
+    // this.serveStaticFiles();
+    this.listen();
+  }
 
-    public bootstrap(): void {
-        this.setupMiddlewares();
-        // this.serveStaticFiles();
-        this.listen();
-
-    }
-
-    // Static  files
-    /* private serveStaticFiles(): void {
+  // Static  files
+  /* private serveStaticFiles(): void {
         this.app.use(express.static(path.join(__dirname, 'FileName'), { maxAge:  this.appConfig.expiredStaticFiles}));
     } */
 
-    private setupMiddlewares(): void {
-        this.app.use(fileUpload({
-            createParentPath: true
-        }))
-        this.app.use(express.json())
-        this.app.use(express.urlencoded({extended:true}))
-        this.app.use(cookieSession({
-            name: "session",
-            keys: [this.appConfig.sessionKey],
-            maxAge: this.appConfig.sessionMaxAge
-        }))
-        this.app.use(cors({
-            credentials: true,
-            origin: this.appConfig.baseURL,
-            methods: ['POST', 'PUT', 'PATCH', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
-        }));
+  private setupMiddlewares(): void {
+    this.app.use(
+      fileUpload({
+        createParentPath: true,
+      })
+    );
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(
+      cookieSession({
+        name: "session",
+        keys: [this.appConfig.sessionKey],
+        maxAge: this.appConfig.sessionMaxAge,
+      })
+    );
+    this.app.use(
+      cors({
+        credentials: true,
+        origin: this.appConfig.baseURL,
+        methods: ["POST", "PUT", "PATCH", "GET", "OPTIONS", "HEAD", "DELETE"],
+      })
+    );
+    this.app.use("/api/auth", AuthRouter);
+    this.app.use(AuthMiddleware.checkAuthentication);
+    this.app.use("/api/transaction-subcategory", TransSubCateRouter);
+    this.app.use("/api/transaction-category", TransCateRouter);
+    this.app.use("/api/user", UserRouter);
+    this.app.use("/api/transaction", TransactionRouter);
+    this.app.use("/api/wallet", WalletRouter);
+    this.app.use("/api/type", TransTypeRouter);
+  }
 
-        this.app.use('/api/auth', AuthRouter);
-        this.app.use(AuthMiddleware.checkAuthentication);
-        this.app.use('/api/transaction-category',TransCateRouter);
-        this.app.use('/api/user', UserRouter)
-        this.app.use('/api/transaction', TransactionRouter);
-        this.app.use('/api/transaction-subcategory', TransSubCateRouter);
-        this.app.use('/api/wallet', WalletRouter);
-        this.app.use('/api/type', TransTypeRouter);
-
-    }
-
-    private listen(): void {
-        this.app.listen(this.appConfig.port, () => {
-            console.log(`server started at http://localhost:${this.appConfig.port}`);
-        });
-    }
+  private listen(): void {
+    this.app.listen(this.appConfig.port, () => {
+      console.log(`server started at http://localhost:${this.appConfig.port}`);
+    });
+  }
 }
 
 // tslint:disable-next-line:no-unused-expression
 new App();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
