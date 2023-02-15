@@ -5,34 +5,35 @@ import TransSubCate from "../models/trans.subcate.model";
 let transSubCateRepo = dataSource.getRepository(TransSubCate);
 
 class TransSubCateServices extends BaseServices {
+  static async getAllSubCatesByType(typeId: number): Promise<TransSubCate[]> {
+    let transSubCates = await transSubCateRepo.find({
+      relations: {
+        category: {
+          transType: true,
+        },
+      },
+      where: {
+        category: {
+          transType: {
+            id: typeId,
+          },
+        },
+      },
+    });
 
-    static async getAllSubCatesByType(typeId: number): Promise<TransSubCate[]> {
-        let transSubCates = await transSubCateRepo.find({
-            relations: {
-                category: {
-                    transType: true
-                }
-            },
-            where: {
-                category: {
-                    transType: {
-                        id: typeId
-                    }
-                }
-            }
-        });
+    return transSubCates;
+  }
 
-        return transSubCates;
+  static async getSubCateById(subCateId: number): Promise<TransSubCate> {
+    let transSubCate = await transSubCateRepo.findOneBy({ id: subCateId });
+    if (!transSubCate) {
+      throw new Error("Transaction subcategory not found");
     }
-
-    static async getSubCateById(subCateId: number): Promise<TransSubCate> {
-        let transSubCate = await transSubCateRepo.findOneBy({id: subCateId});
-        if (!transSubCate) {
-            throw new Error("Transaction subcategory not found")
-        }
-        return transSubCate;
-    }
+    return transSubCate;
+  }
+  static async add(data): Promise<void> {
+    await transSubCateRepo.save({ category: { id: data.cateId }, ...data });
+  }
 }
 
-
-export default TransSubCateServices ;
+export default TransSubCateServices;

@@ -118,9 +118,10 @@ export default function MyHome() {
                             <div style={{ color: 'black', display: "flex", alignItems: "center" }}>
                                 <div>
                                     <img style={{ width: '50px', marginRight: '8px' }}
-                                        src="https:tatic.moneylover.me/img/icon/ic_category_all.png" alt="" />
+                                        src="https://static.moneylover.me/img/icon/ic_category_all.png" alt="" />
                                 </div>
                                 <div>
+
                                     <p className='m-0'>Name: {myWallet.name === '' ? 'Total' : myWallet.name}</p>
                                     <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance === '' ? balance : myWallet.balance)}</p>
                                 </div>
@@ -147,27 +148,46 @@ export default function MyHome() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Transactions', 'Report'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
+                    <ListItem key="Transaction" disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            sx={{
+
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+
+                            }}
+                        >
+                            <ListItemIcon
                                 sx={{
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                    }}
-                                >
+                                <Link style={{ color: 'gray' }} href='/home'>
+                                    <FaWallet style={{ fontSize: '30px' }} />
+                                </Link>
+                            </ListItemIcon>
+                            <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key="Report" disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            sx={{
 
-                                    {index % 2 === 0 ? <Link style={{ color: 'gray' }} href='/home'><FaWallet style={{ fontSize: '30px' }} /></Link> :
-                                        <Link style={{ color: 'gray' }} href='/report'><TbReportMoney style={{ fontSize: '30px' }} /></Link>}
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>))}
-                    <hr />
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                <Link style={{ color: 'gray' }} href='/report'>
+                                    <TbReportMoney style={{ fontSize: '30px' }} />
+                                </Link>
+                            </ListItemIcon>
+                            <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
                     <ListItem key="Account" disablePadding sx={{ display: 'block' }}>
                         <ListItemButton
                             sx={{
@@ -190,45 +210,40 @@ export default function MyHome() {
 
                                 minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
 
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ?
-
-                                        <AccountUser/> :
-                                        <Link style={{color: 'gray'}} href='/report'><GiWallet style={{fontSize:'30px'}}/></Link>}
-
-                                </ListItemIcon>
-                                <ListItemText sx={{opacity: open ? 1 : 0}}/>
-                            </ListItemButton>
-                        </ListItem>,
-                    {['Account', 'Wallet'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{display: 'block'}}>
-                            <ListItemButton
+                            }}
+                        >
+                            <ListItemIcon
                                 sx={{
-
-                                    minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
-
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
                                 }}
                             >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ?
+                                <Link style={{ color: 'gray' }} href='/wallets'>
+                                    <GiWallet style={{ fontSize: '30px' }} />
+                                </Link>
+                            </ListItemIcon>
+                            <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
+                    <ListItem key="Categories" disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            sx={{
 
-                                        <AccountUser/> :
-                                        <Link style={{color: 'gray'}} href='/subCateList'><BiCategory style={{fontSize:'30px'}}/></Link>}
+                                minHeight: 48, justifyContent: open ? 'initial' : 'center', px: 2.5,
 
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{opacity: open ? 1 : 0}}/>
-                            </ListItemButton>
-                        </ListItem>))}
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center',
+                                }}
+                            >
+                                <Link style={{ color: 'gray' }} href='/subCateList'>
+                                    <BiCategory style={{ fontSize: '30px' }} />
+                                </Link>
+                            </ListItemIcon>
+                            <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
                 <Divider />
             </Drawer>
