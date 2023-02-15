@@ -17,7 +17,7 @@ class WalletService {
         return axiosJWT.patch('/wallet/balance', {walletId, balance});
     }
     static updateWallet(values) {
-        
+        return axiosJWT.patch('/', values);
     }
 }
 
