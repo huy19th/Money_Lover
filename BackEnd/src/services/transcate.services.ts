@@ -17,8 +17,6 @@ class TransCateServices extends BaseServices {
         return result;
     }
     static async addCate(subcategoryId, categories): Promise<void>{
-       let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
-        let transCate = new TransCate();
 
 
 
