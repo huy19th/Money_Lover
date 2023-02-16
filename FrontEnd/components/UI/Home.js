@@ -225,7 +225,7 @@ export default function MyHome() {
                 </Link>
               </ListItemIcon>
               <ListItemText
-                primary="Transaction"
+                primary="Categories"
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>
@@ -250,7 +250,7 @@ export default function MyHome() {
                 </Link>
               </ListItemIcon>
               <ListItemText
-                primary="Report"
+                primary="Categories"
                 sx={{ opacity: open ? 1 : 0 }}
               />
             </ListItemButton>

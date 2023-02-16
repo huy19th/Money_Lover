@@ -1,6 +1,7 @@
 import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import Wallet from "../models/wallet.model";
+import User from "../models/user.model";
 
 let walletRepo = dataSource.getRepository(Wallet);
 const [INCOME, EXPENSE] = [1, 2];
@@ -89,6 +90,16 @@ class WalletServices extends BaseServices {
         });
         return wallets;
     }
+    static async addWallet(user: User,name: string ,initial_balance : number): Promise<Wallet>{
+        let wallet = new Wallet();
+        wallet.user = user;
+        wallet.name = name;
+        wallet.balance = initial_balance;
+        wallet.initialBalance = initial_balance;
+        await walletRepo.save(wallet);
+        return wallet
+    }
 }
+
 
 export default WalletServices;
