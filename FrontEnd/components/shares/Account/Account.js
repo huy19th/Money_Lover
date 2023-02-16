@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
+import {timeActions} from "@/features/time/timeSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -75,6 +76,7 @@ export default function AccountUser() {
     dispatch(walletActions.resetWallet());
     dispatch(transactionActions.resetTrans());
     dispatch(categoryActions.getCates([]));
+    dispatch(timeActions.resetTime())
     router.push("/login");
   };
   const [open, setOpen] = React.useState(false);

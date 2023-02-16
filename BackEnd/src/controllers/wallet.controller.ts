@@ -104,6 +104,7 @@ class WalletController extends BaseController {
             res.status(500).json(err.message || this.defaultErrorMessage);
         })
     }
+
     static async addWallet(req: Request, res: Response){
         //@ts-ignore
         let userId = req.user.id;
@@ -117,6 +118,7 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
     }
+
 }
 
 export default WalletController;

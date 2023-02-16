@@ -12,5 +12,4 @@ WalletRouter.get('/:walletId/income-expense', WalletController.getTotalIncomeExp
 WalletRouter.get('/included-in-total/:isIncluded(true|false)', WalletController.getWalletsByIncludedIntotal);
 WalletRouter.post('/',WalletController.addWallet)
 
-
 export default WalletRouter;
