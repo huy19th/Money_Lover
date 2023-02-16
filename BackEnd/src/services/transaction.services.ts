@@ -85,16 +85,12 @@ class TransactionServices extends BaseServices {
         let wallet = await WalletServices.getWalletById(walletId);
         let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
 
-        console.log(date)
-
         transaction.wallet = wallet;
         transaction.subCategory = subcategory;
         transaction.money = money ? +money : null;
         transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
         transaction.image = image;
         transaction.note = note;
-
-        console.log(transaction.date)
 
         await transactionRepo.save(transaction);
     }
