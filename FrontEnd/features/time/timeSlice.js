@@ -13,6 +13,10 @@ export const timeSlice = createSlice({
         changeTime(state, action) {
             state = action.payload;
             return state
+        },
+        resetTime(state, action) {
+            state = initialState;
+            return state
         }
     }
 })

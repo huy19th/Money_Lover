@@ -79,6 +79,16 @@ class WalletServices extends BaseServices {
             .getRawOne();
         return totalBalance;
     }
+
+    static async getWalletsByIncludedInTotal(userId: number, isIncluded: boolean): Promise<Wallet[]> {
+        let wallets = await walletRepo.findBy({
+            includeTotal: isIncluded,
+            user: {
+                id: userId
+            }
+        });
+        return wallets;
+    }
 }
 
 export default WalletServices;
