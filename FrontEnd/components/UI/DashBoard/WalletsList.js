@@ -10,7 +10,10 @@ import {transactionActions} from "@/features/transaction/transactionSlice";
 export default function Wallets() {
 
     const dispatch = useDispatch()
+
     //
+
+    const time = useSelector(state => state.time)
 
     const myWallets = useSelector(state => state.wallet.wallets)
     let balance = 0
@@ -35,19 +38,60 @@ export default function Wallets() {
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
-    const handleClose = (wallet) => {
-        axiosJWT.get(`/transaction/${wallet.id}`)
-            .then((res) => {
-                dispatch(walletActions.changeCurrentWallet(wallet))
-                dispatch(transactionActions.getTrans(res.data))
-                setAnchorEl(null);
+
+    const chooseWallet = (wallet) => {
+        if (time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future') {
+            axiosJWT.get(`/transaction/${wallet.id}`, {
+                params: {
+                    year: time.value.format('MM/YYYY').split('/')[1],
+                    month: time.value.format('MM/YYYY').split('/')[0]
+                }
             })
+                .then((res) => {
+                    dispatch(walletActions.changeCurrentWallet(wallet))
+                    dispatch(transactionActions.getTrans(res.data))
+                    setAnchorEl(null);
+                })
+        } else {
+            axiosJWT.get(`/transaction/${wallet.id}`, {
+                params: {
+                    year: time.name.split('/')[1],
+                    month: time.name.split('/')[0]
+                }
+            })
+                .then((res) => {
+                    dispatch(walletActions.changeCurrentWallet(wallet))
+                    dispatch(transactionActions.getTrans(res.data))
+                    setAnchorEl(null);
+                })
+        }
     };
 
-    const handleWallets = async (wallet) => {
-        let transactions = (await axiosJWT.get('/transaction')).data
-        dispatch(walletActions.changeCurrentWallet(wallet))
-        dispatch(transactionActions.getTrans(transactions))
+    const chooseAllWallets = async (wallet) => {
+        if (time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future') {
+            let transactions = (await axiosJWT.get('/transaction', {
+                params: {
+                    year: time.value.format('MM/YYYY').split('/')[1],
+                    month: time.value.format('MM/YYYY').split('/')[0]
+                }
+            })).data
+            dispatch(walletActions.changeCurrentWallet(wallet))
+            dispatch(transactionActions.getTrans(transactions))
+            setAnchorEl(null);
+        } else {
+            let transactions = (await axiosJWT.get('/transaction', {
+                params: {
+                    year: time.name.split('/')[1],
+                    month: time.name.split('/')[0]
+                }
+            })).data
+            dispatch(walletActions.changeCurrentWallet(wallet))
+            dispatch(transactionActions.getTrans(transactions))
+            setAnchorEl(null);
+        }
+    }
+
+    const handleClose = () => {
         setAnchorEl(null);
     }
 
@@ -63,7 +107,7 @@ export default function Wallets() {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem onClick={() => handleWallets(totalWallets)}>
+                <MenuItem onClick={() => chooseAllWallets(totalWallets)}>
                     <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                         <div>
                             <img style={{width: '50px', marginRight: '8px'}}
@@ -76,7 +120,7 @@ export default function Wallets() {
                     </div>
                 </MenuItem>
                 {myWallets.map(wallet => {
-                    return <MenuItem onClick={() => handleClose(wallet)}>
+                    return <MenuItem onClick={() => chooseWallet(wallet)}>
                         <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                             <div>
                                 <img style={{width: '50px', marginRight: '8px'}}

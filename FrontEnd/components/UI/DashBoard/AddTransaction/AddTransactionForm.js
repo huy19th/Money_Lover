@@ -18,6 +18,7 @@ import SnackBar from "@/components/shares/SnackBar";
 import {walletActions} from "@/features/wallet/walletSlice";
 
 export default function AddTransactionForm({ handleClose, data}) {
+    const time = useSelector(state => state.time)
     const [open, setOpen] = useState(false);
     const [snackbar, setSnackbar] = useState({
         severity: "",
@@ -28,8 +29,6 @@ export default function AddTransactionForm({ handleClose, data}) {
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
     const myWallets = useSelector(state => state.wallet.wallets)
-
-    console.log(myWallet)
 
     const formik = useFormik({
         initialValues: {
@@ -45,6 +44,9 @@ export default function AddTransactionForm({ handleClose, data}) {
             note: Yup.string().nullable()
         }),
         onSubmit: values => {
+            let date = new Date(values.date)
+            date.setDate(date.getDate() + 1)
+            values.date = date
             let payload = {
                 date: values.date,
                 money: values.money,
@@ -56,7 +58,12 @@ export default function AddTransactionForm({ handleClose, data}) {
                 .then(async res => {
                     if (values.walletId === myWallet.id) {
                         let wallet = (await axiosJWT.get(`/wallet/info/${myWallet.id}`)).data
-                        let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`)).data
+                        let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`, {
+                            params: {
+                                year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                            }
+                        })).data
                         dispatch(walletActions.changeCurrentWallet(wallet))
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.changeWallets({
@@ -65,7 +72,12 @@ export default function AddTransactionForm({ handleClose, data}) {
                         }))
                     } else if (myWallet.id === 'Total') {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
-                        let transactions = (await axiosJWT.get('/transaction')).data
+                        let transactions = (await axiosJWT.get('/transaction', {
+                            params: {
+                                year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                            }
+                        })).data
                         dispatch(walletActions.changeWallets({
                             walletInfo: wallet,
                             walletId: values.walletId

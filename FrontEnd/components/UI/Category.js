@@ -13,20 +13,18 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
-import { AiOutlineArrowLeft, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import AddSubCategoryForm from "@/components/UI/Category/AddSubCategory/AddSubCategoryForm";
-import Button from "@mui/material/Button";
 
 export default function Category() {
   const dispatch = useDispatch();
   const myCates = useSelector((state) => state.category);
   useEffect(() => {
     axiosJWT.get("/transaction-category").then((res) => {
-      // console.log(res.data);
       dispatch(categoryActions.getCates(res.data));
     });
   }, []);
-  console.log(myCates);
+
   if (myCates.categories.length !== 0) {
     return (
       <Box
@@ -104,6 +102,6 @@ export default function Category() {
       </Box>
     );
   } else {
-    return <p>Loading</p>;
+    return <p>Loading...</p>;
   }
 }

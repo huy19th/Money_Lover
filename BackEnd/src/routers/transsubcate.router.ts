@@ -8,5 +8,6 @@ TransSubCateRouter.get(
   TransSubCateController.getAllSubCatesByType
 );
 TransSubCateRouter.post("/", TransSubCateController.add);
+TransSubCateRouter.post("/:subCateId", TransSubCateController.update)
 
 export default TransSubCateRouter;

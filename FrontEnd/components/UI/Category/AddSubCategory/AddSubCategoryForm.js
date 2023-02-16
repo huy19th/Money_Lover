@@ -8,7 +8,6 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { AiOutlinePlus } from "react-icons/ai";
 import { Col, Row } from "react-bootstrap";
 import FormControl from "@mui/material/FormControl";
 import { Select } from "@mui/material";
@@ -17,13 +16,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { walletActions } from "@/features/wallet/walletSlice";
-import { transactionActions } from "@/features/transaction/transactionSlice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -66,9 +62,7 @@ BootstrapDialogTitle.propTypes = {
 export default function AddSubCategoryForm() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const categoryState = useSelector((state) => state.category);
-  const myCates = categoryState.categories;
-  console.log(myCates);
+  const myCates = useSelector((state) => state.category.categories);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -89,7 +83,6 @@ export default function AddSubCategoryForm() {
         .post("/transaction-subcategory", values)
         .then(async (response) => {
           axiosJWT.get("/transaction-category").then((res) => {
-            // console.log(res.data);
             dispatch(categoryActions.getCates(res.data));
             handleClose();
           });
@@ -162,11 +155,12 @@ export default function AddSubCategoryForm() {
         <DialogActions>
           <Button
             sx={{ marginRight: "12px" }}
-            variant="outlined"
+            variant="contained"
+            color="success"
             type="submit"
             onClick={formik.handleSubmit}
           >
-            Save changes
+            Save
           </Button>
         </DialogActions>
       </BootstrapDialog>
