@@ -10,6 +10,6 @@ WalletRouter.patch('/balance', WalletController.adjustBalance);
 WalletRouter.get('/balance/total', WalletController.getTotalBalance);
 WalletRouter.get('/:walletId/income-expense', WalletController.getTotalIncomeExpenseOfWallet);
 WalletRouter.get('/included-in-total/:isIncluded(true|false)', WalletController.getWalletsByIncludedIntotal);
-
+WalletRouter.post('/',WalletController.addWallet)
 
 export default WalletRouter;

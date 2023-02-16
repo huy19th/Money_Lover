@@ -1,12 +1,11 @@
 import BaseController from "./base.controller";
 
 import {Request, Response} from "express";
-import WalletModel, {Wallet} from "../models/wallet.model";
+import WalletModel from "../models/wallet.model";
 
 import User from "../models/user.model"
 import dataSource from "../database/data-source";
-import transactionController from "./transaction.controller";
-import TransactionModel, {Transaction} from "../models/transaction.model";
+import TransactionModel from "../models/transaction.model";
 import SubCate from "../models/trans.subcate.model";
 import transactionType from "../models/trans.type.model";
 import TransactionServices from "../services/transaction.services";
@@ -105,6 +104,21 @@ class WalletController extends BaseController {
             res.status(500).json(err.message || this.defaultErrorMessage);
         })
     }
+
+    static async addWallet(req: Request, res: Response){
+        //@ts-ignore
+        let userId = req.user.id;
+        let name = req.body.name;
+        let initialBalance = req.body.initialBalance;
+        try{
+            let wallet =  await WalletServices.addWallet(userId,name,initialBalance)
+            res.status(200).json(wallet);
+        }
+        catch(err){
+            res.status(500).json(err)
+        }
+    }
+
 }
 
 export default WalletController;

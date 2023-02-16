@@ -63,7 +63,6 @@ export default function AddSubCategoryForm() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const myCates = useSelector((state) => state.category.categories);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
