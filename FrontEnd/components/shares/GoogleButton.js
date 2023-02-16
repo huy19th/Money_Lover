@@ -26,11 +26,11 @@ export default function MyGoogleButton() {
                 // Gọi API xét login
                 axios.post('http://localhost:8000/api/auth/login/google', result.data)
                     .then((res) => {
-                        localStorage.setItem('token', res.data.accessToken)
+                        localStorage.setItem('accessToken', res.data.accessToken)
+                        localStorage.setItem('refreshToken', res.data.refreshToken)
                         let user = jwt_decode(res.data.accessToken)
                         dispatch(authActions.loggedIn({
-                            user: user,
-                            refreshToken: res.data.refreshToken
+                            user: user
                         }))
                         router.push('/home')
                     })
