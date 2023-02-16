@@ -6,18 +6,21 @@ import {combineReducers} from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage'
 import walletSlice from "@/features/wallet/walletSlice";
 import transactionSlice from "@/features/transaction/transactionSlice";
+import timeSlice from "@/features/time/timeSlice";
 import categorySlice from "@/features/category/categorySlice";
 
 const persistConfig = {
     key: 'root',
     storage,
-    stateReconciler: autoMergeLevel2
+    stateReconciler: autoMergeLevel2,
+    blacklist: ['time']
 }
 
 const reducer = combineReducers({
     auth: authSlice.reducer,
     wallet: walletSlice.reducer,
     transaction: transactionSlice.reducer,
+    time: timeSlice.reducer
     category: categorySlice.reducer
 })
 

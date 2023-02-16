@@ -10,7 +10,10 @@ import TransactionRouter from "./routers/transaction.router";
 import WalletRouter from "./routers/wallet.router";
 import UserRouter from "./routers/user.router";
 import TransTypeRouter from "./routers/transtype.router";
+import dataSource from "./database/data-source";
+import Transaction from "./models/transaction.model";
 import TransCateRouter from "./routers/transcate.router";
+
 class App {
   private app: express.Application = express();
 
@@ -30,6 +33,7 @@ class App {
   /* private serveStaticFiles(): void {
         this.app.use(express.static(path.join(__dirname, 'FileName'), { maxAge:  this.appConfig.expiredStaticFiles}));
     } */
+
 
   private setupMiddlewares(): void {
     this.app.use(
@@ -68,6 +72,7 @@ class App {
       console.log(`server started at http://localhost:${this.appConfig.port}`);
     });
   }
+
 }
 
 // tslint:disable-next-line:no-unused-expression

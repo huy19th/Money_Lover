@@ -15,6 +15,10 @@ import {transactionActions} from "@/features/transaction/transactionSlice";
 
 export default function EditTransactionForm(props) {
 
+    const myCurrentTransaction = useSelector(state => state.transaction.currentTransaction)
+
+    const time = useSelector(state => state.time)
+
     const dispatch = useDispatch()
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
@@ -31,25 +35,32 @@ export default function EditTransactionForm(props) {
 
     const formik = useFormik({
         initialValues: {
-            walletId: props.data.wallet_name,
-            subcategoryId: props.data.subCate_name,
-            money: props.data.money,
-            date: new Date(props.data.date)-1,
-            note: props.data.note
+            walletId: myCurrentTransaction.wallet_name,
+            subcategoryId: myCurrentTransaction.subCate_name,
+            money: myCurrentTransaction.money,
+            date: new Date(myCurrentTransaction.date),
+            note: myCurrentTransaction.note
         },
         validationSchema: Yup.object({
             money: Yup.number().required("Required"),
             note: Yup.string().nullable()
         }),
         onSubmit: values => {
-            values.walletId = props.data.wallet_id;
-            values.subcategoryId = props.data.subCate_id;
-            console.log(values)
-            axiosJWT.put(`/transaction/${props.data.id}`, values)
+            values.walletId = myCurrentTransaction.wallet_id;
+            values.subcategoryId = myCurrentTransaction.subCate_id;
+            let date = new Date(values.date)
+            date.setDate(date.getDate() + 1)
+            values.date = date
+            axiosJWT.put(`/transaction/${myCurrentTransaction.id}`, values)
                 .then(async (res) => {
                     if (myWallet.id === values.walletId) {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
-                        let transactions = (await axiosJWT.get(`/transaction/${values.walletId}`)).data
+                        let transactions = (await axiosJWT.get(`/transaction/${values.walletId}`, {
+                            params: {
+                                year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                            }
+                        })).data
                         dispatch(walletActions.changeCurrentWallet(wallet))
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.changeWallets({
@@ -58,7 +69,12 @@ export default function EditTransactionForm(props) {
                         }))
                     } else {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
-                        let transactions = (await axiosJWT.get('/transaction')).data
+                        let transactions = (await axiosJWT.get('/transaction', {
+                            params: {
+                                year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                            }
+                        })).data
                         dispatch(walletActions.changeWallets({
                             walletInfo: wallet,
                             walletId: values.walletId
@@ -66,18 +82,29 @@ export default function EditTransactionForm(props) {
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.resetCurrentWallet())
                     }
+                    let date = new Date(values.date)
+                    date.setDate(date.getDate() - 1)
+                    dispatch(transactionActions.changeCurrentTransaction({
+                        subCate_name: myCurrentTransaction.subCate_name,
+                        wallet_name: myCurrentTransaction.wallet_name,
+                        date: date,
+                        note: values.note,
+                        type_name: myCurrentTransaction.type_name,
+                        money: values.money
+                    }))
                     setSnackbar({
                         severity: "success",
                         message: res.data.message
                     })
                     setOpen(true);
+                    handleClose()
                 })
         },
     });
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Grid container spacing={2}>
+            <Grid className='mt-1' container spacing={2}>
                 <Grid item xs={4}>
                     <TextField
                         id="outlined-read-only-input"
