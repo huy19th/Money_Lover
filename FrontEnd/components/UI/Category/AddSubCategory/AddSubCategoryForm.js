@@ -63,7 +63,6 @@ export default function AddSubCategoryForm() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const myCates = useSelector((state) => state.category.categories);
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -156,11 +155,12 @@ export default function AddSubCategoryForm() {
         <DialogActions>
           <Button
             sx={{ marginRight: "12px" }}
-            variant="outlined"
+            variant="contained"
+            color="success"
             type="submit"
             onClick={formik.handleSubmit}
           >
-            Save changes
+            Save
           </Button>
         </DialogActions>
       </BootstrapDialog>

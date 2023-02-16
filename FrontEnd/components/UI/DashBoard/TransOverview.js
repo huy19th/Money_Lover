@@ -49,6 +49,7 @@ const TransOverview = () => {
     }
 
     const handleClick = (transaction) => {
+        console.log(transaction)
         dispatch(transactionActions.changeCurrentTransaction(transaction))
         // setTranDetail(transaction)
         setDisplay(true)
@@ -114,7 +115,7 @@ const TransOverview = () => {
                                                              <div>
                                                                  {item.transOfDate.map(tran => {
                                                                      return (
-                                                                         <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}} onMouseOver={(event) => handleOver(event)} onClick={(event) => handleClick(event, tran)}>
+                                                                         <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: '8px'}} onMouseOver={(event) => handleOver(event)} onClick={() => handleClick(tran)}>
                                                                              <div>
                                                                                  <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
                                                                                  <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>

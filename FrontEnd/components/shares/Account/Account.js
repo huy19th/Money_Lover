@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import {timeActions} from "@/features/time/timeSlice";
+import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -96,42 +98,31 @@ export default function AccountUser() {
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={handleClose}
-        >
-          <div>
-            <Row>
-              <Col>
-                <h3>My account</h3>
-              </Col>
-              <Col style={{ textAlign: "right", marginRight: "30px" }}>
-                <Link
-                  style={{ textDecoration: "none", color: "green" }}
-                  href="#"
-                  onClick={logOut}
-                >
-                  SIGN OUT
-                </Link>
-              </Col>
-            </Row>
+        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+          <div style={{display: "flex", alignItems: "center", padding: '20px'}}>
+            <CloseIcon onClick={handleClose} style={{cursor: "pointer"}}/>
+            <h3 className='m-0 ms-2'>My account</h3>
           </div>
-        </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <div>
-            <Row>
-              <Col sm={2}>
-                <img
-                  style={{ width: "80px" }}
-                  src="https://static.moneylover.me/img/icon/ic_category_all.png"
-                  alt=""
-                />
-              </Col>
-              <Col>
-                <p>{user.name}</p>
-                <p>{user.email}</p>
-              </Col>
-            </Row>
+          <div style={{padding: '20px'}}>
+            <Button color="success" onClick={logOut}>
+              <b style={{ fontSize: "18px" }}>SIGN OUT</b>
+            </Button>
+          </div>
+        </div>
+        <DialogContent
+          style={{ padding: "0px", justifyItems: "center" }}
+          dividers
+        >
+          <div style={{ marginTop: "20px" }}>
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
+              <div>
+                {/*<MyAvatar/>*/}
+              </div>
+              <div>
+                <p className='m-0'>{user.name}</p>
+                <p className='m-0'>{user.email}</p>
+              </div>
+            </div>
             <Row>
               <Col style={{ textAlign: "right", marginRight: "30px" }}>
                 <Link
@@ -139,23 +130,19 @@ export default function AccountUser() {
                   href="#"
                   onClick=""
                 >
-                  <ChangePassword />
+                  <ChangePassword/>
                 </Link>
               </Col>
             </Row>
           </div>
           <hr />
           <img
-            style={{ width: "500px", height: "200px" }}
-            src="https://i.pinimg.com/originals/c9/bc/9c/c9bc9cde36a08a30cd442cdf5780c9c9.jpg"
+            style={{ width: "550px", height: "120px" }}
+            src="https://img.freepik.com/premium-vector/modern-red-orange-banner-background_181182-12801.jpg"
             alt=""
           />
+          <DialogContent>Devices (1/5)</DialogContent>
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Cancel
-          </Button>
-        </DialogActions>
       </BootstrapDialog>
     </div>
   );

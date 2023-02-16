@@ -19,16 +19,16 @@ let transactionTypeRepo = dataSource.getRepository(transactionType);
 
 class WalletController extends BaseController {
 
-    static getAllWalletsOfUser (req: Request, res: Response) {
+    static getAllWalletsOfUser(req: Request, res: Response) {
         //@ts-ignore
         let userId = req.user.id;
         WalletServices.getAllWalletsOfUser(userId)
-        .then(wallets => {
-            res.status(200).json(wallets);
-        })
-        .catch(err => {
-            res.status(500).json(err);
-        })
+            .then(wallets => {
+                res.status(200).json(wallets);
+            })
+            .catch(err => {
+                res.status(500).json(err);
+            })
     }
 
     static getDetailInfoOfWallet(req: Request, res: Response) {
@@ -51,23 +51,23 @@ class WalletController extends BaseController {
     static getWallet(req: Request, res: Response) {
         let walletId = Number(req.params.walletId);
         WalletServices.getWalletById(walletId)
-        .then(wallet => {
-            res.status(200).json(wallet);
-        })
-        .catch(err => {
-            res.status(500).json({message: err.message || this.defaultErrorMessage});
-        })
+            .then(wallet => {
+                res.status(200).json(wallet);
+            })
+            .catch(err => {
+                res.status(500).json({ message: err.message || this.defaultErrorMessage });
+            })
     }
 
     static async adjustBalance(req: Request, res: Response) {
         try {
-            let {walletId, balance} = req.body;
+            let { walletId, balance } = req.body;
             await TransactionServices.addTransactionToAdjustBalance(walletId, balance);
             await WalletServices.updateBalance(walletId);
             res.status(200).json("Adjusted balance succesfully!");
         }
         catch (err) {
-            res.status(500).json({message: err.message || this.defaultErrorMessage});
+            res.status(500).json({ message: err.message || this.defaultErrorMessage });
         }
     }
 
@@ -84,12 +84,12 @@ class WalletController extends BaseController {
     static getTotalIncomeExpenseOfWallet(req: Request, res: Response) {
         let walletId = Number(req.params.walletId);
         WalletServices.getTotalIncomeExpenseOfWallet(walletId)
-        .then(result => {
-            res.status(200).json(result);
-        })
-        .catch(err => {
-            res.status(500).json(err.message);
-        })
+            .then(result => {
+                res.status(200).json(result);
+            })
+            .catch(err => {
+                res.status(500).json(err.message);
+            })
     }
 
     static getWalletsByIncludedIntotal(req: Request, res: Response) {
@@ -97,13 +97,25 @@ class WalletController extends BaseController {
         let userId = req.user.id;
         let isIncluded = req.params.isIncluded == "true" ? true : false;
         WalletServices.getWalletsByIncludedInTotal(userId, isIncluded)
-        .then(wallets => {
-            res.status(200).json(wallets);
-        })
-        .catch(err => {
-            res.status(500).json(err.message || this.defaultErrorMessage);
-        })
+            .then(wallets => {
+                res.status(200).json(wallets);
+            })
+            .catch(err => {
+                res.status(500).json(err.message || this.defaultErrorMessage);
+            })
     }
+
+    static async updateWallet(req: Request, res: Response) {
+        try {
+            await WalletServices.updateWallet(req.body);
+            await WalletServices.updateBalance(req.body.walletId);
+            res.status(200).json("Update wallet successfully!");
+        }
+        catch (err) {
+            res.status(500).json({ message: err.message || this.defaultErrorMessage });
+        }
+    }
+
     static async addWallet(req: Request, res: Response){
         //@ts-ignore
         let userId = req.user.id;
@@ -117,6 +129,7 @@ class WalletController extends BaseController {
             res.status(500).json(err)
         }
     }
+
 }
 
 export default WalletController;

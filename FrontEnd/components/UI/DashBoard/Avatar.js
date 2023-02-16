@@ -36,7 +36,7 @@ export default function MyAvatar() {
     };
 
     const saveImage = () => {
-        if (user.image === '') {
+        if (user.image.length < 20) {
             // Add Firebase
             const storageRef = ref(storage, `/user-upload/${user.name}`)
             // Upload ảnh
@@ -74,11 +74,12 @@ export default function MyAvatar() {
         <div>
             <img
                 alt=""
-                src={user.image}
+                src={!user.image && user.image.length < 20 ? 'https://gocbao.net/wp-content/uploads/2020/10/avatar-trang-4.jpg' : user.image}
                 style={{
-                    width: '80px',
-                    height: '80px',
+                    width: '120px',
+                    height: '120px',
                     borderRadius: '50%',
+                    border: '1px solid black'
                 }}
                 onClick={handleClickOpen}
             />
