@@ -19,7 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
+import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -106,25 +108,27 @@ export default function AccountUser() {
                 <h3>My account</h3>
               </Col>
               <Col style={{ textAlign: "right", marginRight: "30px" }}>
-                <Link
-                  style={{ textDecoration: "none", color: "green" }}
-                  href="#"
-                  onClick={logOut}
-                >
-                  SIGN OUT
-                </Link>
+                <Button color="success" onClick={logOut}>
+                  <b style={{ fontSize: "18px" }}>SIGN OUT</b>
+                </Button>
               </Col>
             </Row>
           </div>
         </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <div>
+        <DialogContent
+          style={{ padding: "0px", justifyItems: "center" }}
+          dividers
+        >
+          <div style={{ marginTop: "20px" }}>
             <Row>
-              <Col sm={2}>
-                <img
-                  style={{ width: "80px" }}
-                  src="https://static.moneylover.me/img/icon/ic_category_all.png"
-                  alt=""
+              <Col sm={4}>
+                <Avatar
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    marginLeft: "50px",
+                  }}
+                  src="/broken-image.jpg"
                 />
               </Col>
               <Col>
@@ -146,14 +150,16 @@ export default function AccountUser() {
           </div>
           <hr />
           <img
-            style={{ width: "500px", height: "200px" }}
-            src="https://i.pinimg.com/originals/c9/bc/9c/c9bc9cde36a08a30cd442cdf5780c9c9.jpg"
+            style={{ width: "550px", height: "120px" }}
+            src="https://img.freepik.com/premium-vector/modern-red-orange-banner-background_181182-12801.jpg"
             alt=""
           />
+          <DialogContent>Devices (1/5)</DialogContent>
+          {/*<DialogContent></DialogContent>*/}
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
-            Cancel
+            <b>Cancel</b>
           </Button>
         </DialogActions>
       </BootstrapDialog>
