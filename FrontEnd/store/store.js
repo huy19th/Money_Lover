@@ -7,6 +7,7 @@ import storage from 'redux-persist/lib/storage'
 import walletSlice from "@/features/wallet/walletSlice";
 import transactionSlice from "@/features/transaction/transactionSlice";
 import timeSlice from "@/features/time/timeSlice";
+import categorySlice from "@/features/category/categorySlice";
 
 const persistConfig = {
     key: 'root',
@@ -20,6 +21,7 @@ const reducer = combineReducers({
     wallet: walletSlice.reducer,
     transaction: transactionSlice.reducer,
     time: timeSlice.reducer
+    category: categorySlice.reducer
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

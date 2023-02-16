@@ -48,7 +48,7 @@ export default function AddTransactionModal() {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button style={{width:'150px'}} variant="primary" onClick={handleShow}>
                 Add Transaction
             </Button>
 
