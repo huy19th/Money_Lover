@@ -43,9 +43,13 @@ class TransSubCateServices extends BaseServices {
     let category = await tranCateRepo.findOneBy({ id: cateId})
     transSubCate.category = category
     transSubCate.name = name
-    await tranCateRepo.save(transSubCate);
+    await transSubCateRepo.save(transSubCate);
     return transSubCate;
   }
+  // static async delete(subCateId){
+  //   let tranCateId = await this.getSubCateById(subCateId);
+  //   await transSubCateRepo.remove(tranCateId);
+  // }
 }
 
 export default TransSubCateServices;

@@ -89,7 +89,6 @@ export default function AddSubCategoryForm() {
         .post("/transaction-subcategory", values)
         .then(async (response) => {
           axiosJWT.get("/transaction-category").then((res) => {
-            // console.log(res.data);
             dispatch(categoryActions.getCates(res.data));
             handleClose();
           });
