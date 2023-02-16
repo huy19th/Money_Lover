@@ -19,8 +19,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
+import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -92,12 +94,13 @@ export default function AccountUser() {
 
   return (
     <div>
-      <FaUserCircle style={{ fontSize: "30px" }} onClick={handleClickOpen} />
+      <FaUserCircle style={{ fontSize: "25px" }} onClick={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
+
         <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
           <div style={{display: "flex", alignItems: "center", padding: '20px'}}>
             <CloseIcon onClick={handleClose} style={{cursor: "pointer"}}/>
@@ -109,11 +112,13 @@ export default function AccountUser() {
             </Button>
           </div>
         </div>
+
         <DialogContent
           style={{ padding: "0px", justifyItems: "center" }}
           dividers
         >
           <div style={{ marginTop: "20px" }}>
+
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
               <div>
                 {/*<MyAvatar/>*/}
@@ -123,6 +128,7 @@ export default function AccountUser() {
                 <p className='m-0'>{user.email}</p>
               </div>
             </div>
+
             <Row>
               <Col style={{ textAlign: "right", marginRight: "30px" }}>
                 <Link
@@ -142,7 +148,9 @@ export default function AccountUser() {
             alt=""
           />
           <DialogContent>Devices (1/5)</DialogContent>
+
         </DialogContent>
+
       </BootstrapDialog>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from '@mui/material/Button';
 import Modal from 'react-bootstrap/Modal';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
@@ -48,7 +48,7 @@ export default function AddTransactionModal() {
 
     return (
         <>
-            <Button style={{width:'150px'}} variant="primary" onClick={handleShow}>
+            <Button variant="contained" color="success" onClick={handleShow}>
                 Add Transaction
             </Button>
 
