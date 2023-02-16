@@ -112,32 +112,48 @@ export default function MyHome() {
     setOpen(false);
   };
 
+  const ListItemButtonStyle = {
+    minHeight: 48,
+    justifyContent: open ? "initial" : "center",
+    px: 2.5
+  }
+
+  const ListItemIconStyle = {
+    minWidth: 0,
+    mr: open ? 3 : "auto",
+    justifyContent: "center"
+  }
+
+  const IconSize = { fontSize: "25px" }
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <AppBar sx={{ backgroundColor: "white" }} position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="gray"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{
-              marginRight: 5,
-              ...(open && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <div
+        <Toolbar fullWidth>
+          <div className="d-flex align-items-center col-6">
+            <IconButton
+              color="gray"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+
+
+          {/* <div
             style={{
               width: "100%",
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
             }}
-          >
+          > */}
+
             <div
               style={{ color: "black", display: "flex", alignItems: "center" }}
             >
@@ -175,7 +191,8 @@ export default function MyHome() {
               </div>
             </div>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
+          <div className="d-flex justify-content-end align-items-center col-6">
             <BsCalendarDay
               style={{
                 color: "gray",
@@ -206,129 +223,54 @@ export default function MyHome() {
         <Divider />
         <List>
           <ListItem key="Transaction" disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  padding: "10px",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <Link style={{ color: "gray" }} href="/home">
-                  <FaWallet style={{ fontSize: "25px" }} />
-                </Link>
-              </ListItemIcon>
-              <ListItemText
-
-                primary="Transaction"
-
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
+            <Link style={{ color: "gray" }} href="/home" className="text-decoration-none">
+              <ListItemButton sx={ListItemButtonStyle}>
+                <ListItemIcon sx={ListItemIconStyle}>
+                  <FaWallet style={IconSize} />
+                </ListItemIcon>
+                <ListItemText primary="Transaction" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           </ListItem>
           <ListItem key="Report" disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                padding: " 10px",
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <Link style={{ color: "gray" }} href="/report">
-                  <TbReportMoney style={{ fontSize: "30px" }} />
-                </Link>
-              </ListItemIcon>
-              <ListItemText
-
-                primary="Report"
-
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
+            <Link style={{ color: "gray" }} href="/report" className="text-decoration-none">
+              <ListItemButton sx={ListItemButtonStyle}>
+                <ListItemIcon sx={ListItemIconStyle}>
+                  <TbReportMoney style={IconSize} />
+                </ListItemIcon>
+                <ListItemText primary="Report" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           </ListItem>
           <ListItem key="Account" disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  padding: "10px",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <AccountUser />
-              </ListItemIcon>
-              <ListItemText primary="Account" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
+            <Link style={{ color: "gray" }} href="/#" className="text-decoration-none">
+              <ListItemButton sx={ListItemButtonStyle}>
+                <ListItemIcon sx={ListItemIconStyle}>
+                  <AccountUser />
+                </ListItemIcon>
+                <ListItemText primary="Account" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           </ListItem>
           <ListItem key="Wallets" disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  padding: "10px",
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <Link style={{ color: "gray" }} href="/wallets">
-                  <GiWallet style={{ fontSize: "30px" }} />
-                </Link>
-              </ListItemIcon>
-              <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
+            <Link style={{ color: "gray" }} href="/wallets" className="text-decoration-none">
+              <ListItemButton sx={ListItemButtonStyle}>
+                <ListItemIcon sx={ListItemIconStyle}>
+                  <GiWallet style={IconSize} />
+                </ListItemIcon>
+                <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           </ListItem>
           <ListItem key="Categories" disablePadding sx={{ display: "block" }}>
-            <ListItemButton
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? "initial" : "center",
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : "auto",
-                  justifyContent: "center",
-                }}
-              >
-                <Link style={{ color: "gray" }} href="/category">
-                  <BiCategory style={{ fontSize: "30px" }} />
-                </Link>
-              </ListItemIcon>
-              <ListItemText
-                primary="Categories"
-                sx={{ opacity: open ? 1 : 0 }}
-              />
-            </ListItemButton>
+            <Link style={{ color: "gray" }} href="/category" className="text-decoration-none">
+              <ListItemButton sx={ListItemButtonStyle}>
+                <ListItemIcon sx={ListItemIconStyle}>
+                  <BiCategory style={IconSize} />
+                </ListItemIcon>
+                <ListItemText primary="Categories" sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </Link>
           </ListItem>
         </List>
         <Divider />
@@ -347,6 +289,6 @@ export default function MyHome() {
           </Container>
         </div>
       </Box>
-    </Box>
+    </Box >
   );
 }

@@ -92,7 +92,7 @@ export default function AccountUser() {
 
   return (
     <div>
-      <FaUserCircle style={{ fontSize: "30px" }} onClick={handleClickOpen} />
+      <FaUserCircle style={{ fontSize: "25px" }} onClick={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
