@@ -14,7 +14,7 @@ const [OTHER_INCOME_ID, OTHER_EXPENSE_ID] = [34, 20];
 
 class TransactionServices extends BaseServices {
 
-    static async getTransactions(userId) {
+    static async getTransactions(userId, month, year) {
         return await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
@@ -28,11 +28,35 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('user.id = :id', { id: userId })
-            .orderBy('trans.id', 'ASC')
-            .getRawMany();
+            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+            .getRawMany()
+            .then((trans) => {
+                let arr = [];
+                let dates = trans.map(tran => {return tran.date.toString()})
+                let uniqueDate = Array.from(new Set(dates))
+                for (let i = 0; i < uniqueDate.length; i++) {
+                    let obj = {
+                        date: uniqueDate[i],
+                        sum: 0,
+                        transOfDate: []
+                    }
+                    for (let j = 0; j < trans.length; j++) {
+                        if (trans[j].date.toString() === uniqueDate[i]) {
+                            obj.transOfDate.push(trans[j])
+                            if (trans[j].type_name === 'Income') {
+                                obj.sum += trans[j].money
+                            } else {
+                                obj.sum -= trans[j].money
+                            }
+                        }
+                    }
+                    arr.push(obj)
+                }
+                return arr
+            })
     }
 
-    static async getTransactionsOfWallet(walletId) {
+    static async getTransactionsOfWallet(walletId, month, year) {
         return await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
@@ -46,8 +70,32 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('wallet.id = :id', { id: walletId })
-            .orderBy('trans.id', 'ASC')
-            .getRawMany();
+            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+            .getRawMany()
+            .then((trans) => {
+                let arr = [];
+                let dates = trans.map(tran => {return tran.date.toString()})
+                let uniqueDate = Array.from(new Set(dates))
+                for (let i = 0; i < uniqueDate.length; i++) {
+                    let obj = {
+                        date: uniqueDate[i],
+                        sum: 0,
+                        transOfDate: []
+                    }
+                    for (let j = 0; j < trans.length; j++) {
+                        if (trans[j].date.toString() === uniqueDate[i]) {
+                            obj.transOfDate.push(trans[j])
+                            if (trans[j].type_name === 'Income') {
+                                obj.sum += trans[j].money
+                            } else {
+                                obj.sum -= trans[j].money
+                            }
+                        }
+                    }
+                    arr.push(obj)
+                }
+                return arr
+            })
     }
 
     static async deleteTransaction(transaction: Transaction): Promise<void> {
@@ -85,16 +133,12 @@ class TransactionServices extends BaseServices {
         let wallet = await WalletServices.getWalletById(walletId);
         let subcategory = await TransSubCateServices.getSubCateById(subcategoryId);
 
-        console.log(date)
-
         transaction.wallet = wallet;
         transaction.subCategory = subcategory;
         transaction.money = money ? +money : null;
-        transaction.date = typeof date == 'string' ? date.substring(0, 9) : date;
+        transaction.date = typeof date == 'string' ? date.substring(0, 10) : date;
         transaction.image = image;
         transaction.note = note;
-
-        console.log(transaction.date)
 
         await transactionRepo.save(transaction);
     }

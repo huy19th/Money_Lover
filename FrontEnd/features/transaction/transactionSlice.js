@@ -1,17 +1,27 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-let initialState = []
+let initialState = {
+    currentTransaction: {
+        subCate_name: '',
+        wallet_name: '',
+        date: '',
+        note: '',
+        type_name: '',
+        money: ''
+    },
+    trans: []
+}
 
 export const transactionSlice = createSlice({
     name: 'transaction',
     initialState: initialState,
     reducers: {
         getTrans(state, action) {
-            state = action.payload
+            state = {...state, trans: action.payload}
             return state
         },
-        addTran(state, action) {
-            state = [...state, action.payload]
+        changeCurrentTransaction(state, action) {
+            state = {...state, currentTransaction: action.payload}
             return state
         },
         resetTrans(state) {
