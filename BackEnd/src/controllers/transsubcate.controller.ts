@@ -6,6 +6,7 @@ import TransactionServices from "../services/transaction.services";
 import WalletServices from "../services/wallet.services";
 
 class TransSubCateController extends BaseController {
+
     static getAllSubCatesByType(req: Request, res: Response) {
         let transTypeId = Number(req.params.transTypeId);
         TransSubCateServices.getAllSubCatesByType(transTypeId)
@@ -40,6 +41,7 @@ class TransSubCateController extends BaseController {
 
         }
     }
+
 }
 
 export default TransSubCateController;
