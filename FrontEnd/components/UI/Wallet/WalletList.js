@@ -79,7 +79,7 @@ export default function WalletLists() {
                     />
                     <Card.Header className="ps-4">Excluded In Total</Card.Header>
                     <ListItems
-                        data={[]}
+                        data={wallets}
                         showDetail={showDetail}
                         setShowDetail={setShowDetail}
                         selectedWallet={selectedWallet}
@@ -103,6 +103,7 @@ export default function WalletLists() {
                     <WalletEditDialog wallet={selectedWallet}
                         data={wallets}
                         setShow={setShowEdit}
+                        setSelectedWallet={setSelectedWallet}
                     />
                     : null
             }
@@ -111,6 +112,7 @@ export default function WalletLists() {
                     <AdjustBalanceDialog wallet={selectedWallet}
                         data={wallets}
                         setShow={setShowBalance}
+                        setSelectedWallet={setSelectedWallet}
                     />
                     : null
             }

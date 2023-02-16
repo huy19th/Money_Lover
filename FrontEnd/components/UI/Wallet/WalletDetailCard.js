@@ -2,7 +2,7 @@ import Button from "@mui/material/Button";
 import Card from 'react-bootstrap/Card';
 import CloseIcon from '@mui/icons-material/Close';
 import Col from 'react-bootstrap/Col';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Divider, Checkbox } from '@mui/material';
 import WalletService from "@/services/wallet.service";
 
@@ -21,16 +21,18 @@ function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance}) 
         setShowEdit(true);
     }
 
+    useEffect(() => {}, [wallet]);
+
     return (
         <Col xs={7}>
             <Card>
                 <Card.Header>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                    <div className="d-flex align-items-center justify-content-between">
+                        <div className="d-flex align-items-center">
                             <CloseIcon className='ms-3' onClick={handleClose} />
                             <h5 className='m-0 ms-3'>Wallet Details</h5>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div className="d-flex align-items-center">
                             <Button color="error" onClick={handleClickOpen}>Delete</Button>
                             <Button color="success" onClick={showEdit}>Edit</Button>
                         </div>
