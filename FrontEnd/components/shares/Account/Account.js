@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import Avatar from "@mui/material/Avatar";
+import {timeActions} from "@/features/time/timeSlice";
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -76,6 +78,7 @@ export default function AccountUser() {
     dispatch(walletActions.resetWallet());
     dispatch(transactionActions.resetTrans());
     dispatch(categoryActions.getCates([]));
+    dispatch(timeActions.resetTime())
     router.push("/login");
   };
   const [open, setOpen] = React.useState(false);

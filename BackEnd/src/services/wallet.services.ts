@@ -90,6 +90,7 @@ class WalletServices extends BaseServices {
         });
         return wallets;
     }
+
     static async addWallet(user: User,name: string ,initial_balance : number): Promise<Wallet>{
         let wallet = new Wallet();
         wallet.user = user;
@@ -99,6 +100,7 @@ class WalletServices extends BaseServices {
         await walletRepo.save(wallet);
         return wallet
     }
+
 }
 
 
