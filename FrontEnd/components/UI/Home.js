@@ -146,7 +146,7 @@ export default function MyHome() {
             </IconButton>
 
 
-          {/* <div
+            {/* <div
             style={{
               width: "100%",
               display: "flex",
@@ -166,17 +166,16 @@ export default function MyHome() {
               >
                 <div>
                   <img
-                    style={{ width: "50px", marginRight: "8px" }}
+                    style={{ width: "45px", marginRight: "8px" }}
                     src="https://static.moneylover.me/img/icon/ic_category_all.png"
                     alt=""
                   />
                 </div>
                 <div>
-                  <p className="m-0">
-                    Name: {myWallet.name === "" ? "Total" : myWallet.name}
+                  <p className="m-0 fw-semibold" style={{fontSize: "14px"}}>
+                    {myWallet.name === "" ? "Total" : myWallet.name}
                   </p>
-                  <p className="m-0">
-                    Total:{" "}
+                  <p className="m-0" style={{fontSize: "14px"}}>
                     {new Intl.NumberFormat("vi-VN", {
                       style: "currency",
                       currency: "VND",
@@ -191,22 +190,10 @@ export default function MyHome() {
               </div>
             </div>
           </div>
-          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
           <div className="d-flex justify-content-end align-items-center col-6">
-            <BsCalendarDay
-              style={{
-                color: "gray",
-                width: "50px",
-                height: "30px",
-                marginRight: "10px",
-              }}
-            />
-            <RiFindReplaceLine
-              style={{ width: "100px", height: "30px", color: "gray" }}
-            />
-            {/* <Button style={{marginRight:'10px'}} > */}
+            <BsCalendarDay style={{ color: "gray", width: "25px", height: "25px" , marginRight: "25px"}} />
+            <RiFindReplaceLine style={{ color: "gray", width: "25px", height: "25px", marginRight: "25px"}} />
             <AddTransactionModal />
-            {/* </Button> */}
           </div>
         </Toolbar>
       </AppBar>
