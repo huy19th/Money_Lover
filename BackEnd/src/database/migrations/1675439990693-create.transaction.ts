@@ -23,13 +23,14 @@ export class CreateTableTransAction1675439990693 implements MigrationInterface {
         let fk_wallet_transaction = new TableForeignKey({
             columnNames: ['wallet_id'],
             referencedColumnNames: ['id'],
-            referencedTableName: 'wallet'
+            referencedTableName: 'wallet',
+            onDelete: 'CASCADE'
         });
 
         let fk_category_transaction = new TableForeignKey({
             columnNames: ['subcategory_id'],
             referencedColumnNames: ['id'],
-            referencedTableName: 'trans_subcate'
+            referencedTableName: 'trans_subcate',
         });
 
         await queryRunner.createForeignKeys(this.nameTable, [fk_wallet_transaction, fk_category_transaction]);
