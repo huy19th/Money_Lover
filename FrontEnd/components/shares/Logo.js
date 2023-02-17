@@ -1,7 +1,7 @@
 export default function Logo(){
     return(
-        <div style={{paddingTop:'50px', display: 'flex', alignItems: 'center'}}>
-            <svg data-v-0624972a="" xmlns="http://www.w3.org/2000/svg" width="1400" height="140" viewBox="0 0 230 130"
+        <div style={{paddingTop:'15px', display: 'flex', alignItems: 'center'}}>
+            <svg data-v-0624972a="" xmlns="http://www.w3.org/2000/svg" width="1400" height="130" viewBox="0 0 230 130"
                  className="logo-icon logo-desktop d-none d-sm-flex">
                 <g id="Group_883" data-name="Group 883" transform="translate(-598 -30)">
                     <g id="Group_3" data-name="Group 3" transform="translate(615 32)">
