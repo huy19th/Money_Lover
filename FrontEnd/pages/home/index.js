@@ -9,6 +9,8 @@ import {transactionActions} from "@/features/transaction/transactionSlice";
 
 export default function Home() {
 
+    const myTrans = useSelector(state => state.transaction.trans)
+
     const time = useSelector(state => state.time)
 
     const router = useRouter()
@@ -20,13 +22,11 @@ export default function Home() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (user.isLoggedIn) {
+        if (user.isLoggedIn && myTrans.length === 0) {
             async function fetchData() {
                 let wallets = (await axiosJWT.get('/wallet/info')).data
                 let transactions = (await axiosJWT.get('/transaction', {
                     params: {
-                        // year: new Date().getFullYear(),
-                        // month: new Date().getMonth()+1 < 10 ? `0${new Date().getMonth()+1}` : new Date().getMonth()+1
                         year: time.value.format('MM/YYYY').split('/')[1],
                         month: time.value.format('MM/YYYY').split('/')[0]
                     }
@@ -36,8 +36,12 @@ export default function Home() {
                 setChild(<MyHome/>)
             }
             fetchData()
-        } else {
+        }
+        if (!user.isLoggedIn) {
             router.push('/login')
+        }
+        if (user.isLoggedIn && myTrans.length !== 0) {
+            setChild(<MyHome/>)
         }
     }, [])
 

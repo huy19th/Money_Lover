@@ -19,8 +19,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
+import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -92,7 +94,7 @@ export default function AccountUser() {
 
   return (
     <div>
-      <FaUserCircle style={{ fontSize: "30px" }} onClick={handleClickOpen} />
+      <FaUserCircle style={{ fontSize: "25px" }} onClick={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"

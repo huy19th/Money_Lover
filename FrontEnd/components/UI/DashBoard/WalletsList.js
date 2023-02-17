@@ -110,12 +110,12 @@ export default function Wallets() {
                 <MenuItem onClick={() => chooseAllWallets(totalWallets)}>
                     <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                         <div>
-                            <img style={{width: '50px', marginRight: '8px'}}
+                            <img style={{width: '40px', marginRight: '8px'}}
                                  src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
                         </div>
                         <div>
-                            <p className='m-0'>Name: {totalWallets.name}</p>
-                            <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalWallets.balance)}</p>
+                            <p className='m-0 fw-semibold' style={{fontSize: "13px"}}>{totalWallets.name}</p>
+                            <p className='m-0 text-secondary' style={{fontSize: "13px"}}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(totalWallets.balance)}</p>
                         </div>
                     </div>
                 </MenuItem>
@@ -123,12 +123,12 @@ export default function Wallets() {
                     return <MenuItem onClick={() => chooseWallet(wallet)}>
                         <div style={{color: 'black', display: "flex", alignItems: "center"}}>
                             <div>
-                                <img style={{width: '50px', marginRight: '8px'}}
+                                <img style={{width: '40px', marginRight: '8px'}}
                                      src="https://static.moneylover.me/img/icon/ic_category_all.png" alt=""/>
                             </div>
                             <div>
-                                <p className='m-0'>Name: {wallet.name}</p>
-                                <p className='m-0'>Total: {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(wallet.balance)}</p>
+                                <p className='m-0 fw-semibold' style={{fontSize: "13px"}}>{wallet.name}</p>
+                                <p className='m-0 text-secondary' style={{fontSize: "13px"}}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(wallet.balance)}</p>
                             </div>
                         </div>
                     </MenuItem>
