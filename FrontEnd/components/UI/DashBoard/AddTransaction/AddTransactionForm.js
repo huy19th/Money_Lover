@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {useState} from "react";
 import {axiosJWT} from "@/configs/axios";
 import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
-import Button from "react-bootstrap/Button";
+import Button from "@mui/material/Button";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {transactionActions} from "@/features/transaction/transactionSlice";
@@ -176,14 +176,14 @@ export default function AddTransactionForm({ handleClose, data}) {
                                name="note" {...formik.getFieldProps('note')}
                     />
                 </Grid>
-                <Grid item xs={8} />
-                <Grid item xs={4}>
-                    <Button variant="secondary" style={{width: '45%'}} className="me-2"
+                <Grid item xs={9} />
+                <Grid item xs={3}>
+                    <Button variant="text" color="success" className="me-2"
                             onClick={handleClose}
                     >
-                        Close
+                        Cancel
                     </Button>
-                    <Button variant="primary" style={{width: '45%'}} type="submit">
+                    <Button variant="contained" color="success" type="submit">
                         Save
                     </Button>
                 </Grid>
