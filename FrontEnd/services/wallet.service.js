@@ -19,6 +19,9 @@ class WalletService {
     static updateWallet(values) {
         return axiosJWT.patch('/wallet', values);
     }
+    static deleteWallet(walletId) {
+        return axiosJWT.delete(`/wallet/${walletId}`);
+    }
 }
 
 export default WalletService;
