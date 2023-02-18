@@ -1,18 +1,20 @@
 import Grid from "@mui/material/Grid";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
-import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
-import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import Button from "@mui/material/Button";
 import CancelButton from "@/components/shares/CancelButton";
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import SnackBar from "@/components/shares/SnackBar";
-import {useState} from "react";
-import {useFormik} from "formik";
-import {axiosJWT} from "@/configs/axios";
-import {useDispatch, useSelector} from "react-redux";
-import {walletActions} from "@/features/wallet/walletSlice";
-import {transactionActions} from "@/features/transaction/transactionSlice";
+import { useState } from "react";
+import { useFormik } from "formik";
+import { axiosJWT } from "@/configs/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { walletActions } from "@/features/wallet/walletSlice";
+import { transactionActions } from "@/features/transaction/transactionSlice";
 
 export default function EditTransactionForm(props) {
 
@@ -105,65 +107,73 @@ export default function EditTransactionForm(props) {
 
     return (
         <form onSubmit={formik.handleSubmit}>
-            <Grid className='mt-1' container spacing={2}>
-                <Grid item xs={4}>
-                    <TextField
-                        id="outlined-read-only-input"
-                        label="Wallet"
-                        name='walletId'
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        {...formik.getFieldProps('walletId')}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField
-                        id="outlined-read-only-input"
-                        label="Category"
-                        name='subcategoryId'
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        {...formik.getFieldProps('subcategoryId')}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <TextField id="outlined-basic" label="Amount" variant="outlined" name="money"
-                               {...formik.getFieldProps('money')}
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <MobileDatePicker
-                            label="Date"
-                            inputFormat="MM/DD/YYYY"
-                            id="date"
-                            name="date"
-                            value={formik.values.date}
-                            onChange={value => {
-                                formik.setFieldValue('date', new Date(Date.parse(value)));
+            <DialogContent>
+                <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="Wallet"
+                            name='walletId'
+                            InputProps={{
+                                readOnly: true,
                             }}
-                            renderInput={(params) =>
-                                <TextField {...params} />
-                            }
+                            {...formik.getFieldProps('walletId')}
                         />
-                    </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            id="outlined-read-only-input"
+                            label="Category"
+                            name='subcategoryId'
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            {...formik.getFieldProps('subcategoryId')}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField id="outlined-basic" label="Amount" variant="outlined" name="money"
+                            {...formik.getFieldProps('money')}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={8}>
-                    <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth
-                               name="note" {...formik.getFieldProps('note')}
-                    />
+                <Grid className='mt-1' container spacing={2}>
+                    <Grid item xs={4}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <MobileDatePicker
+                                label="Date"
+                                inputFormat="MM/DD/YYYY"
+                                id="date"
+                                name="date"
+                                value={formik.values.date}
+                                onChange={value => {
+                                    formik.setFieldValue('date', new Date(Date.parse(value)));
+                                }}
+                                renderInput={(params) =>
+                                    <TextField {...params} />
+                                }
+                            />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth
+                            name="note" {...formik.getFieldProps('note')}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={8} />
-                <Grid item xs={4}>
-                    <CancelButton onClick={handleClose} text="Cancel"/>
-                    <Button variant="contained" color="success" type="submit" className="ms-2">
-                        Save
-                    </Button>
+            </DialogContent>
+            <DialogActions sx={{mb: 1}}>
+                <Grid container spacing={2}>
+                    <Grid item xs={8} />
+                    <Grid item xs={4}>
+                        <CancelButton onClick={handleClose} text="Cancel" />
+                        <Button variant="contained" color="success" type="submit" className="ms-2">
+                            Save
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message}/>
-        </form>
+            </DialogActions>
+            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message} />
+        </form >
     )
 }

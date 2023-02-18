@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
-import Modal from 'react-bootstrap/Modal';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import DialogTitle from '@mui/material/DialogTitle';

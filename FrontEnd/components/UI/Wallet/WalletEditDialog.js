@@ -2,10 +2,11 @@ import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Modal from 'react-bootstrap/Modal';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import CancelButton from '@/components/shares/CancelButton';
 import { Checkbox } from '@mui/material';
 import WalletService from '@/services/wallet.service';
@@ -74,12 +75,11 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
     }
 
     return (
-        <Modal show={true} onHide={handleClose} centered>
+        <Dialog onClose={handleClose} open={true}>
             <form onSubmit={handleSubmit}>
-                <Modal.Header>
-                    <Modal.Title>Edit Wallet</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+                <DialogTitle>Edit Wallet</DialogTitle>
+                <hr className="my-0" />
+                <DialogContent>
                     <FormControl fullWidth sx={{ mb: 3 }}>
                         <TextField id="outlined-basic" label="Name" variant="outlined" type="text"
                             name="name"
@@ -121,15 +121,14 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
                             </span>
                         </div>
                     </div>
-                </Modal.Body>
-
-                <Modal.Footer>
+                </DialogContent>
+                <DialogActions sx={{ mr: 3, my: 1 }}>
                     <CancelButton onClick={handleClose} text="Cancel" />
-                    <Button variant="contained" color="success" type="submit" disabled={!isValidated} sx={{ml: 2}}>
+                    <Button variant="contained" color="success" type="submit" disabled={!isValidated} sx={{ ml: 2 }}>
                         Save
                     </Button>
-                </Modal.Footer>
+                </DialogActions>
             </form>
-        </Modal>
+        </Dialog>
     );
 }
