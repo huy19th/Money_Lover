@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import CancelButton from '@/components/shares/CancelButton';
 import { Checkbox } from '@mui/material';
 import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,7 +41,7 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
             let oldName = wallet.name;
             let newName = event.target.value;
             let nameIsDuplicated = data.filter(item => item.name == newName)[0];
-            if (nameIsDuplicated && newName!= oldName) {
+            if (nameIsDuplicated && newName != oldName) {
                 return setIsValidated(false);
             }
         }
@@ -52,7 +53,7 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
                 if (newValues[key] != selectedWallet[key]) {
                     return setIsValidated(true);
                 }
-            } 
+            }
         }
         setIsValidated(false);
     }
@@ -85,9 +86,9 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
                             value={values.name}
                             onChange={handleChange}
                         />
-                        <span className="text-secondary" style={{"font-size": "12px"}}>Wallet name must be unique</span>
+                        <span className="text-secondary" style={{ "font-size": "12px" }}>Wallet name must be unique</span>
                     </FormControl>
-                    
+
                     <FormControl fullWidth sx={{ mb: 1 }}>
                         <TextField id="outlined-basic" label="Initial Balance" variant="outlined" type="number"
                             name="initialBalance"
@@ -123,10 +124,8 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button color="success" onClick={handleClose} sx={{ mr: 2 }}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" color="success" type="submit" disabled={!isValidated}>
+                    <CancelButton onClick={handleClose} text="Cancel" />
+                    <Button variant="contained" color="success" type="submit" disabled={!isValidated} sx={{ml: 2}}>
                         Save
                     </Button>
                 </Modal.Footer>

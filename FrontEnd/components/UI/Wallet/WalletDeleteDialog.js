@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Modal from 'react-bootstrap/Modal';
+import CancelButton from '@/components/shares/CancelButton';
 import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { walletActions } from '@/features/wallet/walletSlice';
@@ -12,7 +13,7 @@ export default function WalletDeleteDialog({ wallet, setShow, setShowDetail }) {
 
     const handleClose = () => setShow(false);
 
-    const handleDelete = async() => {
+    const handleDelete = async () => {
         dispatch(walletActions.resetWallet());
         await WalletService.deleteWallet(wallet.id);
         let wallets = (await WalletService.getAllWalletsOfUser()).data;
@@ -31,10 +32,8 @@ export default function WalletDeleteDialog({ wallet, setShow, setShowDetail }) {
                     You will also delete all of its transactions, budgets, events, bills and this action cannot be undone.
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="text" color="success" onClick={handleClose} sx={{ mr: 2 }}>
-                        Cancel
-                    </Button>
-                    <Button variant="contained" color="error" onClick={handleDelete}>
+                    <CancelButton onClick={handleClose} text="Cancel" />
+                    <Button variant="contained" color="error" onClick={handleDelete} sx={{ml: 2}}>
                         Delete
                     </Button>
                 </Modal.Footer>

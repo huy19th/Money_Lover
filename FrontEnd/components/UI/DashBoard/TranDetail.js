@@ -14,6 +14,7 @@ import {transactionActions} from "@/features/transaction/transactionSlice";
 import {useDispatch, useSelector} from "react-redux";
 import EditTransactionForm from "@/components/UI/DashBoard/EditTransaction/EditTransactionForm";
 import SnackBar from "@/components/shares/SnackBar";
+import CancelButton from '@/components/shares/CancelButton';
 import {useState} from "react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -153,13 +154,13 @@ export default function TranDetail(props) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseDeleteDialog}>No</Button>
-                    <Button onClick={handleDelete}>Yes</Button>
+                    <CancelButton onClick={handleCloseDeleteDialog} text="No" />
+                    <Button onClick={handleDelete} variant="contained" color="error">Yes</Button>
                 </DialogActions>
             </Dialog>
 
             {/*Edit Dialog*/}
-            <Dialog open={openEditDialog} onClose={handleCloseEditDialog}  fullWidth='sm'>
+            <Dialog open={openEditDialog} onClose={handleCloseEditDialog}  fullWidth='sm' maxWidth="sm">
                 <DialogTitle>Edit Transaction</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import CancelButton from '@/components/shares/CancelButton';
 import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { walletActions } from '@/features/wallet/walletSlice';
@@ -104,10 +105,8 @@ export default function AdjustBalanceDialog({ setShow, data, wallet , setSelecte
                         </FormControl>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button color="success" onClick={handleClose} sx={{mr: 2}}>
-                            Close
-                        </Button>
-                        <Button variant="contained" color="success" type="submit" disabled={!isValidated}>
+                        <CancelButton onClick={handleClose} text="Cancel" />
+                        <Button variant="contained" color="success" sx={{ml: 2}}type="submit" disabled={!isValidated}>
                             Save
                         </Button>
                     </Modal.Footer>

@@ -4,7 +4,8 @@ import TextField from "@mui/material/TextField";
 import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
-import Button from "react-bootstrap/Button";
+import Button from "@mui/material/Button";
+import CancelButton from "@/components/shares/CancelButton";
 import SnackBar from "@/components/shares/SnackBar";
 import {useState} from "react";
 import {useFormik} from "formik";
@@ -150,18 +151,14 @@ export default function EditTransactionForm(props) {
                     </LocalizationProvider>
                 </Grid>
                 <Grid item xs={8}>
-                    <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth sx={{ pr: 3 }}
+                    <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth
                                name="note" {...formik.getFieldProps('note')}
                     />
                 </Grid>
                 <Grid item xs={8} />
                 <Grid item xs={4}>
-                    <Button variant="secondary" style={{width: '45%'}} className="me-2"
-                            onClick={handleClose}
-                    >
-                        Close
-                    </Button>
-                    <Button variant="primary" style={{width: '45%'}} type="submit">
+                    <CancelButton onClick={handleClose} text="Cancel"/>
+                    <Button variant="contained" color="success" type="submit" className="ms-2">
                         Save
                     </Button>
                 </Grid>
