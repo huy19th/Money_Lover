@@ -1,6 +1,7 @@
 import Grid from "@mui/material/Grid";
 import * as Yup from "yup";
 import TextField from "@mui/material/TextField";
+import MaskedTextField from "@/components/shares/MaskedTextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
@@ -132,7 +133,7 @@ export default function EditTransactionForm(props) {
                         />
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField id="outlined-basic" label="Amount" variant="outlined" name="money"
+                        <MaskedTextField label="Amount" variant="outlined" name="money"
                             {...formik.getFieldProps('money')}
                         />
                     </Grid>
@@ -162,7 +163,7 @@ export default function EditTransactionForm(props) {
                     </Grid>
                 </Grid>
             </DialogContent>
-            <DialogActions sx={{mb: 1}}>
+            <DialogActions sx={{ mb: 1 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={8} />
                     <Grid item xs={4}>

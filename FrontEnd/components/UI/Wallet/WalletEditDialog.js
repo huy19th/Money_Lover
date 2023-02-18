@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import Modal from 'react-bootstrap/Modal';
 import TextField from '@mui/material/TextField';
+import MaskedTextField from '@/components/shares/MaskedTextField';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -88,9 +88,8 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
                         />
                         <span className="text-secondary" style={{ "font-size": "12px" }}>Wallet name must be unique</span>
                     </FormControl>
-
                     <FormControl fullWidth sx={{ mb: 1 }}>
-                        <TextField id="outlined-basic" label="Initial Balance" variant="outlined" type="number"
+                        <MaskedTextField label="Initial Balance" variant="outlined"
                             name="initialBalance"
                             value={values.initialBalance}
                             onChange={handleChange}

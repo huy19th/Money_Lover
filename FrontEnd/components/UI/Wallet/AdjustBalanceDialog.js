@@ -13,6 +13,7 @@ import CancelButton from '@/components/shares/CancelButton';
 import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { walletActions } from '@/features/wallet/walletSlice';
+import MaskedTextField from '@/components/shares/MaskedTextField';
 
 export default function AdjustBalanceDialog({ setShow, data, wallet, setSelectedWallet }) {
     const dispatch = useDispatch();
@@ -98,7 +99,7 @@ export default function AdjustBalanceDialog({ setShow, data, wallet, setSelected
                         </Select>
                     </FormControl>
                     <FormControl fullWidth sx={{ mb: 2 }}>
-                        <TextField id="outlined-basic" label="Current balance" variant="outlined" type="number"
+                        <MaskedTextField label="Current balance" variant="outlined" type="number"
                             name="balance"
                             value={values.balance}
                             onChange={handleChange}

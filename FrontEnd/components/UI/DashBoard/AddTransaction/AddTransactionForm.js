@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import MaskedTextField from '@/components/shares/MaskedTextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from "react-redux";
@@ -152,7 +153,7 @@ export default function AddTransactionForm({ handleClose, data }) {
                     </FormControl>
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField id="outlined-basic" label="Amount" variant="outlined" name="money" fullWidth
+                    <MaskedTextField label="Amount" variant="outlined" name="money" fullWidth="true"
                         {...formik.getFieldProps('money')}
                     />
                 </Grid>
@@ -168,7 +169,7 @@ export default function AddTransactionForm({ handleClose, data }) {
                                 formik.setFieldValue('date', new Date(Date.parse(value)));
                             }}
                             renderInput={(params) =>
-                                <TextField {...params} fullWidth/>
+                                <TextField {...params} fullWidth />
                             }
                         />
                     </LocalizationProvider>
@@ -180,7 +181,7 @@ export default function AddTransactionForm({ handleClose, data }) {
                 </Grid>
                 <Grid item xs={8} />
                 <Grid item xs={4}>
-                    <CancelButton onClick={handleClose} text={"Cancel"}/>
+                    <CancelButton onClick={handleClose} text={"Cancel"} />
                     <Button variant="contained" color="success" type="submit" className="ms-2">
                         Save
                     </Button>
