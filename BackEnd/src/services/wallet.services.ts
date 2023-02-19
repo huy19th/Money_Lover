@@ -110,6 +110,10 @@ class WalletServices extends BaseServices {
         return wallet
     }
 
+    static async deleteWallet(walletId: number): Promise<void> {
+        let wallet = await walletRepo.findOneBy({id: walletId});
+        await walletRepo.remove(wallet);
+    }
 }
 
 

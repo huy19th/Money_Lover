@@ -1,21 +1,7 @@
 import BaseController from "./base.controller";
-
 import {Request, Response} from "express";
-import WalletModel from "../models/wallet.model";
-
-import User from "../models/user.model"
-import dataSource from "../database/data-source";
-import TransactionModel from "../models/transaction.model";
-import SubCate from "../models/trans.subcate.model";
-import transactionType from "../models/trans.type.model";
 import TransactionServices from "../services/transaction.services";
 import WalletServices from "../services/wallet.services";
-
-let walletRepo = dataSource.getRepository(WalletModel);
-let userRepo = dataSource.getRepository(User);
-let subCateRepo = dataSource.getRepository(SubCate);
-let transactionRepo = dataSource.getRepository(TransactionModel);
-let transactionTypeRepo = dataSource.getRepository(transactionType);
 
 class WalletController extends BaseController {
 
@@ -128,6 +114,17 @@ class WalletController extends BaseController {
         catch(err){
             res.status(500).json(err)
         }
+    }
+
+    static async deleteWallet(req: Request, res: Response) {
+            let walletId = Number(req.params.walletId);
+            WalletServices.deleteWallet(walletId)
+            .then(() => {
+                res.status(200).json({message: "Delete wallet successfully"});
+            })
+            .catch(err => {
+                res.status(500).json({message: err.message || this.defaultErrorMessage});
+            })
     }
 
 }

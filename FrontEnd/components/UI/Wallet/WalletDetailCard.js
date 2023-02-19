@@ -8,14 +8,14 @@ import WalletService from "@/services/wallet.service";
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance}) {
+function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance, setShowDelete}) {
     const {name, balance, includeTotal, active} = wallet;
     
     const handleClose = () => {
         setShowDetail(false);
     }
-    const handleClickOpen = () => {
-        setOpen(true);
+    const showDelete = () => {
+        setShowDelete(true);
     };
     const showEdit = () => {
         setShowEdit(true);
@@ -33,7 +33,7 @@ function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance}) 
                             <h5 className='m-0 ms-3'>Wallet Details</h5>
                         </div>
                         <div className="d-flex align-items-center">
-                            <Button color="error" onClick={handleClickOpen}>Delete</Button>
+                            <Button color="error" onClick={showDelete}>Delete</Button>
                             <Button color="success" onClick={showEdit}>Edit</Button>
                         </div>
                     </div>
