@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from '@mui/material/Button';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import AddTransactionForm from "@/components/UI/Dashboard/AddTransaction/AddTransactionForm";
-import {axiosJWT} from "@/configs/axios";
+import { axiosJWT } from "@/configs/axios";
 
 function ControlledTabs({ handleCLose }) {
     const [key, setKey] = useState('expense');
@@ -48,18 +51,15 @@ export default function AddTransactionModal() {
 
     return (
         <>
-            <Button style={{width:'150px'}} variant="primary" onClick={handleShow}>
+            <Button variant="contained" color="success" onClick={handleShow}>
                 Add Transaction
             </Button>
-
-            <Modal show={show} onHide={handleClose} size="lg" centered>
-                <Modal.Header closeButton className="border-0">
-                    <Modal.Title>Add Transaction</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
+            <Dialog onClose={handleClose} open={show}>
+                <DialogTitle>Add Transaction</DialogTitle>
+                <DialogContent>
                     <ControlledTabs handleCLose={handleClose} />
-                </Modal.Body>
-            </Modal>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

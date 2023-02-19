@@ -21,6 +21,9 @@ import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
+import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
+
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -92,50 +95,41 @@ export default function AccountUser() {
 
   return (
     <div>
-      <FaUserCircle style={{ fontSize: "30px" }} onClick={handleClickOpen} />
+      <FaUserCircle style={{ fontSize: "25px" }} onClick={handleClickOpen} />
       <BootstrapDialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={handleClose}
-        >
-          <div>
-            <Row>
-              <Col>
-                <h3>My account</h3>
-              </Col>
-              <Col style={{ textAlign: "right", marginRight: "30px" }}>
-                <Button color="success" onClick={logOut}>
-                  <b style={{ fontSize: "18px" }}>SIGN OUT</b>
-                </Button>
-              </Col>
-            </Row>
+
+        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
+          <div style={{display: "flex", alignItems: "center", padding: '20px'}}>
+            <CloseIcon onClick={handleClose} style={{cursor: "pointer"}}/>
+            <h3 className='m-0 ms-2'>My account</h3>
           </div>
-        </BootstrapDialogTitle>
+          <div style={{padding: '20px'}}>
+            <Button color="success" onClick={logOut}>
+              <b style={{ fontSize: "18px" }}>SIGN OUT</b>
+            </Button>
+          </div>
+        </div>
+
         <DialogContent
           style={{ padding: "0px", justifyItems: "center" }}
           dividers
         >
           <div style={{ marginTop: "20px" }}>
-            <Row>
-              <Col sm={4}>
-                <Avatar
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    marginLeft: "50px",
-                  }}
-                  src="/broken-image.jpg"
-                />
-              </Col>
-              <Col>
-                <p>{user.name}</p>
-                <p>{user.email}</p>
-              </Col>
-            </Row>
+
+            <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
+              <div>
+                {/*<MyAvatar/>*/}
+              </div>
+              <div>
+                <p className='m-0'>{user.name}</p>
+                <p className='m-0'>{user.email}</p>
+              </div>
+            </div>
+
             <Row>
               <Col style={{ textAlign: "right", marginRight: "30px" }}>
                 <Link
@@ -143,7 +137,7 @@ export default function AccountUser() {
                   href="#"
                   onClick=""
                 >
-                  <ChangePassword />
+                  <ChangePassword/>
                 </Link>
               </Col>
             </Row>
@@ -155,13 +149,9 @@ export default function AccountUser() {
             alt=""
           />
           <DialogContent>Devices (1/5)</DialogContent>
-          {/*<DialogContent></DialogContent>*/}
+
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            <b>Cancel</b>
-          </Button>
-        </DialogActions>
+
       </BootstrapDialog>
     </div>
   );

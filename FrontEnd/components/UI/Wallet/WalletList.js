@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import AdjustBalanceDialog from './AdjustBalanceDialog';
 import WalletDetailCard from './WalletDetailCard';
 import WalletEditDialog from './WalletEditDialog';
+import WalletDeleteDialog from './WalletDeleteDialog';
 
 function ListItems({ data, setShowDetail, setSelectedWallet, include }) {
 
@@ -21,13 +22,13 @@ function ListItems({ data, setShowDetail, setSelectedWallet, include }) {
     }, [data])
 
     return (
-        <Table bordered hover>
+        <Table bordered hover className="mb-0">
             <tbody>
                 {
                     data.length ?
                         data.map(item =>
                             // <tr>
-                            <tr className={item.includeTotal == include ? "" : "d-none"}>
+                            <tr>
                                 <td key={item.id} className="ps-3" onClick={() => selectWallet(item.id)}>
                                     <Row>
                                         <Col xs={1} className="d-flex align-items-center me-3">
@@ -55,14 +56,17 @@ function ListItems({ data, setShowDetail, setSelectedWallet, include }) {
 
 export default function WalletLists() {
     const wallets = useSelector(state => state.wallet.wallets);
-    console.log(wallets)
-
+    let walletsIncludeTotal = wallets.filter(item => item.includeTotal == true);
+    let walletsNotIncludeTotal = wallets.filter(item => item.includeTotal == false);
     const [showDetail, setShowDetail] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showBalance, setShowBalance] = useState(false);
+    const [showDelete, setShowDelete] = useState(false);
     const [selectedWallet, setSelectedWallet] = useState({});
 
     useEffect(() => {
+        walletsIncludeTotal = wallets.filter(item => item.includeTotal == true);
+        walletsNotIncludeTotal = wallets.filter(item => item.includeTotal == false);
     }, [wallets])
 
     return (
@@ -71,7 +75,7 @@ export default function WalletLists() {
                 <Card style={{ width: '100%' }}>
                     <Card.Header className="ps-4">Included In Total</Card.Header>
                     <ListItems
-                        data={wallets}
+                        data={walletsIncludeTotal}
                         showDetail={showDetail}
                         setShowDetail={setShowDetail}
                         selectedWallet={selectedWallet}
@@ -80,7 +84,7 @@ export default function WalletLists() {
                     />
                     <Card.Header className="ps-4">Excluded In Total</Card.Header>
                     <ListItems
-                        data={wallets}
+                        data={walletsNotIncludeTotal}
                         showDetail={showDetail}
                         setShowDetail={setShowDetail}
                         selectedWallet={selectedWallet}
@@ -96,6 +100,7 @@ export default function WalletLists() {
                         setShowDetail={setShowDetail}
                         setShowEdit={setShowEdit}
                         setShowBalance={setShowBalance}
+                        setShowDelete={setShowDelete}
                     />
                     : null
             }
@@ -114,6 +119,14 @@ export default function WalletLists() {
                         data={wallets}
                         setShow={setShowBalance}
                         setSelectedWallet={setSelectedWallet}
+                    />
+                    : null
+            }
+            {
+                showDelete ?
+                    <WalletDeleteDialog wallet={selectedWallet}
+                        setShow={setShowDelete}
+                        setShowDetail={setShowDetail}
                     />
                     : null
             }
