@@ -229,7 +229,7 @@ export default function MyHome() {
               </ListItemButton>
             </Link>
           </ListItem>
-          <ListItem key="Account" disablePadding sx={{ display: "block" }}>
+          <ListItem key="Account" style={{ color: "gray" }} disablePadding sx={{ display: "block" }}>
               <ListItemButton sx={ListItemButtonStyle}>
                 <ListItemIcon sx={ListItemIconStyle}>
                   <AccountUser />

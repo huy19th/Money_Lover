@@ -52,7 +52,9 @@ class TransactionServices extends BaseServices {
                     }
                     arr.push(obj)
                 }
-                return arr
+                return arr.sort((a: any, b: any) => {
+                    return new Date(b.date).valueOf() - new Date(a.date).valueOf()
+                })
             })
     }
 
@@ -94,7 +96,9 @@ class TransactionServices extends BaseServices {
                     }
                     arr.push(obj)
                 }
-                return arr
+                return arr.sort((a: any, b: any) => {
+                    return new Date(b.date).valueOf() - new Date(a.date).valueOf()
+                })
             })
     }
 

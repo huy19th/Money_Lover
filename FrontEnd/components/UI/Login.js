@@ -1,17 +1,17 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import {MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBInput, MDBRow} from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit';
 import Link from "next/link";
-import {FaFacebook, FaGoogle} from "react-icons/fa";
-import {useFormik} from 'formik';
+import { FaFacebook, FaGoogle } from "react-icons/fa";
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Logo from "@/components/shares/Logo";
-import {myAxios} from "@/configs/axios";
+import { myAxios } from "@/configs/axios";
 import useRouter from 'next/router';
-import {authActions} from "@/features/auth/authSlice";
-import {useDispatch} from "react-redux";
+import { authActions } from "@/features/auth/authSlice";
+import { useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
-import {GoogleOAuthProvider} from "@react-oauth/google";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import MyGoogleButton from "@/components/shares/GoogleButton";
 
 const Login = () => {
@@ -45,63 +45,64 @@ const Login = () => {
                     }))
                     router.push('/home')
                 }).catch(err => {
-                console.log(err)
-            })
+                    console.log(err)
+                })
         }
     })
     return (
         <GoogleOAuthProvider clientId='207613247758-us4rbch893j544l41v682drcogd6tdoc.apps.googleusercontent.com'>
-            <MDBContainer style={{height:'100%',backgroundColor:'lightgray'}} fluid>
+            <MDBContainer style={{ height: '110vh', backgroundColor: 'lightgray' }} fluid>
                 <MDBRow className='d-flex justify-content-center align-items-center'>
-                    <MDBCol style={{backgroundColor: 'lightgray', height: "100vh"}} col='12'>
-                        <div style={{backgroundColor: '#00710f', height: '350px', width: "100%"}}>
-                            <Logo/>
+                    <MDBCol style={{ backgroundColor: 'lightgray', height: "100vh", padding: "0px" }} col='12'>
+                        <div style={{ backgroundColor: '#00710f', height: '350px', width: "100%" }}>
+                            <Logo />
                         </div>
-                        <form onSubmit={formik.handleSubmit}>
-                            <MDBCard className='bg-white mx-auto'
-                                     style={{borderRadius: '1rem', maxWidth: '700px',zIndex:999, top: "-120px"}}>
-                                <MDBCardBody className='p-5 w-100 d-flex flex-column'>
-                                    <MDBRow>
-                                        <h2 className="fw-bold mb-2 text-center">Log In</h2>
+                        <MDBCard className='bg-white mx-auto'
+                            style={{ borderRadius: '1rem', maxWidth: '700px', zIndex: 999, top: "-185px" }}>
+                            <MDBCardBody className='px-5 py-5 w-100 d-flex flex-column'>
+                                <MDBRow>
+                                    <h2 className="fw-bold mb-3 text-center">Log In</h2>
 
-                                        <MDBCol style={{marginTop: '40px'}}>
-                                            <p>Using social networking accounts</p>
+                                    <MDBCol className="mt-4">
+                                        <p>Using social networking accounts</p>
 
-                                            <MyGoogleButton/>
+                                        <MyGoogleButton />
 
-                                            <Button style={{borderWidth: '2px'}} variant='outline-primary'
-                                                    className="mb-4 w-100 d-flex align-items-center" size="lg">
-                                                <FaFacebook style={{marginRight: '19px'}}/>
-                                                Connect with facebook
-                                            </Button>
-                                        </MDBCol>
-                                        <MDBCol>
-                                            <p className="text-white-50 mb-3">Please enter your login and password!</p>
+                                        <Button style={{ borderWidth: '2px' }} variant='outline-primary'
+                                            className="mb-4 w-100 d-flex align-items-center" size="lg">
+                                            <FaFacebook style={{ marginRight: '19px' }} />
+                                            Connect with facebook
+                                        </Button>
+                                    </MDBCol>
+                                    <MDBCol className="mt-4">
+                                        <form onSubmit={formik.handleSubmit}>
+                                            {/* <p className="text-white-50 mb-3">Please enter your login and password!</p> */}
                                             <p>Using Money Lover account</p>
                                             <MDBInput wrapperClass='mb-2 w-100' placeholder='Email' id='email'
-                                                      type='email' name='email' onChange={formik.handleChange}
-                                                      value={formik.values.email} size="lg"/>
-                                            {formik.errors.email && formik.touched.email && (<p style={{color:'red'}}>{formik.errors.email}</p>)}
+                                                type='email' name='email' onChange={formik.handleChange}
+                                                value={formik.values.email} size="lg" autoFocus />
+                                            {formik.errors.email && formik.touched.email && (<p style={{ color: 'red' }}>{formik.errors.email}</p>)}
                                             <MDBInput wrapperClass='mb-2 w-100' placeholder="Password" id='password'
-                                                      type='password' name='password' onChange={formik.handleChange}
-                                                      value={formik.values.password} size="lg"/>
+                                                type='password' name='password' onChange={formik.handleChange}
+                                                value={formik.values.password} size="lg" />
                                             {formik.errors.password && formik.touched.password && (
-                                                <p style={{color:'red'}}>{formik.errors.password}</p>)}
-                                            <Link style={{textAlign: 'center', textDecoration: 'none'}}
-                                                  href="#">Forgot password?</Link>
-                                            <br/>
-                                            <Button type='submit' style={{marginTop: '20px', width: '300px'}} variant="success" size='lg'>
+                                                <p style={{ color: 'red' }}>{formik.errors.password}</p>)}
+                                            <Link style={{ textAlign: 'center', textDecoration: 'none' }}
+                                                href="#">Forgot password?</Link>
+                                            <br />
+                                            <Button type='submit' style={{ marginTop: '20px', width: '300px' }} variant="success" size='lg'>
                                                 Log In
                                             </Button>
-                                            <br/>
-                                            <p style={{textAlign: 'center', textDecoration: 'none', marginTop: '10px'}}>Have you
-                                                an
-                                                account? <Link href="/register"> Register</Link></p>
-                                        </MDBCol>
-                                    </MDBRow>
-                                </MDBCardBody>
-                            </MDBCard>
-                        </form>
+                                            <br />
+                                            <p style={{ textAlign: 'center', textDecoration: 'none', marginTop: '10px' }}>
+                                                Don't have an account?
+                                                <Link href="/register"> Register</Link>
+                                            </p>
+                                        </form>
+                                    </MDBCol>
+                                </MDBRow>
+                            </MDBCardBody>
+                        </MDBCard>
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>

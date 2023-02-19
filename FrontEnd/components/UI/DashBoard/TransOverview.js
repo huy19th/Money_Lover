@@ -38,6 +38,19 @@ const TransOverview = () => {
 
     //
 
+
+    let inflowByTime = 0;
+    let outflowByTime = 0;
+    myTrans.map(trans => {
+        trans.transOfDate.map(tran => {
+            if (tran.type_name === 'Expenese') {
+                outflowByTime += tran.money
+            } else {
+                inflowByTime += tran.money
+            }
+        })
+    })
+
     //
 
     // const [tranDetail, setTranDetail] = useState('')
@@ -87,13 +100,15 @@ const TransOverview = () => {
                                                 </Col>
                                                 <Col>
 
-                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>
-                                                    <p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>
+                                                    {/*<p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>*/}
+                                                    {/*<p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>*/}
+                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflowByTime)}</p>
+                                                    <p style={{color:'red',marginLeft:'124px'}}>- {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflowByTime)}</p>
                                                     <p>
                                                         <hr style={{width: '120px', marginLeft: '106px'}}/>
                                                     </p>
-                                                    <p style={{marginLeft:'134px'}}>{myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>
-
+                                                    {/*<p style={{marginLeft:'134px'}}>{myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>*/}
+                                                    <p style={{marginLeft:'134px'}}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflowByTime-outflowByTime)}</p>
                                                 </Col>
                                                 <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                                             </Row>
