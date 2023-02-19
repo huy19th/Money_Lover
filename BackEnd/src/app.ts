@@ -42,24 +42,24 @@ class App {
     this.app.use(
       cookieSession({
         name: "session",
-        keys: ["case-md6"],
-        maxAge: 24 * 60 * 60 * 100,
+        keys: [this.appConfig.sessionKey],
+        maxAge: this.appConfig.sessionMaxAge,
       })
     );
     this.app.use(
       cors({
         credentials: true,
-        origin: "http://localhost:3000",
+        origin: this.appConfig.baseURL,
         methods: ["POST", "PUT", "PATCH", "GET", "OPTIONS", "HEAD", "DELETE"],
       })
     );
     this.app.use("/api/auth", AuthRouter);
     this.app.use(AuthMiddleware.checkAuthentication);
+    this.app.use("/api/wallet", WalletRouter);
     this.app.use("/api/transaction-subcategory", TransSubCateRouter);
     this.app.use("/api/transaction-category", TransCateRouter);
     this.app.use("/api/user", UserRouter);
     this.app.use("/api/transaction", TransactionRouter);
-    this.app.use("/api/wallet", WalletRouter);
     this.app.use("/api/type", TransTypeRouter);
   }
 

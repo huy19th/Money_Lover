@@ -2,7 +2,7 @@ import { axiosJWT } from "@/configs/axios";
 
 class WalletService {
     static getAllWalletsOfUser() {
-        return axiosJWT.get('/wallet');
+        return axiosJWT.get('/wallet/info');
     }
     static getWalletsIncludedInTotal() {
         return axiosJWT.get('/wallet/included-in-total/true');
@@ -15,6 +15,9 @@ class WalletService {
     }
     static adjustBalance({walletId, balance}) {
         return axiosJWT.patch('/wallet/balance', {walletId, balance});
+    }
+    static updateWallet(values) {
+        return axiosJWT.patch('/wallet', values);
     }
 }
 

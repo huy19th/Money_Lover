@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { useState } from 'react';
+import Button from '@mui/material/Button';
 import Modal from 'react-bootstrap/Modal';
 import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
@@ -7,12 +7,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import WalletService from '@/services/wallet.service';
+import { useDispatch, useSelector } from 'react-redux';
+import { walletActions } from '@/features/wallet/walletSlice';
 
-export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
-
+export default function AdjustBalanceDialog({ setShow, data, wallet , setSelectedWallet}) {
+    const dispatch = useDispatch();
+    const user = useSelector(state => state.auth).currentUser;
     const [values, setValues] = useState({
-        walletId: selectedItem.id,
-        balance: selectedItem.balance,
+        walletId: wallet.id,
+        balance: wallet.balance,
     })
 
     const [isValidated, setIsValidated] = useState(false);
@@ -50,10 +53,17 @@ export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
         }
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = event => {
+        event.preventDefault();
         WalletService.adjustBalance(values)
         .then(res => {
             console.log(res);
+            WalletService.getAllWalletsOfUser(user.id)
+            .then(res => {
+                let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                setSelectedWallet(selectedWallet);
+                dispatch(walletActions.getWallets(res.data));
+            })
             handleClose();
         })
     }
@@ -94,11 +104,11 @@ export default function AdjustBalanceDialog({ setShow, data, selectedItem }) {
                         </FormControl>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button variant="secondary" onClick={handleClose}>
+                        <Button color="success" onClick={handleClose} sx={{mr: 2}}>
                             Close
                         </Button>
-                        <Button variant="primary" type="submit" disabled={!isValidated}>
-                            Save Changes
+                        <Button variant="contained" color="success" type="submit" disabled={!isValidated}>
+                            Save
                         </Button>
                     </Modal.Footer>
                 </form>
