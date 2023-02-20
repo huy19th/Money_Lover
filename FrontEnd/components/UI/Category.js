@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import AddSubCategoryForm from "@/components/UI/Category/AddSubCategory/AddSubCategoryForm";
+import SubCateAddDiolog from "@/components/UI/Category/SubCateAddDiolog";
 
 export default function Category() {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ export default function Category() {
                 </h5>
               </div>
             </div>
-            <AddSubCategoryForm style={{ float: "right" }} />
+            <SubCateAddDiolog style={{ float: "right" }} />
           </Toolbar>
         </AppBar>
         <Container style={{ marginTop: "30px" }}>

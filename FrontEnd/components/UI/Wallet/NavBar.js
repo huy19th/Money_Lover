@@ -8,7 +8,7 @@ import WestIcon from "@mui/icons-material/West";
 import { useRouter } from "next/router";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Button from "@mui/material/Button";
-import AddWalletForm from "@/components/UI/Wallet/AddWalletForm";
+import WalletAddDiolog from "@/components/UI/Wallet/WalletAddDiolog";
 
 export default function SimpleAppBar() {
   const router = useRouter();
@@ -32,9 +32,9 @@ export default function SimpleAppBar() {
             </Typography>
           </div>
           <div>
-            <AddWalletForm variant="contained" color="success">
+            <WalletAddDiolog variant="contained" color="success">
               ADD WALLET
-            </AddWalletForm>
+            </WalletAddDiolog>
           </div>
         </Toolbar>
       </AppBar>
