@@ -17,8 +17,8 @@ class AuthServices extends BaseServices {
         user.password = await bcrypt.hash(password, 10);
         user.name = name;
         user.image = image;
-        user.googleId = googleId
-        user.refreshToken = refreshToken
+        user.googleId = googleId;
+        user.refreshToken = refreshToken;
         await userRepo.save(user);
         return user
     }
@@ -31,6 +31,9 @@ class AuthServices extends BaseServices {
         let match = await bcrypt.compare(password, user.password);
         if (!match) {
             throw new Error("Wrong email or password");
+        }
+        if (!user.active) {
+            throw new Error("Please verify your email to login");
         }
         let accessToken = this.generateAccessToken(user);
         let refreshToken = this.generateRefreshToken(user);
