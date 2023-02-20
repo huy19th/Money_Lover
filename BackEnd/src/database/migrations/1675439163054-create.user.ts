@@ -17,7 +17,8 @@ export class CreateTableUser1675439163054 implements MigrationInterface {
                     { name: 'google_id', type: 'nvarchar(500)', isNullable: true },
                     { name: 'facebook_id', type: 'nvarchar(500)', isNullable: true },
                     { name: 'github_id', type: 'nvarchar(500)', isNullable: true },
-                    { name: 'refresh_token', type: 'longtext', isNullable: true }
+                    { name: 'refresh_token', type: 'longtext', isNullable: true },
+                    { name: 'active', type: 'boolean', isNullable: false, default: false}
                 ],
             }),
         )

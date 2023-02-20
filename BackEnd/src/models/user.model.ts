@@ -44,10 +44,11 @@ export class User {
         //@ts-ignore
     transCates: TransCate[];
 
-
     @Column({name: "refresh_token", type: "longtext", nullable: true})
     refreshToken: string;
 
+    @Column({name: "active", type: "boolean", nullable: false, default: false})
+    active: boolean
 }
 
 export default User;
