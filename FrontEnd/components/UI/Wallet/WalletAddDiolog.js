@@ -58,7 +58,9 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function WalletAddDiolog() {
-  const [open, setOpen] = React.useState(false);
+  const wallets = useSelector(state => state.wallet.wallets)
+  const [open, setOpen] = React.useState(wallets.length === 0 ? true : false);
+
   const dispatch = useDispatch();
   const handleClickOpen = () => {
     setOpen(true);
