@@ -4,20 +4,22 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
+import MaskedTextField from '@/components/shares/MaskedTextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {useDispatch, useSelector} from "react-redux";
-import {useState} from "react";
-import {axiosJWT} from "@/configs/axios";
-import {MobileDatePicker} from "@mui/x-date-pickers/MobileDatePicker";
-import Button from "react-bootstrap/Button";
-import {useFormik} from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
+import { axiosJWT } from "@/configs/axios";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import Button from "@mui/material/Button";
+import { useFormik } from "formik";
 import * as Yup from "yup";
-import {transactionActions} from "@/features/transaction/transactionSlice";
+import { transactionActions } from "@/features/transaction/transactionSlice";
 import SnackBar from "@/components/shares/SnackBar";
-import {walletActions} from "@/features/wallet/walletSlice";
+import { walletActions } from "@/features/wallet/walletSlice";
+import CancelButton from '@/components/shares/CancelButton';
 
-export default function AddTransactionForm({ handleClose, data}) {
+export default function AddTransactionForm({ handleClose, data }) {
     const time = useSelector(state => state.time)
     const [open, setOpen] = useState(false);
     const [snackbar, setSnackbar] = useState({
@@ -144,14 +146,15 @@ export default function AddTransactionForm({ handleClose, data}) {
                                             })}
                                         </optgroup>
                                     </>
-                                )}
+                                )
+                            }
                             )}
                         </Select>
                     </FormControl>
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField id="outlined-basic" label="Amount" variant="outlined" name="money"
-                               {...formik.getFieldProps('money')}
+                    <MaskedTextField label="Amount" variant="outlined" name="money" fullWidth="true"
+                        {...formik.getFieldProps('money')}
                     />
                 </Grid>
                 <Grid item xs={4}>
@@ -166,29 +169,25 @@ export default function AddTransactionForm({ handleClose, data}) {
                                 formik.setFieldValue('date', new Date(Date.parse(value)));
                             }}
                             renderInput={(params) =>
-                                <TextField {...params} />
+                                <TextField {...params} fullWidth />
                             }
                         />
                     </LocalizationProvider>
                 </Grid>
                 <Grid item xs={8}>
-                    <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth sx={{ pr: 3 }}
-                               name="note" {...formik.getFieldProps('note')}
+                    <TextField id="outlined-basic" label="Note" variant="outlined" fullWidth
+                        name="note" {...formik.getFieldProps('note')}
                     />
                 </Grid>
                 <Grid item xs={8} />
                 <Grid item xs={4}>
-                    <Button variant="secondary" style={{width: '45%'}} className="me-2"
-                            onClick={handleClose}
-                    >
-                        Close
-                    </Button>
-                    <Button variant="primary" style={{width: '45%'}} type="submit">
+                    <CancelButton onClick={handleClose} text={"Cancel"} />
+                    <Button variant="contained" color="success" type="submit" className="ms-2">
                         Save
                     </Button>
                 </Grid>
             </Grid>
-            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message}/>
+            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message} />
         </form>
     )
 }

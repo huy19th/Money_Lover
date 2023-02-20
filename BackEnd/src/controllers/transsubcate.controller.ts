@@ -43,17 +43,6 @@ class TransSubCateController extends BaseController {
 
         }
     }
-    // static async delete(req: Request, res: Response) {
-    //     try {
-    //         let tranCateId = +req.params.subCateId
-    //         console.log(tranCateId)
-    //         await TransSubCateServices.delete(tranCateId);
-    //         res.status(200).json({message:'success'})
-    //     }
-    //     catch (e) {
-    //         res.status(500).json({message: e.message});
-    //     }
-    // }
 
 }
 

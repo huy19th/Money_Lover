@@ -1,4 +1,4 @@
-import NavBar from "@/components/shares/NavBar";
+import NavBar from "@/components/UI/Wallet/NavBar";
 import WalletList from "@/components/UI/Wallet/WalletList";
 
 export default function Wallet() {

@@ -23,17 +23,21 @@ export default function Home() {
         if (user.isLoggedIn) {
             async function fetchData() {
                 let wallets = (await axiosJWT.get('/wallet/info')).data
-                let transactions = (await axiosJWT.get('/transaction', {
-                    params: {
-                        // year: new Date().getFullYear(),
-                        // month: new Date().getMonth()+1 < 10 ? `0${new Date().getMonth()+1}` : new Date().getMonth()+1
-                        year: time.value.format('MM/YYYY').split('/')[1],
-                        month: time.value.format('MM/YYYY').split('/')[0]
-                    }
-                })).data
-                dispatch(walletActions.getWallets(wallets))
-                dispatch(transactionActions.getTrans(transactions))
-                setChild(<MyHome/>)
+                if(wallets.length===0){
+                    router.push('/wallets');
+                } else {
+                    let transactions = (await axiosJWT.get('/transaction', {
+                        params: {
+                            // year: new Date().getFullYear(),
+                            // month: new Date().getMonth()+1 < 10 ? `0${new Date().getMonth()+1}` : new Date().getMonth()+1
+                            year: time.value.format('MM/YYYY').split('/')[1],
+                            month: time.value.format('MM/YYYY').split('/')[0]
+                        }
+                    })).data
+                    dispatch(walletActions.getWallets(wallets))
+                    dispatch(transactionActions.getTrans(transactions))
+                    setChild(<MyHome/>)
+                }
             }
             fetchData()
         } else {

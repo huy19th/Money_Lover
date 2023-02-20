@@ -230,15 +230,13 @@ export default function MyHome() {
               </ListItemButton>
             </Link>
           </ListItem>
-          <ListItem key="Account" disablePadding sx={{ display: "block" }}>
-            <Link style={{ color: "gray" }} href="/#" className="text-decoration-none">
+          <ListItem key="Account" style={{ color: "gray" }} disablePadding sx={{ display: "block" }}>
               <ListItemButton sx={ListItemButtonStyle}>
                 <ListItemIcon sx={ListItemIconStyle}>
                   <AccountUser />
                 </ListItemIcon>
                 <ListItemText primary="Account" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
-            </Link>
           </ListItem>
           <ListItem key="Wallets" disablePadding sx={{ display: "block" }}>
             <Link style={{ color: "gray" }} href="/wallets" className="text-decoration-none">
