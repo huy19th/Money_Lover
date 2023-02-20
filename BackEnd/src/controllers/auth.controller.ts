@@ -44,7 +44,7 @@ class AuthController extends BaseController {
         try {
             let { oldPassword, newPassword } = req.body;
             await AuthServices.resetPassword(req.user, oldPassword, newPassword);
-            res.status(200).json({message: 'Reset password successfully!'})
+            res.status(200).json({ message: 'Reset password successfully!' })
         }
         catch (err) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage })
@@ -67,6 +67,17 @@ class AuthController extends BaseController {
             accessToken: accessToken,
             refreshToken: refreshToken,
         });
+    }
+
+    static async verifyEmail(req: Request, res: Response) {
+        try {
+            let hash = req.params.hash;
+            await AuthServices.verifyEmail(hash);
+            res.status(200).json({ message: "Email verified" });
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
     }
 
 }

@@ -57,8 +57,7 @@ class AuthServices extends BaseServices {
         }
     }
 
-    static async sendEmailVerificationRequest(email) {
-        console.log(email);
+    static async sendEmailVerificationRequest(email: string): Promise<void> {
         let hash = await bcrypt.hash(email, 10);
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
@@ -96,6 +95,20 @@ class AuthServices extends BaseServices {
             else {
                 console.log('Message sent: ' + info.response);
             }
+        })
+    }
+
+    static async verifyEmail(hash: string): Promise<void> {
+        let users = await userRepo.findBy({
+            active: false
+        })
+        users.forEach(user => {
+            bcrypt.compare(user.email, hash, (err, result) => {
+                if (result) {
+                    user.active = true;
+                    return userRepo.save(user);
+                }
+            })
         })
     }
 }
