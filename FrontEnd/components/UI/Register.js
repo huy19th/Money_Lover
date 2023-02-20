@@ -36,8 +36,12 @@ const Register = () => {
                         .required('Password is required'),
         }), onSubmit: async (values) => {
             try {
-                await axios.post('http://localhost:8000/api/auth/register', values)
-                router.push('/login')
+                let res = await axios.post('http://localhost:8000/api/auth/register', values);
+                setSnackbar({
+                    severity: "success",
+                    message: res.data.message
+                });
+                setOpen(true);
             }
             catch (err) {
                 setSnackbar({

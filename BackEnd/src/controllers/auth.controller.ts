@@ -57,6 +57,7 @@ class AuthController extends BaseController {
             req.body.password = BaseController.getRandomString();
             req.body.image = req.body.picture;
             req.body.googleId = req.body.sub;
+            req.body.active = true;
             user = await AuthServices.register(req.body);
         }
         let accessToken = BaseServices.generateAccessToken(user);
@@ -71,8 +72,7 @@ class AuthController extends BaseController {
 
     static async verifyEmail(req: Request, res: Response) {
         try {
-            let hash = req.params.hash;
-            await AuthServices.verifyEmail(hash);
+            await AuthServices.verifyEmail(req.body);
             res.status(200).json({ message: "Email verified" });
         }
         catch (err) {

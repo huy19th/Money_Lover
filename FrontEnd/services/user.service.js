@@ -7,7 +7,9 @@ export const ChangePassword = (value) =>{
 
 class UserService {
     static verifyEmail(hash) {
-        return myAxios.get(`/auth/verify/${hash}`);
+        console.log(hash);
+        let param = hash.join('/');
+        return myAxios.post(`/auth/verify/`, {hash: param});
     }
 }
 

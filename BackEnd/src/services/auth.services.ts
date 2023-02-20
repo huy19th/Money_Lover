@@ -10,7 +10,7 @@ let userRepo = dataSource.getRepository(User);
 
 class AuthServices extends BaseServices {
 
-    static async register({ name, email, password, googleId, image, refreshToken }): Promise<User> {
+    static async register({ name, email, password, googleId, image, refreshToken, active }): Promise<User> {
         await this.validateEmail(email);
         await this.validatePassword(password);
         let user = new User();
@@ -20,6 +20,7 @@ class AuthServices extends BaseServices {
         user.image = image;
         user.googleId = googleId;
         user.refreshToken = refreshToken;
+        user.active = active
         await userRepo.save(user);
         return user
     }
@@ -98,7 +99,7 @@ class AuthServices extends BaseServices {
         })
     }
 
-    static async verifyEmail(hash: string): Promise<void> {
+    static async verifyEmail({hash}): Promise<void> {
         let users = await userRepo.findBy({
             active: false
         })

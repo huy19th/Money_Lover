@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import UserService from "@/services/user.service";
 
 const Hash = () => {
-
     const router = useRouter();
     const { hash } = router.query;
-    console.log(hash);
-
     useEffect(() => {
+        if (!hash) {
+            return;
+        }
         UserService.verifyEmail(hash)
         .then(res => {
             setTimeout(() => {
@@ -18,9 +18,9 @@ const Hash = () => {
         .catch(err => {
             console.log(err.response.data.message)
         })
-    }, [])
+    }, [hash])
 
-    return <p>{hash}</p>
+    return <p>Verifying Email...</p>
 }
 
 export default Hash;
