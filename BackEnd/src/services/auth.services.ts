@@ -1,15 +1,16 @@
 import bcrypt from "bcrypt";
-
+import nodemailer from "nodemailer";
 import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
 import UserServices from "./user.services";
+require('dotenv').config();
 
 let userRepo = dataSource.getRepository(User);
 
 class AuthServices extends BaseServices {
 
-    static async register({name, email, password, googleId, image, refreshToken}): Promise<User> {
+    static async register({ name, email, password, googleId, image, refreshToken }): Promise<User> {
         await this.validateEmail(email);
         await this.validatePassword(password);
         let user = new User();
@@ -52,8 +53,44 @@ class AuthServices extends BaseServices {
             await userRepo.save(user);
         }
         else {
-            throw new Error ("Password Mismatch");
+            throw new Error("Password Mismatch");
         }
+    }
+
+    static async sendEmailVerificationRequest(email) {
+        let hash = await bcrypt.hash(email, 10);
+        let transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: process.env.AUTH_EMAIL,
+                pass: process.env.AUTH_PASSWORD
+            }
+        });
+        let options = {
+            from: 'Money Lover',
+            to: email,
+            subject: 'Test Nodemailer',
+            hmtl: `
+                <span>Dear New User</span>
+                <pre>
+                    You have just registered a Money Lover account.
+                    Please click the following link to verify your email:
+                </pre>
+                <a href="http://localhost:3000/${hash}"/>
+                <p>
+                    Please ignore this email if you didn't register.
+                </p>
+
+            `
+        }
+        transporter.sendMail(options, (err, info) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log('Message sent: ' + info.response);
+            }
+        })
     }
 }
 
