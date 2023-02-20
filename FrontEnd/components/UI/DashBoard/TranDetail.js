@@ -13,12 +13,26 @@ import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
 import {useDispatch, useSelector} from "react-redux";
 import EditTransactionForm from "@/components/UI/DashBoard/EditTransaction/EditTransactionForm";
+import SnackBar from "@/components/shares/SnackBar";
+import {useState} from "react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function TranDetail(props) {
+
+    const time = useSelector(state => state.time)
+
+    const myCurrentTransaction = useSelector(state => state.transaction.currentTransaction)
+
+    const [open, setOpen] = useState(false);
+    const [snackbar, setSnackbar] = useState({
+        severity: "",
+        message: ""
+    })
+
+    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
 
@@ -28,35 +42,47 @@ export default function TranDetail(props) {
         event.target.classList.add(styles.changePointer)
     }
 
-    const handleEdit = () => {
-
-    }
-
     const handleDelete = async () => {
         // Gọi api xóa
-        await axiosJWT.delete(`/transaction/${props.detail.id}`);
-        // Goị api trả lại dữ liệu
-        if (myWallet.id === props.detail.wallet_id) {
-            let wallet = (await axiosJWT.get(`/wallet/info/${props.detail.wallet_id}`)).data
-            let transactions = (await axiosJWT.get(`/transaction/${props.detail.wallet_id}`)).data
-            dispatch(walletActions.changeCurrentWallet(wallet))
-            dispatch(transactionActions.getTrans(transactions))
-            dispatch(walletActions.changeWallets({
-                walletInfo: wallet,
-                walletId: props.detail.wallet_id
-            }))
-        } else {
-            let wallet = (await axiosJWT.get(`/wallet/info/${props.detail.wallet_id}`)).data
-            let transactions = (await axiosJWT.get('/transaction')).data
-            dispatch(walletActions.changeWallets({
-                walletInfo: wallet,
-                walletId: props.detail.wallet_id
-            }))
-            dispatch(transactionActions.getTrans(transactions))
-            dispatch(walletActions.resetCurrentWallet())
-        }
-        setOpenDeleteDialog(false)
-        props.close()
+        axiosJWT.delete(`/transaction/${myCurrentTransaction.id}`)
+            .then(async res => {
+                if (myWallet.id === myCurrentTransaction.wallet_id) {
+                    let wallet = (await axiosJWT.get(`/wallet/info/${myCurrentTransaction.wallet_id}`)).data
+                    let transactions = (await axiosJWT.get(`/transaction/${myCurrentTransaction.wallet_id}`, {
+                        params: {
+                            year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                            month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                        }
+                    })).data
+                    dispatch(walletActions.changeCurrentWallet(wallet))
+                    dispatch(transactionActions.getTrans(transactions))
+                    dispatch(walletActions.changeWallets({
+                        walletInfo: wallet,
+                        walletId: myCurrentTransaction.wallet_id
+                    }))
+                } else {
+                    let wallet = (await axiosJWT.get(`/wallet/info/${myCurrentTransaction.wallet_id}`)).data
+                    let transactions = (await axiosJWT.get('/transaction', {
+                        params: {
+                            year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                            month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                        }
+                    })).data
+                    dispatch(walletActions.changeWallets({
+                        walletInfo: wallet,
+                        walletId: myCurrentTransaction.wallet_id
+                    }))
+                    dispatch(transactionActions.getTrans(transactions))
+                    dispatch(walletActions.resetCurrentWallet())
+                }
+                setSnackbar({
+                    severity: "success",
+                    message: res.data.message
+                })
+                setOpen(true);
+                setOpenDeleteDialog(false)
+                props.close()
+            })
     }
 
     const myHandleCLose = () => {
@@ -98,15 +124,15 @@ export default function TranDetail(props) {
             </Card.Header>
             <Card.Body>
                 <div className='ms-5'>
-                    <p style={{fontSize: '20px'}}>{props.detail.subCate_name}</p>
-                    <p>{props.detail.wallet_name}</p>
-                    <p style={{opacity: 0.7}}>{props.detail.date}</p>
+                    <p style={{fontSize: '20px'}}>{myCurrentTransaction.subCate_name}</p>
+                    <p>{myCurrentTransaction.wallet_name}</p>
+                    <p style={{opacity: 0.7}}>{weekday[new Date(myCurrentTransaction.date).getDay()]}, {new Date(myCurrentTransaction.date).toLocaleDateString('en-GB')}</p>
                     <hr style={{width: '200px'}}/>
-                    <p>{props.detail.note}</p>
-                    {props.detail.type_name === 'Expenese' ? (
-                        <p style={{color: 'red', fontSize: '36px'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.detail.money)}</p>
+                    <p>{myCurrentTransaction.note}</p>
+                    {myCurrentTransaction.type_name === 'Expenese' ? (
+                        <p style={{color: 'red', fontSize: '36px'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myCurrentTransaction.money)}</p>
                     ) : (
-                        <p style={{color: "dodgerblue", fontSize: '36px'}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(props.detail.money)}</p>
+                        <p style={{color: "dodgerblue", fontSize: '36px'}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myCurrentTransaction.money)}</p>
                     )}
                 </div>
             </Card.Body>
@@ -137,10 +163,11 @@ export default function TranDetail(props) {
                 <DialogTitle>Edit Transaction</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        <EditTransactionForm data={props.detail} close={handleCloseEditDialog}/>
+                        <EditTransactionForm close={handleCloseEditDialog}/>
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
+            <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message}/>
         </Card>
     )
 }

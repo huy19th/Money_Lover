@@ -2,15 +2,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import {Col, Row} from "react-bootstrap";
+import {useEffect} from "react";
 import EditSubCategoryForm from "@/components/UI/Category/EditSubCategoryForm";
 
-function SubCateDetailForm(props) {
+
+function SubCateDetailForm({data, close}) {
     const handleClose = () => {
-        props.close();
+        close();
     }
-    console.log(props.data.subCate)
-    console.log(props.data.category.transType)
-    console.log(props.data.index)
+    let {category, subCate, index} = data;
+
     return (
         <Card style={{width:'550px'}}>
             <Card.Header >
@@ -19,14 +20,13 @@ function SubCateDetailForm(props) {
                         <h4><CloseIcon onClick={handleClose}/> Category details</h4>
                     </Col>
                     <Col sm={2}>
-                        {/*<Button variant="danger" style={{marginRight:'5px'}}>Delete</Button>*/}
-                        <EditSubCategoryForm cate={props.data.category.transType} subCate={props.data.subCate} index={props.data.index}/>
+                        <EditSubCategoryForm category={category} subCate={subCate} index={index}/>
                     </Col>
                 </Row>
             </Card.Header>
             <Card.Body>
-                <Card.Title><h4>{props.data.subCate.name}</h4></Card.Title>
-                <Card.Text><p>{props.data.category.transType.name}</p></Card.Text>
+                <Card.Title><h4>{subCate.name}</h4></Card.Title>
+                <Card.Text><p>{category.transType.name}</p></Card.Text>
             </Card.Body>
 
         </Card>

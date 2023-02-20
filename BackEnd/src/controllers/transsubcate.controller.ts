@@ -6,6 +6,7 @@ import TransactionServices from "../services/transaction.services";
 import WalletServices from "../services/wallet.services";
 
 class TransSubCateController extends BaseController {
+
     static getAllSubCatesByType(req: Request, res: Response) {
         let transTypeId = Number(req.params.transTypeId);
         TransSubCateServices.getAllSubCatesByType(transTypeId)
@@ -33,7 +34,9 @@ class TransSubCateController extends BaseController {
 
     static async update(req: Request, res: Response) {
         try {
-            await TransSubCateServices.updateSubCate(req.body);
+           const subCateId = req.params.subCateId;
+           let {cateId, name} = req.body;
+            await TransSubCateServices.updateSubCate(subCateId, cateId, name);
             res.status(200).json()
         } catch (e) {
             res.status(500).json({message: e.message});
@@ -51,6 +54,7 @@ class TransSubCateController extends BaseController {
     //         res.status(500).json({message: e.message});
     //     }
     // }
+
 }
 
 export default TransSubCateController;

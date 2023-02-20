@@ -13,22 +13,20 @@ import Link from "next/link";
 import {useDispatch, useSelector} from "react-redux";
 import {axiosJWT} from "@/configs/axios";
 import {categoryActions} from "@/features/category/categorySlice";
-import {AiOutlineArrowLeft, AiOutlinePlus} from "react-icons/ai";
+import {AiOutlineArrowLeft} from "react-icons/ai";
 import AddSubCategoryForm from "@/components/UI/Category/AddSubCategoryForm";
-import Button from "@mui/material/Button";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import TableHead from "@mui/material/TableHead";
-import Table from "@mui/material/Table";
-import CategoryDetails from "@/components/UI/Category/CategoryDetail";
 import SubCateDetailForm from "@/components/UI/Category/CategoryDetail";
+import TableCell from "@mui/material/TableCell";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 export default function Category() {
     const dispatch = useDispatch();
     const [display, setDisplay] = useState(false);
     const [width, setWidth] = useState(0)
     const [details, setDetails] = useState('')
-    const handleClick = (subCate, category, index) =>{
+    const handleClick = (subCate, category, index) => {
         setDetails({
             subCate: subCate,
             category: category,
@@ -36,9 +34,9 @@ export default function Category() {
         });
         setDisplay(true);
         setWidth('500px');
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }
-    const handleClose = () =>{
+    const handleClose = () => {
         setDisplay(false);
         setWidth(0);
         // setDetails('');
@@ -47,11 +45,15 @@ export default function Category() {
     const myCates = useSelector((state) => state.category);
     useEffect(() => {
         axiosJWT.get("/transaction-category").then((res) => {
-            // console.log(res.data);
             dispatch(categoryActions.getCates(res.data));
+            console.log(res.data);
         });
     }, []);
-    console.log(myCates);
+    useEffect(() => {
+        let category = myCates.categories.filter(item => item.id == details.category?.id)[0];
+        let subcategory = category?.subCategories.filter(item => item.id == details.subCate.id)[0];
+        setDetails({...details, subCate: subcategory, category: category});
+    }, [myCates])
     if (myCates.categories.length !== 0) {
         return (
             <Box
@@ -92,7 +94,8 @@ export default function Category() {
                                                     <Card.Header>{category.name}</Card.Header>
                                                     {category.subCategories?.map((subcategory) => {
                                                         return (
-                                                            <Card.Body style={{padding: "0px"}} onClick = {()=>handleClick(subcategory,category, index)}>
+                                                            <Card.Body style={{padding: "0px"}}
+                                                                       onClick={() => handleClick(subcategory, category, index)}>
                                                                 <Paper
                                                                     sx={{
                                                                         width: 600,
@@ -124,9 +127,12 @@ export default function Category() {
                                                 </>
                                             );
                                         })}
-                                    </Card></TableCell>
+                                    </Card>
+                                    </TableCell>
                                     <Slide direction="up" in={display} mountOnEnter unmountOnExit>
-                                        <TableCell style={{width: width , verticalAlign : "unset"}}><SubCateDetailForm data={details} close={handleClose}/></TableCell>
+                                        <TableCell style={{width: width, verticalAlign: "unset"}}>
+                                            <SubCateDetailForm data={details} close={handleClose}/>
+                                        </TableCell>
                                     </Slide>
 
                                 </TableRow>

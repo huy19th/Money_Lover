@@ -38,7 +38,7 @@ class TransSubCateServices extends BaseServices {
         { category: { id: data.cateId }, ...data });
   }
 
-  static async updateSubCate({subCateId , cateId, name}): Promise<TransSubCate>{
+  static async updateSubCate(subCateId , cateId, name): Promise<TransSubCate>{
     let transSubCate = await this.getSubCateById(subCateId);
     let category = await tranCateRepo.findOneBy({ id: cateId})
     transSubCate.category = category
