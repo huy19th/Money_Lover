@@ -58,29 +58,35 @@ class AuthServices extends BaseServices {
     }
 
     static async sendEmailVerificationRequest(email) {
+        console.log(email);
         let hash = await bcrypt.hash(email, 10);
         let transporter = nodemailer.createTransport({
-            service: 'Gmail',
+            host: "smtp.gmail.com",
+            port: 587,
+            service: 'gmail',
             auth: {
                 user: process.env.AUTH_EMAIL,
                 pass: process.env.AUTH_PASSWORD
             }
         });
         let options = {
-            from: 'Money Lover',
+            from: process.env.AUTH_EMAIL,
             to: email,
-            subject: 'Test Nodemailer',
-            hmtl: `
+            subject: 'Money Lover Email Verification',
+            html: `
+            <div>
                 <span>Dear New User</span>
-                <pre>
-                    You have just registered a Money Lover account.
+                <p>
+                    You have just registered a Money Lover account.<br/>
                     Please click the following link to verify your email:
-                </pre>
-                <a href="http://localhost:3000/${hash}"/>
+                </p>
+                <a href="http://localhost:3000/${hash}">
+                    http://localhost:3000/${hash}
+                </a>
                 <p>
                     Please ignore this email if you didn't register.
                 </p>
-
+            </div>
             `
         }
         transporter.sendMail(options, (err, info) => {
