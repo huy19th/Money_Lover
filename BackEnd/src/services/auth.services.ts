@@ -79,8 +79,8 @@ class AuthServices extends BaseServices {
                     You have just registered a Money Lover account.<br/>
                     Please click the following link to verify your email:
                 </p>
-                <a href="http://localhost:3000/${hash}">
-                    http://localhost:3000/${hash}
+                <a href="http://localhost:3000/verify/${hash}">
+                    http://localhost:3000/verify/${hash}
                 </a>
                 <p>
                     Please ignore this email if you didn't register.
