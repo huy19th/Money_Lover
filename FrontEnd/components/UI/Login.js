@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBInput, MDBRow } from 'mdb-react-ui-kit';
 import Link from "next/link";
@@ -13,12 +13,20 @@ import { useDispatch } from "react-redux";
 import jwt_decode from "jwt-decode";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import MyGoogleButton from "@/components/shares/GoogleButton";
+import SnackBar from "@/components/shares/SnackBar";
 
 const Login = () => {
 
     const dispatch = useDispatch();
 
-    const router = useRouter
+    const router = useRouter;
+
+    const [open, setOpen] = useState(false);
+
+    const [snackbar, setSnackbar] = useState({
+        severity: "",
+        message: ""
+    })
 
     const formik = useFormik({
         initialValues: {
@@ -45,7 +53,11 @@ const Login = () => {
                     }))
                     router.push('/home')
                 }).catch(err => {
-                    console.log(err)
+                    setSnackbar({
+                        severity: "error",
+                        message: err.response.data.message
+                    }),
+                    setOpen(true);
                 })
         }
     })
@@ -105,6 +117,7 @@ const Login = () => {
                         </MDBCard>
                     </MDBCol>
                 </MDBRow>
+                <SnackBar open={open} setOpen={setOpen} severity={snackbar.severity} message={snackbar.message} />
             </MDBContainer>
         </GoogleOAuthProvider>
     );
