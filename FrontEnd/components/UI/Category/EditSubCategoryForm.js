@@ -172,7 +172,8 @@ export default function EditSubCategoryForm({subCate, category}) {
                         <DialogActions>
                             <Button
                                 sx={{marginRight: "12px"}}
-                                variant="outlined"
+                                variant="contained"
+                                color="success"
                                 type="submit"
                                 onClick={formik.handleSubmit}
                             >

@@ -14,14 +14,11 @@ import FormControl from "@mui/material/FormControl";
 import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from "react";
 import MuiAlert from "@mui/material/Alert";
+import CancelButton from "@/components/shares/CancelButton";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
-
-const styles = {};
-const contactFormEndpoint = process.env.REACT_APP_CONTACT_ENDPOINT;
-
 export default function DialogChangePassWord() {
   const [showPassword, setShowPassword] = useState({
     oldPassword: false,
@@ -241,15 +238,15 @@ export default function DialogChangePassWord() {
             </span>
           </DialogContent>
           <DialogActions>
-            <Button type="button" onClick={handleClose}>
-              <b>Cancel</b>
-            </Button>
-            <Button type="submit" color="success" onClick={formik.handleSubmit}>
+            <CancelButton onClick={handleClose} text={"Cancel"} />
+            <Button type="submit"
+                    variant="contained"
+                    color="success"
+                    onClick={formik.handleSubmit}>
               <b>Save</b>
             </Button>
           </DialogActions>
         </form>
-        {/*</React.Fragment>*/}
       </Dialog>
     </>
   );
