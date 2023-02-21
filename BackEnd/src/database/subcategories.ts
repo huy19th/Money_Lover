@@ -36,3 +36,5 @@ const subCategories = [
     { category: 6, name: "Salary" },
     { category: 8, name: "Incoming Transfer" },
 ];
+
+export default subCategories;
