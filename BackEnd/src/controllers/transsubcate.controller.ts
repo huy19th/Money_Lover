@@ -33,7 +33,7 @@ class TransSubCateController extends BaseController {
            const subCateId = req.params.subCateId;
            let {cateId, name} = req.body;
             await TransSubCateServices.updateSubCate(subCateId, cateId, name);
-            res.status(200).json()
+            res.status(200).json({message:'Update subcategory successfully'})
         } catch (e) {
             res.status(500).json({message: e.message});
 
