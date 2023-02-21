@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import {Slide, TableContainer} from "@mui/material";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import ReportDetail from "@/components/UI/Report/ReportDetail";
 import SubcateReportDetail from "@/components/UI/Report/SubcateReportDetail";
 import MyBarChart from "@/components/shares/BarChart";
@@ -16,6 +16,12 @@ import MyBarChart from "@/components/shares/BarChart";
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 export default function ReportOverview() {
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+
+    useEffect(() => {
+
+    }, [myWallet])
 
     let myTrans = useSelector(state => state.transaction.trans)
 

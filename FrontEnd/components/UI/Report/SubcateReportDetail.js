@@ -1,13 +1,20 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {Dialog, DialogContent, DialogTitle} from "@mui/material";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import moment from 'moment';
 import styles from '../../../styles/Report.module.css'
 import CloseIcon from '@mui/icons-material/Close';
 import MyBarChart from "@/components/shares/BarChart";
+import {useSelector} from "react-redux";
 
 export default function SubcateReportDetail(props) {
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+
+    useEffect(() => {
+
+    }, [myWallet])
 
     //
 

@@ -49,7 +49,7 @@ const TransOverview = () => {
         })
     })
 
-    //
+  //
 
   // const [tranDetail, setTranDetail] = useState('')
   const [display, setDisplay] = useState(false);

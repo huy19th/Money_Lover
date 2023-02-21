@@ -2,8 +2,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import PieChart from "@/components/shares/PieChart";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import styles from '../../../styles/Report.module.css'
+import {useSelector} from "react-redux";
+import {useEffect} from "react";
 
 export default function ReportDetail(props) {
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+
+    useEffect(() => {
+
+    }, [myWallet])
 
     const handleClose = () => {
         props.close()

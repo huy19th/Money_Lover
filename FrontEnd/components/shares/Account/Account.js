@@ -21,7 +21,8 @@ import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
-// import MyAvatar from "@/components/UI/DashBoard/Avatar";
+import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
 
 
 
@@ -122,7 +123,7 @@ export default function AccountUser() {
 
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
               <div>
-                {/*<MyAvatar/>*/}
+                <MyAvatar/>
               </div>
               <div>
                 <p className='m-0'>{user.name}</p>

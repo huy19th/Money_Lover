@@ -26,6 +26,7 @@ import Wallets from "@/components/UI/DashBoard/WalletsList";
 import AccountUser from "@/components/shares/Account/Account";
 import { BiCategory } from "react-icons/bi";
 import ReportOverview from "@/components/UI/Report/ReportOverview";
+import {useEffect} from "react";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -91,6 +92,10 @@ export default function MyHome() {
 
     const myWallet = useSelector((state) => state.wallet.currentWallet);
     const myWallets = useSelector((state) => state.wallet.wallets);
+
+    useEffect(() => {
+
+    }, [myWallet])
 
     let balance = 0;
     let inflow = 0;
@@ -175,9 +180,6 @@ export default function MyHome() {
                                 </div>
                                 <div>
                                     <Wallets />
-                                </div>
-                                <div>
-                                    <p>Hello</p>
                                 </div>
                             </div>
                         </div>
