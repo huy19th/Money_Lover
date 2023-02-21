@@ -51,7 +51,7 @@ const Login = () => {
     })
     return (
         <GoogleOAuthProvider clientId='207613247758-us4rbch893j544l41v682drcogd6tdoc.apps.googleusercontent.com'>
-            <MDBContainer style={{ height: '110vh', backgroundColor: 'lightgray' }} fluid>
+            <MDBContainer style={{ height: '100vh', backgroundColor: 'lightgray' }} fluid>
                 <MDBRow className='d-flex justify-content-center align-items-center'>
                     <MDBCol style={{ backgroundColor: 'lightgray', height: "100vh", padding: "0px" }} col='12'>
                         <div style={{ backgroundColor: '#00710f', height: '350px', width: "100%" }}>

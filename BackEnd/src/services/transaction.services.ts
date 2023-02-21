@@ -102,6 +102,138 @@ class TransactionServices extends BaseServices {
             })
     }
 
+    static async getTransactionsByTypeName(userId, month, year, typeName) {
+        return await transactionRepo.createQueryBuilder('trans')
+            .innerJoin('trans.wallet', 'wallet')
+            .innerJoin('wallet.user', 'user')
+            .innerJoin('trans.subCategory', 'subCategory')
+            .innerJoin('subCategory.category', 'category')
+            .innerJoin('category.transType', 'type')
+            .select('trans.money, trans.date, trans.note, trans.id')
+            .addSelect('wallet.name', 'wallet_name')
+            .addSelect('subCategory.id', 'subCate_id')
+            .addSelect('wallet.id', 'wallet_id')
+            .addSelect('subCategory.name', 'subCate_name')
+            .addSelect('type.name', 'type_name')
+            .where('user.id = :id', { id: userId })
+            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+            .andWhere('type.name = :name', {name: typeName})
+            .getRawMany()
+            .then(trans => {
+                let arr = []
+                let names = Array.from(new Set(trans.map(tran => {return tran.subCate_name})));
+                for (let i = 0; i < names.length; i++) {
+                    let obj = {
+                        subCate_name: names[i],
+                        sum: 0,
+                        trans: []
+                    }
+                    for (let j = 0; j < trans.length; j++) {
+                        if (trans[j].subCate_name === names[i]) {
+                            obj.trans.push(trans[j])
+                            if (trans[j].type_name === 'Income') {
+                                obj.sum += trans[j].money
+                            } else {
+                                obj.sum -= trans[j].money
+                            }
+                        }
+                    }
+                    let newTrans = []
+                    let dates = obj.trans.map(tran => {return tran.date.toString().slice(0, 11)})
+                    let uniqueDate = Array.from(new Set(dates))
+                    for (let a = 0; a < uniqueDate.length; a++) {
+                        let newObj = {
+                            date: uniqueDate[a],
+                            sum: 0,
+                            transOfDate: []
+                        }
+                        for (let b = 0; b < obj.trans.length; b++) {
+                            if (obj.trans[b].date.toString().slice(0, 11) === uniqueDate[a]) {
+                                newObj.transOfDate.push(obj.trans[b])
+                                if (obj.trans[b].type_name === 'Income') {
+                                    newObj.sum += obj.trans[b].money
+                                } else {
+                                    newObj.sum -= obj.trans[b].money
+                                }
+                            }
+                        }
+                        newTrans.push(newObj)
+                    }
+                    obj.trans = newTrans.sort((a: any, b: any) => {
+                        return new Date(b.date).valueOf() - new Date(a.date).valueOf()
+                    })
+                    arr.push(obj)
+                }
+                return arr
+            })
+    }
+
+    static async getTransactionsByTypeNameOfWallet(walletId, month, year, typeName) {
+        return await transactionRepo.createQueryBuilder('trans')
+            .innerJoin('trans.wallet', 'wallet')
+            .innerJoin('wallet.user', 'user')
+            .innerJoin('trans.subCategory', 'subCategory')
+            .innerJoin('subCategory.category', 'category')
+            .innerJoin('category.transType', 'type')
+            .select('trans.money, trans.date, trans.note, trans.id')
+            .addSelect('wallet.name', 'wallet_name')
+            .addSelect('subCategory.id', 'subCate_id')
+            .addSelect('wallet.id', 'wallet_id')
+            .addSelect('subCategory.name', 'subCate_name')
+            .addSelect('type.name', 'type_name')
+            .where('wallet.id = :id', { id: walletId })
+            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+            .andWhere('type.name = :name', {name: typeName})
+            .getRawMany()
+            .then(trans => {
+                let arr = []
+                let names = Array.from(new Set(trans.map(tran => {return tran.subCate_name})));
+                for (let i = 0; i < names.length; i++) {
+                    let obj = {
+                        subCate_name: names[i],
+                        sum: 0,
+                        trans: []
+                    }
+                    for (let j = 0; j < trans.length; j++) {
+                        if (trans[j].subCate_name === names[i]) {
+                            obj.trans.push(trans[j])
+                            if (trans[j].type_name === 'Income') {
+                                obj.sum += trans[j].money
+                            } else {
+                                obj.sum -= trans[j].money
+                            }
+                        }
+                    }
+                    let newTrans = []
+                    let dates = obj.trans.map(tran => {return tran.date.toString().slice(0, 11)})
+                    let uniqueDate = Array.from(new Set(dates))
+                    for (let a = 0; a < uniqueDate.length; a++) {
+                        let newObj = {
+                            date: uniqueDate[a],
+                            sum: 0,
+                            transOfDate: []
+                        }
+                        for (let b = 0; b < obj.trans.length; b++) {
+                            if (obj.trans[b].date.toString().slice(0, 11) === uniqueDate[a]) {
+                                newObj.transOfDate.push(obj.trans[b])
+                                if (obj.trans[b].type_name === 'Income') {
+                                    newObj.sum += obj.trans[b].money
+                                } else {
+                                    newObj.sum -= obj.trans[b].money
+                                }
+                            }
+                        }
+                        newTrans.push(newObj)
+                    }
+                    obj.trans = newTrans.sort((a: any, b: any) => {
+                        return new Date(b.date).valueOf() - new Date(a.date).valueOf()
+                    })
+                    arr.push(obj)
+                }
+                return arr
+            })
+    }
+
     static async deleteTransaction(transaction: Transaction): Promise<void> {
         await transactionRepo.remove(transaction);
     };

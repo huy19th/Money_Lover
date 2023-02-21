@@ -145,15 +145,6 @@ export default function MyHome() {
               <MenuIcon />
             </IconButton>
 
-
-            {/* <div
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-            }}
-          > */}
-
             <div
               style={{ color: "black", display: "flex", alignItems: "center" }}
             >

@@ -21,7 +21,8 @@ import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import Avatar from "@mui/material/Avatar";
 import {timeActions} from "@/features/time/timeSlice";
-import MyAvatar from "@/components/UI/DashBoard/Avatar";
+// import MyAvatar from "@/components/UI/DashBoard/Avatar";
+
 
 
 
