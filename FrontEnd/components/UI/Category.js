@@ -49,8 +49,14 @@ export default function Category() {
         });
     }, []);
     useEffect(() => {
-        let category = myCates.categories.filter(item => item.id == details.category?.id)[0];
-        let subcategory = category?.subCategories.filter(item => item.id == details.subCate.id)[0];
+        let subcategory, category;
+        for (let i = 0; i < myCates.categories.length ; i++) {
+            subcategory = myCates.categories[i].subCategories.filter(item => item.id == details.subCate?.id)[0];
+            if (subcategory) {
+                category = myCates.categories[i];
+                break;
+            }
+        }
         setDetails({...details, subCate: subcategory, category: category});
     }, [myCates])
     if (myCates.categories.length !== 0) {
