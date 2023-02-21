@@ -20,6 +20,8 @@ import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {useState} from "react";
+import SnackBar from "@/components/shares/SnackBar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -61,6 +63,11 @@ BootstrapDialogTitle.propTypes = {
 
 export default function SubCateAddDiolog() {
   const [open, setOpen] = React.useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    severity: "",
+    message: ""
+  })
   const dispatch = useDispatch();
   const myCates = useSelector((state) => state.category.categories);
   const handleClickOpen = () => {
@@ -81,14 +88,24 @@ export default function SubCateAddDiolog() {
     onSubmit: (values) => {
       axiosJWT
         .post("/transaction-subcategory", values)
-        .then(async (response) => {
+        .then(async (res) => {
+          setSnackbar({
+            severity: "success",
+            message: res.data.message
+          })
+          setOpenSnackBar(true);
+          handleClose();
           axiosJWT.get("/transaction-category").then((res) => {
             dispatch(categoryActions.getCates(res.data));
             handleClose();
           });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          setSnackbar({
+            severity: "error",
+            message: err.response.data.message
+          });
+          setOpenSnackBar(true);
         });
     },
   });
@@ -164,6 +181,7 @@ export default function SubCateAddDiolog() {
           </Button>
         </DialogActions>
       </BootstrapDialog>
+      <SnackBar open={openSnackBar} setOpen={setOpenSnackBar} severity={snackbar.severity} message={snackbar.message} />
     </form>
   );
 }

@@ -48,6 +48,7 @@ class WalletController extends BaseController {
     static async adjustBalance(req: Request, res: Response) {
         try {
             let { walletId, balance } = req.body;
+            console.log(req.body)
             await TransactionServices.addTransactionToAdjustBalance(walletId, balance);
             await WalletServices.updateBalance(walletId);
             res.status(200).json({message: "Adjusted balance succesfully!"});
