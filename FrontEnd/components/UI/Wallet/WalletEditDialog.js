@@ -61,7 +61,6 @@ export default function WalletEditDialog({ data, wallet, setShow, setSelectedWal
 
     const handleSubmit = event => {
         event.preventDefault();
-        console.log(values);
         WalletService.updateWallet(values)
             .then(() => {
                 WalletService.getAllWalletsOfUser()

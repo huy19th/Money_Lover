@@ -1,52 +1,63 @@
-import Card from 'react-bootstrap/Card';
-import Nav from 'react-bootstrap/Nav';
+import Card from "react-bootstrap/Card";
+import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
-import {Col, Row} from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import Link from "next/link";
-import styles from '../../../styles/TransOverview.module.css'
-import {useDispatch, useSelector} from "react-redux";
-import Table from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import {useRef, useState} from "react";
-import {Slide, TableContainer} from "@mui/material";
+import styles from "../../../styles/TransOverview.module.css";
+import { useDispatch, useSelector } from "react-redux";
+import Table from "@mui/material/Table";
+import TableCell from "@mui/material/TableCell";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { useRef, useState } from "react";
+import { Slide, TableContainer } from "@mui/material";
 import TranDetail from "@/components/UI/DashBoard/TranDetail";
 import TransOverviewTabs from "@/components/UI/DashBoard/TransOverviewTabs";
-import moment from 'moment'
-import {transactionActions} from "@/features/transaction/transactionSlice";
-
+import moment from "moment";
+import { transactionActions } from "@/features/transaction/transactionSlice";
 
 const TransOverview = () => {
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  // Add Transaction
 
-    // Add Transaction
+  const myWallet = useSelector((state) => state.wallet.currentWallet);
+  const myTrans = useSelector((state) => state.transaction.trans);
+  const myWallets = useSelector((state) => state.wallet.wallets);
 
-    const myWallet = useSelector(state => state.wallet.currentWallet)
-    const myTrans = useSelector(state => state.transaction.trans)
-    const myWallets = useSelector(state => state.wallet.wallets)
+  let balance = 0;
+  let inflow = 0;
+  let outflow = 0;
+  myWallets.map((wallet) => {
+    balance += wallet.balance;
+    inflow += wallet.inflow;
+    outflow += wallet.outflow;
+  });
 
-    let balance = 0
-    let inflow = 0;
-    let outflow = 0;
-    myWallets.map(wallet => {
-        balance += wallet.balance
-        inflow += wallet.inflow
-        outflow += wallet.outflow
+  //
+
+
+    let inflowByTime = 0;
+    let outflowByTime = 0;
+    myTrans.map(trans => {
+        trans.transOfDate.map(tran => {
+            if (tran.type_name === 'Expenese') {
+                outflowByTime += tran.money
+            } else {
+                inflowByTime += tran.money
+            }
+        })
     })
 
-    //
+  //
 
-    //
+  // const [tranDetail, setTranDetail] = useState('')
+  const [display, setDisplay] = useState(false);
+  const [width, setWidth] = useState(0);
 
-    // const [tranDetail, setTranDetail] = useState('')
-    const [display, setDisplay] = useState(false)
-    const [width, setWidth] = useState(0)
-
-    const handleOver = (event) => {
-        event.target.classList.add(styles.changePointer)
-    }
+  const handleOver = (event) => {
+    event.target.classList.add(styles.changePointer);
+  };
 
     const handleClick = (transaction) => {
         console.log(transaction)
@@ -57,15 +68,15 @@ const TransOverview = () => {
         window.scrollTo(0, 0)
     }
 
-    const handleClose = () => {
-        dispatch(transactionActions.changeCurrentTransaction({}))
-        setDisplay(false)
-        setWidth(0)
-    }
+  const handleClose = () => {
+    dispatch(transactionActions.changeCurrentTransaction({}));
+    setDisplay(false);
+    setWidth(0);
+  };
 
-    const containerRef = useRef(null);
+  const containerRef = useRef(null);
 
-    //
+  //
 
     return (
         <TableContainer>
@@ -87,13 +98,15 @@ const TransOverview = () => {
                                                 </Col>
                                                 <Col>
 
-                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>
-                                                    <p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>
+                                                    {/*<p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {myWallet.inflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.inflow) }</p>*/}
+                                                    {/*<p style={{color:'red',marginLeft:'124px'}}>- {myWallet.outflow === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflow) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.outflow)}</p>*/}
+                                                    <p style={{color:'dodgerblue',marginLeft:'124px'}}>+ {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflowByTime)}</p>
+                                                    <p style={{color:'red',marginLeft:'124px'}}>- {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(outflowByTime)}</p>
                                                     <p>
                                                         <hr style={{width: '120px', marginLeft: '106px'}}/>
                                                     </p>
-                                                    <p style={{marginLeft:'134px'}}>{myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>
-
+                                                    {/*<p style={{marginLeft:'134px'}}>{myWallet.balance === '' ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(balance) : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myWallet.balance)}</p>*/}
+                                                    <p style={{marginLeft:'134px'}}>{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(inflowByTime-outflowByTime)}</p>
                                                 </Col>
                                                 <Link href='#' style={{textAlign:'center',color: '#2db84c',textDecoration:'none'}}>VIEW REPORT FOR THIS PERIOD</Link>
                                             </Row>

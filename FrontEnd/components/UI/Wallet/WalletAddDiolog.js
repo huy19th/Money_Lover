@@ -57,8 +57,10 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function AddWalletForm() {
-  const [open, setOpen] = React.useState(false);
+export default function WalletAddDiolog() {
+  const wallets = useSelector(state => state.wallet.wallets)
+  const [open, setOpen] = React.useState(wallets.length === 0 ? true : false);
+
   const dispatch = useDispatch();
   const handleClickOpen = () => {
     setOpen(true);
@@ -69,7 +71,8 @@ export default function AddWalletForm() {
   const formik = useFormik({
     initialValues: {
       name: "",
-      initialBalance: ""
+      initialBalance: "",
+      includeTotal: true
     },
     validationSchema: Yup.object({
       name: Yup.string().required("Required"),
@@ -82,7 +85,6 @@ export default function AddWalletForm() {
           .then(async (response) => {
             axiosJWT.get("/wallet/info").then((res) => {
               dispatch(walletActions.getWallets(res.data));
-              console.log(res.data)
               handleClose();
             });
           })
@@ -155,8 +157,10 @@ export default function AddWalletForm() {
               </Col>
             </Row>
             <Row>
-                <div className="ms-5 mb-3 d-flex align-items-center">
-                  <Checkbox color="success"/>
+                <div>
+                  <Checkbox color="success" checked={!formik.values.includeTotal}
+                  onChange={() => formik.setFieldValue("includeTotal", !formik.values.includeTotal)}
+                  />
                   <div className="d-inline-flex flex-column ms-3">
                     <span>Excluded from Total</span>
                     <span className="text-secondary" style={{ "font-size": "12px" }}>
@@ -164,9 +168,7 @@ export default function AddWalletForm() {
                             </span>
                   </div>
                 </div>
-
             </Row>
-
           </DialogContent>
           <DialogActions>
             <Button

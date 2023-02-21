@@ -107,8 +107,9 @@ class WalletController extends BaseController {
         let userId = req.user.id;
         let name = req.body.name;
         let initialBalance = req.body.initialBalance;
+        let includeTotal = req.body.includeTotal;
         try{
-            let wallet =  await WalletServices.addWallet(userId,name,initialBalance)
+            let wallet =  await WalletServices.addWallet(userId,name,initialBalance,includeTotal)
             res.status(200).json(wallet);
         }
         catch(err){

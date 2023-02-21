@@ -25,6 +25,8 @@ import MyAvatar from "@/components/UI/DashBoard/Avatar";
 
 
 
+
+
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -121,7 +123,7 @@ export default function AccountUser() {
 
             <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
               <div>
-                {/*<MyAvatar/>*/}
+                <MyAvatar/>
               </div>
               <div>
                 <p className='m-0'>{user.name}</p>

@@ -59,7 +59,7 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function AddSubCategoryForm() {
+export default function SubCateAddDiolog() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const myCates = useSelector((state) => state.category.categories);
