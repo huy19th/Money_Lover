@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table, TableForeignKey, TableIndex } from 'typeorm';
+import { MigrationInterface, QueryRunner, Table, TableExclusion, TableForeignKey, TableIndex } from 'typeorm';
 
 export class CreateTableTransSubCate1675439663189 implements MigrationInterface {
 
@@ -11,6 +11,7 @@ export class CreateTableTransSubCate1675439663189 implements MigrationInterface 
                 columns: [
                     { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'cate_id', type: 'int', isNullable: false },
+                    { name: 'user_id', type: 'int', default: null, isNullable: true },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false }
                 ],
             }),
@@ -22,11 +23,18 @@ export class CreateTableTransSubCate1675439663189 implements MigrationInterface 
             referencedTableName: 'trans_cate'
         });
 
+        let fk_user_case = new TableForeignKey({
+            columnNames: ['user_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'user'
+        })
+
         let subcate_index = new TableIndex({
             columnNames: ['cate_id', 'name']
         })
 
         await queryRunner.createForeignKey(this.nameTable, fk_cate_case);
+        await queryRunner.createForeignKey(this.nameTable, fk_user_case);
         await queryRunner.createIndex(this.nameTable, subcate_index);
     }
 

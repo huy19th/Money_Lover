@@ -1,6 +1,5 @@
 import BaseController from "./base.controller";
 import {Request, Response} from "express";
-
 import TransSubCateServices from "../services/transsubcate.services";
 import TransactionServices from "../services/transaction.services";
 import WalletServices from "../services/wallet.services";
@@ -18,14 +17,11 @@ class TransSubCateController extends BaseController {
             });
     }
 
-    static async add(req: Request, res: Response) {
+    static async add(req: any, res: Response) {
         try {
             let {cateId, name} = req.body;
-            await TransSubCateServices.add({
-                cateId,
-                name,
-            });
-            res.status(200).json({message: "Added subcategory successfully"});
+            await TransSubCateServices.add(cateId, req.user.id, name);
+            res.status(200).json({message: "Added subCategory successfully"});
         } catch (err) {
             console.log(err);
             res.status(500).json({message: err.message});
@@ -44,6 +40,15 @@ class TransSubCateController extends BaseController {
         }
     }
 
+    static async addDefaultSubCategoriesForUser(req: any, res: Response) {
+        try {
+            await TransSubCateServices.addDefaultSubCategoriesForUser(req.user.id);
+            res.status(200).json({message: "success"})
+        }
+        catch (err) {
+            res.status(500).json({message: err.message})
+        }
+    }
 }
 
 export default TransSubCateController;

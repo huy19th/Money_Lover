@@ -5,6 +5,8 @@ import BaseController from "./base.controller";
 import User from "../models/user.model";
 import AuthServices from "../services/auth.services";
 import BaseServices from "../services/base.services";
+import UserServices from "../services/user.services";
+import TransSubCateServices from "../services/transsubcate.services";
 
 let userRepo = dataSource.getRepository(User);
 
@@ -12,7 +14,8 @@ class AuthController extends BaseController {
 
     static async register(req: Request, res: Response) {
         try {
-            await AuthServices.register(req.body);
+            let user = await AuthServices.register(req.body);
+            await TransSubCateServices.addDefaultSubCategoriesForUser(user.id);
             await AuthServices.sendEmailVerificationRequest(req.body.email);
             res.status(200).json({ message: 'An email has been sent to your email. Please verify your email to continue' });
         }
@@ -59,6 +62,7 @@ class AuthController extends BaseController {
             req.body.googleId = req.body.sub;
             req.body.active = true;
             user = await AuthServices.register(req.body);
+            TransSubCateServices.addDefaultSubCategoriesForUser(user.id);
         }
         let accessToken = BaseServices.generateAccessToken(user);
         let refreshToken = BaseServices.generateRefreshToken(user);

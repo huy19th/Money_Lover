@@ -12,7 +12,6 @@ export class CreateTableTransCate1675439663188 implements MigrationInterface {
                     { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'type_id', type: 'int', isNullable: false },
                     { name: 'name', type: 'nvarchar(255)', isNullable: false },
-                    { name: 'user_id', type: 'int', isNullable: false }
                 ],
             }),
         )
@@ -23,18 +22,11 @@ export class CreateTableTransCate1675439663188 implements MigrationInterface {
             referencedTableName: 'trans_type'
         });
 
-        let fk_user_case = new TableForeignKey({
-            columnNames: ['user_id'],
-            referencedColumnNames: ['id'],
-            referencedTableName: 'user'
-        })
-
         let cate_index = new TableIndex({
             columnNames: ['type_id', 'name']
         })
 
         await queryRunner.createForeignKey(this.nameTable, fk_type_case);
-        await queryRunner.createForeignKey(this.nameTable, fk_user_case);
         await queryRunner.createIndex(this.nameTable, cate_index);
     }
 

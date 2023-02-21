@@ -3,6 +3,7 @@ import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
 import UserServices from "./user.services";
+import TransSubCateServices from "./transsubcate.services";
 import transporter from "../config/nodemailer.config";
 import jwt from "jsonwebtoken";
 require('dotenv').config();
