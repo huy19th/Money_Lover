@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import UserService from "@/services/user.service";
 
-const Hash = () => {
+const Token = () => {
     const router = useRouter();
-    const { hash } = router.query;
+    const { token } = router.query;
     useEffect(() => {
-        if (!hash) {
+        if (!token) {
             return;
         }
-        UserService.verifyEmail(hash)
+        UserService.verifyEmail(token)
         .then(res => {
             setTimeout(() => {
                 router.push('/login');
@@ -18,9 +18,9 @@ const Hash = () => {
         .catch(err => {
             console.log(err.response.data.message)
         })
-    }, [hash])
+    }, [token])
 
     return <p>Verifying Email...</p>
 }
 
-export default Hash;
+export default Token;

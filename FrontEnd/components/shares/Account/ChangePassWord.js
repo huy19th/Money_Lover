@@ -5,9 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useFormik } from "formik";
-import * as yup from "yup";
-import TextField from "@mui/material/TextField";
-import { ChangePassword } from "@/services/user.service";
+import UserService from "@/services/user.service";
 import InputLabel from "@mui/material/InputLabel";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { InputAdornment, OutlinedInput } from "@mui/material";
@@ -15,7 +13,6 @@ import IconButton from "@mui/material/IconButton";
 import FormControl from "@mui/material/FormControl";
 import Snackbar from "@mui/material/Snackbar";
 import { useEffect, useState } from "react";
-import { axiosJWT } from "@/configs/axios";
 import MuiAlert from "@mui/material/Alert";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -53,7 +50,7 @@ export default function DialogChangePassWord() {
       };
       let result = checkConfirmPassword();
       if (result === true) {
-        ChangePassword(data)
+        UserService.changePassword(data)
           .then(() => {
             setOpenSnackBar(true);
             handleClose();

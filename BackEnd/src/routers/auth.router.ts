@@ -9,9 +9,11 @@ AuthRouter.post('/register', AuthController.register);
 AuthRouter.post('/login', AuthController.login);
 AuthRouter.post('/refresh', AuthMiddleware.refreshToken);
 AuthRouter.get('/logout', AuthMiddleware.checkAuthentication, AuthController.logout);
-AuthRouter.post('/reset-password', AuthMiddleware.checkAuthentication, AuthController.resetPassword);
+AuthRouter.post('/change-password', AuthMiddleware.checkAuthentication, AuthController.changePassword);
 AuthRouter.post('/login/google', AuthController.loginWithGoogle);
 AuthRouter.post('/verify', AuthController.verifyEmail);
+AuthRouter.post('/forgot-password', AuthController.forgotPassword);
+AuthRouter.post('/reset-password', AuthController.resetPassword);
 
 export default AuthRouter;
 

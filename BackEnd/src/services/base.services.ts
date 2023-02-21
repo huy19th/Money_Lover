@@ -47,6 +47,10 @@ class BaseServices {
         let payload = { id, email, name, image };
         return jwt.sign(payload, `${process.env.JWT_REFRESH_KEY}`);
     };
+
+    static generateTokenFromString(email: string): string {
+        return jwt.sign(email, `${process.env.JWT_REFRESH_KEY}`);
+    }
 }
 
 export default BaseServices;

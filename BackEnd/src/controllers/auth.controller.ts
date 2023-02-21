@@ -40,10 +40,10 @@ class AuthController extends BaseController {
         res.status(200).json({ message: 'Logged out successfully!' });
     }
 
-    static async resetPassword(req: Request, res: Response) {
+    static async changePassword(req: Request, res: Response) {
         try {
             let { oldPassword, newPassword } = req.body;
-            await AuthServices.resetPassword(req.user, oldPassword, newPassword);
+            await AuthServices.changePassword(req.user, oldPassword, newPassword);
             res.status(200).json({ message: 'Reset password successfully!' })
         }
         catch (err) {
@@ -80,6 +80,24 @@ class AuthController extends BaseController {
         }
     }
 
+    static async forgotPassword(req: Request, res: Response) {
+        try {
+            await AuthServices.sendEmailConfirmResetPassword(req.body);
+            res.status(200).json({message: "We have sent an email to confirm reset password"})
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
+    }
+
+    static async resetPassword(req: Request, res: Response) {
+        try {
+            await AuthServices.resetPasswordAndSendPasswordViaEmail(req.body);
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
+    }
 }
 
 export default AuthController;

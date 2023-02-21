@@ -100,7 +100,7 @@ const Login = () => {
                                             {formik.errors.password && formik.touched.password && (
                                                 <p style={{ color: 'red' }}>{formik.errors.password}</p>)}
                                             <Link style={{ textAlign: 'center', textDecoration: 'none' }}
-                                                href="#">Forgot password?</Link>
+                                                href="/forgot-password">Forgot password?</Link>
                                             <br />
                                             <Button type='submit' style={{ marginTop: '20px', width: '300px' }} variant="success" size='lg'>
                                                 Log In
