@@ -14,14 +14,19 @@ import WalletService from '@/services/wallet.service';
 import { useDispatch, useSelector } from 'react-redux';
 import { walletActions } from '@/features/wallet/walletSlice';
 import MaskedTextField from '@/components/shares/MaskedTextField';
+import {axiosJWT} from "@/configs/axios";
+import {transactionActions} from "@/features/transaction/transactionSlice";
 
-export default function AdjustBalanceDialog({ setShow, data, wallet, setSelectedWallet }) {
+export default function AdjustBalanceDialog({ setShow, data, wallet , setSelectedWallet}) {
+    const time = useSelector(state => state.time)
     const dispatch = useDispatch();
     const user = useSelector(state => state.auth).currentUser;
     const [values, setValues] = useState({
         walletId: wallet.id,
         balance: wallet.balance,
     })
+
+    const myWallet = useSelector(state => state.wallet.currentWallet)
 
     const [isValidated, setIsValidated] = useState(false);
     const handleClose = () => setShow(false);
@@ -61,16 +66,43 @@ export default function AdjustBalanceDialog({ setShow, data, wallet, setSelected
     const handleSubmit = event => {
         event.preventDefault();
         WalletService.adjustBalance(values)
-            .then(res => {
-                console.log(res);
-                WalletService.getAllWalletsOfUser(user.id)
-                    .then(res => {
+        .then(res => {
+            console.log(res);
+            WalletService.getAllWalletsOfUser(user.id)
+            .then(async res => {
+                if (myWallet.id !== 'Total') {
+                    if (myWallet.id === wallet.id) {
+                        let transactions = (await axiosJWT.get(`/transaction/${wallet.id}`, {
+                            params: {
+                                year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                            }
+                        })).data
+                        let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                        setSelectedWallet(selectedWallet);
+                        dispatch(walletActions.changeCurrentWallet(selectedWallet))
+                        dispatch(walletActions.getWallets(res.data));
+                        dispatch(transactionActions.getTrans(transactions))
+                    } else {
                         let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
                         setSelectedWallet(selectedWallet);
                         dispatch(walletActions.getWallets(res.data));
-                    })
-                handleClose();
+                    }
+                } else {
+                    let transactions = (await axiosJWT.get('/transaction', {
+                        params: {
+                            year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                            month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                        }
+                    })).data
+                    let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                    setSelectedWallet(selectedWallet);
+                    dispatch(walletActions.getWallets(res.data));
+                    dispatch(transactionActions.getTrans(transactions))
+                }
             })
+            handleClose();
+        })
     }
 
     return (

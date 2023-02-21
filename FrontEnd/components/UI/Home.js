@@ -145,15 +145,6 @@ export default function MyHome() {
               <MenuIcon />
             </IconButton>
 
-
-            {/* <div
-            style={{
-              width: "100%",
-              display: "flex",
-              alignItems: "center",
-            }}
-          > */}
-
             <div
               style={{ color: "black", display: "flex", alignItems: "center" }}
             >
@@ -210,7 +201,6 @@ export default function MyHome() {
         <Divider />
         <List>
           <ListItem key="Transaction" disablePadding sx={{ display: "block" }}>
-
             <Link style={{ color: "gray" }} href="/home" className="text-decoration-none">
               <ListItemButton sx={ListItemButtonStyle}>
                 <ListItemIcon sx={ListItemIconStyle}>
@@ -247,7 +237,6 @@ export default function MyHome() {
                 <ListItemText primary="Wallets" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </Link>
-
           </ListItem>
           <ListItem key="Categories" disablePadding sx={{ display: "block" }}>
             <Link style={{ color: "gray" }} href="/category" className="text-decoration-none">
