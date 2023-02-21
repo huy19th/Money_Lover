@@ -34,7 +34,9 @@ class TransSubCateController extends BaseController {
 
     static async update(req: Request, res: Response) {
         try {
-            await TransSubCateServices.updateSubCate(req.body);
+           const subCateId = req.params.subCateId;
+           let {cateId, name} = req.body;
+            await TransSubCateServices.updateSubCate(subCateId, cateId, name);
             res.status(200).json()
         } catch (e) {
             res.status(500).json({message: e.message});
