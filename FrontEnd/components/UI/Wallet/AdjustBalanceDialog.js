@@ -66,6 +66,7 @@ export default function AdjustBalanceDialog({show, setShow, data, wallet, setSel
     }
     const handleSubmit = event => {
         event.preventDefault();
+        console.log(values)
         WalletService.adjustBalance(values)
             .then(res => {
                 setSnackbar({

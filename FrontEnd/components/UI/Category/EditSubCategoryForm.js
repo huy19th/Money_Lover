@@ -17,13 +17,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {axiosJWT} from "@/configs/axios";
 import {categoryActions} from "@/features/category/categorySlice";
 import {useFormik} from "formik";
 import * as Yup from "yup";
 import {walletActions} from "@/features/wallet/walletSlice";
 import {transactionActions} from "@/features/transaction/transactionSlice";
+import SnackBar from "@/components/shares/SnackBar";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     "& .MuiDialogContent-root": {
@@ -66,6 +67,11 @@ BootstrapDialogTitle.propTypes = {
 export default function EditSubCategoryForm({subCate, category}) {
     const [open, setOpen] = React.useState(false);
     const dispatch = useDispatch();
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [snackbar, setSnackbar] = useState({
+        severity: "",
+        message: ""
+    })
     const categoryState = useSelector((state) => state.category);
     const myCates = categoryState.categories;
 
@@ -88,14 +94,23 @@ export default function EditSubCategoryForm({subCate, category}) {
         onSubmit: (values) => {
             axiosJWT
                 .post(`/transaction-subcategory/${subCate.id}`, values)
-                .then(async (response) => {
+                .then(async (res) => {
+                    setSnackbar({
+                        severity: "success",
+                        message: res.data.message
+                    })
+                    setOpenSnackBar(true);
+                    handleClose();
                     axiosJWT.get("/transaction-category").then((res) => {
                         dispatch(categoryActions.getCates(res.data));
-                        handleClose();
                     });
                 })
-                .catch((error) => {
-                    console.log(error);
+                .catch((err) => {
+                    setSnackbar({
+                        severity: "error",
+                        message: err.response.data.message
+                    });
+                    setOpenSnackBar(true);
                 });
         },
     });
@@ -180,9 +195,12 @@ export default function EditSubCategoryForm({subCate, category}) {
                             </Button>
                         </DialogActions>
                     </BootstrapDialog>
+
                 </form>
                 : null
             }
+            <SnackBar open={openSnackBar} setOpen={setOpenSnackBar} severity={snackbar.severity} message={snackbar.message} />
+
         </>
     );
 }
