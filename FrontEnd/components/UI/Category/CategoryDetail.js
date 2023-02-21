@@ -4,6 +4,8 @@ import Card from 'react-bootstrap/Card';
 import {Col, Row} from "react-bootstrap";
 import {useEffect} from "react";
 import EditSubCategoryForm from "@/components/UI/Category/EditSubCategoryForm";
+import Chip from '@mui/material/Chip';
+
 
 
 function SubCateDetailForm({data, close}) {
@@ -15,8 +17,11 @@ function SubCateDetailForm({data, close}) {
         <Card style={{width:'550px'}}>
             <Card.Header >
                 <Row>
-                    <Col>
-                        <h4><CloseIcon onClick={handleClose}/> Category details</h4>
+                    <Col style={{marginTop:'7px'}} sm={1}>
+                        <CloseIcon onClick={handleClose}/>
+                    </Col>
+                    <Col style={{marginTop:'7px'}}>
+                        <h5> Category details</h5>
                     </Col>
                     <Col sm={2}>
                         <EditSubCategoryForm category={category} subCate={subCate} index={index}/>
@@ -24,8 +29,18 @@ function SubCateDetailForm({data, close}) {
                 </Row>
             </Card.Header>
             <Card.Body>
-                <Card.Title><h4>{subCate.name}</h4></Card.Title>
-                <Card.Text><p>{category.transType.name}</p></Card.Text>
+                <Row>
+                    <Col sm={2}>
+                        <img style={{width:'60px'}} src="https://static.moneylover.me/img/icon/ic_category_foodndrink.png" alt=""/>
+                    </Col>
+                    <Col>
+                        <Card.Title><h4>{subCate.name}</h4></Card.Title>
+                        <Card.Text>
+                            <Chip label={category.transType.name} color={category.transType.name==='Expenese' ? 'error' : 'success'} variant="contained" />
+                            </Card.Text>
+                    </Col>
+                </Row>
+
             </Card.Body>
 
         </Card>

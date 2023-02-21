@@ -16,8 +16,8 @@ import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { walletActions } from "@/features/wallet/walletSlice";
-import { Checkbox } from "@mui/material";
+import {walletActions} from "@/features/wallet/walletSlice";
+import {Checkbox} from "@mui/material";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -32,23 +32,23 @@ function BootstrapDialogTitle(props) {
   const { children, onClose, ...other } = props;
 
   return (
-    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
+      <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        {children}
+        {onClose ? (
+            <IconButton
+                aria-label="close"
+                onClick={onClose}
+                sx={{
+                  position: "absolute",
+                  right: 8,
+                  top: 8,
+                  color: (theme) => theme.palette.grey[500],
+                }}
+            >
+              <CloseIcon />
+            </IconButton>
+        ) : null}
+      </DialogTitle>
   );
 }
 
@@ -78,109 +78,108 @@ export default function AddWalletForm() {
     onSubmit: (values) => {
       console.log(values)
       axiosJWT
-        .post("/wallet", values)
-        .then(async (response) => {
-          axiosJWT.get("/wallet/info").then((res) => {
-            dispatch(walletActions.getWallets(res.data));
-            console.log(res.data)
-            handleClose();
+          .post("/wallet", values)
+          .then(async (response) => {
+            axiosJWT.get("/wallet/info").then((res) => {
+              dispatch(walletActions.getWallets(res.data));
+              console.log(res.data)
+              handleClose();
+            });
+          })
+          .catch((error) => {
+            console.log(error);
           });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     },
   });
   return (
-    <form>
-      <Button variant="contained" color="success" onClick={handleClickOpen}>
-        ADD WALLET
-      </Button>
-      <BootstrapDialog
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={open}
-      >
-        <BootstrapDialogTitle
-          id="customized-dialog-title"
-          onClose={handleClose}
+      <form>
+        <Button variant="contained" color="success" onClick={handleClickOpen}>
+          ADD WALLET
+        </Button>
+        <BootstrapDialog
+            onClose={handleClose}
+            aria-labelledby="customized-dialog-title"
+            open={open}
         >
-          Add wallet
-        </BootstrapDialogTitle>
-        <DialogContent dividers>
-          <Row>
-            <Col>
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <TextField
-                  id="name"
-                  label="Name"
-                  variant="outlined"
-                  name="name"
-                  type="text"
-                  onChange={formik.handleChange}
-                />
-                {formik.errors.name && formik.touched.name && (
-                  <p style={{ color: "red" }}>{formik.errors.name}</p>
-                )}
-              </Box>
-            </Col>
-            <Col>
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <TextField
-                  id="initialBalance"
-                  label="Initial balance"
-                  variant="outlined"
-                  name="initialBalance"
-                  type="number"
-                  onChange={formik.handleChange}
-                />
-                {formik.errors.initialBalance && formik.touched.initialBalance && (
-                  <p style={{ color: "red" }}>{formik.errors.initialBalance}</p>
-                )}
-
-              </Box>
-            </Col>
-          </Row>
-          <Row>
-            <div className="ms-5 mb-3 d-flex align-items-center">
-              <Checkbox color="success" />
-              <div className="d-inline-flex flex-column ms-3">
-                <span>Excluded from Total</span>
-                <span className="text-secondary" style={{ "font-size": "12px" }}>
-                  Include this wallet and its balance in the "Total" mode.
-                </span>
-              </div>
-            </div>
-
-          </Row>
-
-        </DialogContent>
-        <DialogActions>
-          <Button
-            sx={{ marginRight: "12px" }}
-            variant="contained"
-            color="success"
-            type="submit"
-            onClick={formik.handleSubmit}
+          <BootstrapDialogTitle
+              id="customized-dialog-title"
+              onClose={handleClose}
           >
-            Save
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
-    </form>
+            Add wallet
+          </BootstrapDialogTitle>
+          <DialogContent dividers>
+            <Row>
+              <Col>
+                <Box
+                    component="form"
+                    sx={{
+                      "& > :not(style)": { m: 1, width: "25ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
+                  <TextField
+                      id="name"
+                      label="Name"
+                      variant="outlined"
+                      name="name"
+                      type="text"
+                      onChange={formik.handleChange}
+                  />
+                  {formik.errors.name && formik.touched.name && (
+                      <p style={{ color: "red" }}>{formik.errors.name}</p>
+                  )}
+                </Box>
+              </Col>
+              <Col>
+                <Box
+                    component="form"
+                    sx={{
+                      "& > :not(style)": { m: 1, width: "25ch" },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                >
+                  <TextField
+                      id="initialBalance"
+                      label="Initial balance"
+                      variant="outlined"
+                      name="initialBalance"
+                      type="number"
+                      onChange={formik.handleChange}
+                  />
+                  {formik.errors.initialBalance && formik.touched.initialBalance && (
+                      <p style={{ color: "red" }}>{formik.errors.initialBalance}</p>
+                  )}
+                </Box>
+              </Col>
+            </Row>
+            <Row>
+                <div className="ms-5 mb-3 d-flex align-items-center">
+                  <Checkbox color="success"/>
+                  <div className="d-inline-flex flex-column ms-3">
+                    <span>Excluded from Total</span>
+                    <span className="text-secondary" style={{ "font-size": "12px" }}>
+                                Include this wallet and its balance in the "Total" mode.
+                            </span>
+                  </div>
+                </div>
+
+            </Row>
+
+          </DialogContent>
+          <DialogActions>
+            <Button
+                sx={{ marginRight: "12px" }}
+                variant="contained"
+                color="success"
+                type="submit"
+                onClick={formik.handleSubmit}
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </BootstrapDialog>
+      </form>
   );
 }
