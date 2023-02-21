@@ -278,12 +278,19 @@ class TransactionServices extends BaseServices {
 
         await transactionRepo.save(transaction);
     }
-    static async addTransactionToAdjustBalance(walletId: number, balance: number): Promise<void> {
+    static async addTransactionToAdjustBalance(userId: number, walletId: number, balance: number): Promise<void> {
         let wallet = await WalletServices.getWalletById(walletId);
-        let subcategoryId = balance > wallet.balance ? OTHER_INCOME_ID : OTHER_EXPENSE_ID;
-        let money = Math.abs(balance - wallet.balance)
-        await this.addTransaction(walletId, subcategoryId, money, new Date(), null, "Adjust Balance");
+        let subcategoryName = balance > wallet.balance ? "Other Income" : "Other Expense";
+        let subcategory = await transSubCateRepo.findOneBy({
+            name: subcategoryName,
+            user: {
+                id: userId
+            }
+        })
+        let money = Math.abs(balance - wallet.balance);
+        await this.addTransaction(walletId, subcategory.id, money, new Date(), null, "Adjust Balance");
     }
+
 }
 
 export default TransactionServices;

@@ -1,6 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Wallet from "./wallet.model";
-import TransCate from "./trans.cate.model";
 import TransSubCate from "./trans.subcate.model";
 
 @Entity()
@@ -38,12 +37,6 @@ export class User {
         cascade: true
     })
     wallets: Wallet[];
-
-    @OneToMany(() => TransCate, transCate => transCate.user, {
-        cascade: true
-    })
-        //@ts-ignore
-    transCates: TransCate[];
 
     @OneToMany(() => TransSubCate, transSubCate => transSubCate.user, {
         cascade: true

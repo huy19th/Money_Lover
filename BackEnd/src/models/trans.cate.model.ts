@@ -1,7 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, OneToMany, JoinColumn, Index } from "typeorm";
 import TransType from "./trans.type.model";
 import TransSubCate from "./trans.subcate.model";
-import User from "./user.model";
 
 @Entity()
 
@@ -21,11 +20,6 @@ export class TransCate {
 
     @OneToMany(() => TransSubCate, transSubCate => transSubCate.category)
     subCategories: TransSubCate[];
-
-    @ManyToOne(() => User, (user: User) => user.transCates)
-    @JoinColumn({name: "user_id"})
-        //@ts-ignore
-    user: User
 
 }
 

@@ -13,9 +13,11 @@ class TransCateServices extends BaseServices {
         transType: true,
       },
       where: {
-        user: {
-          id: user.id,
-        },
+        subCategories: {
+          user: {
+            id: user.id,
+          }
+        }
       },
     });
     return result;

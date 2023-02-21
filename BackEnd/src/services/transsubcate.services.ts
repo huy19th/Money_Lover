@@ -35,9 +35,12 @@ class TransSubCateServices extends BaseServices {
     }
     return transSubCate;
   }
-  static async add(data): Promise<void> {
-    await transSubCateRepo.save(
-      { category: { id: data.cateId }, ...data });
+  static async add(cateId, userId, name): Promise<void> {
+    await transSubCateRepo.save({
+      category: cateId,
+      user: userId,
+      name: name
+    })
   }
 
   static async updateSubCate(subCateId, cateId, name): Promise<TransSubCate> {
