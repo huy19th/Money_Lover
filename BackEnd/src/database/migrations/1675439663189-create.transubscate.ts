@@ -11,6 +11,7 @@ export class CreateTableTransSubCate1675439663189 implements MigrationInterface 
                 columns: [
                     { name: 'id', type: 'int', isPrimary: true, isGenerated: true, generationStrategy: 'increment' },
                     { name: 'cate_id', type: 'int', isNullable: false },
+                    { name: 'user_id', type: 'int', default: null, isNullable: true},
                     { name: 'name', type: 'nvarchar(255)', isNullable: false }
                 ],
             }),
