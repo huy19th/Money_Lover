@@ -2,7 +2,9 @@ import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import TransSubCate from "../models/trans.subcate.model";
 import TransCate from "../models/trans.cate.model";
+import subCategoriesValues from "../database/subcategories";
 
+const EntityManager = dataSource.manager;
 let transSubCateRepo = dataSource.getRepository(TransSubCate);
 let tranCateRepo = dataSource.getRepository(TransCate);
 
@@ -35,21 +37,24 @@ class TransSubCateServices extends BaseServices {
   }
   static async add(data): Promise<void> {
     await transSubCateRepo.save(
-        { category: { id: data.cateId }, ...data });
+      { category: { id: data.cateId }, ...data });
   }
 
-  static async updateSubCate(subCateId , cateId, name): Promise<TransSubCate>{
+  static async updateSubCate(subCateId, cateId, name): Promise<TransSubCate> {
     let transSubCate = await this.getSubCateById(subCateId);
-    let category = await tranCateRepo.findOneBy({ id: cateId})
+    let category = await tranCateRepo.findOneBy({ id: cateId })
     transSubCate.category = category
     transSubCate.name = name
     await transSubCateRepo.save(transSubCate);
     return transSubCate;
   }
-  // static async delete(subCateId){
-  //   let tranCateId = await this.getSubCateById(subCateId);
-  //   await transSubCateRepo.remove(tranCateId);
-  // }
+
+  static async addDefaultSubCategoriesForUser(userId: number): Promise<void> {
+    await EntityManager.query(`
+      insert into trans_subcate (cate_id, user_id, name) values
+      ${subCategoriesValues(userId)}
+    `)
+  }
 }
 
 export default TransSubCateServices;

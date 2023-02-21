@@ -3,12 +3,10 @@ import TransSubCateController from "../controllers/transsubcate.controller";
 
 const TransSubCateRouter: Router = express.Router();
 
-TransSubCateRouter.get(
-  "/:transTypeId",
-  TransSubCateController.getAllSubCatesByType
-);
+TransSubCateRouter.get("/:transTypeId", TransSubCateController.getAllSubCatesByType);
 TransSubCateRouter.post("/", TransSubCateController.add);
-TransSubCateRouter.post("/:subCateId", TransSubCateController.update)
+TransSubCateRouter.post("/:subCateId", TransSubCateController.update);
 // TransSubCateRouter.delete("/:subCateId", TransSubCateController.delete)
+TransSubCateRouter.get("/subcate/add", TransSubCateController.addDefaultSubCategoriesForUser);
 
 export default TransSubCateRouter;
