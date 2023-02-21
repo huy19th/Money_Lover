@@ -70,7 +70,7 @@ export default function AddTransactionForm({ handleClose, data }) {
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.changeWallets({
                             walletInfo: wallet,
-                            walletId: myWallet.id
+                            walletId: myWallet.id,
                         }))
                     } else if (myWallet.id === 'Total') {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
