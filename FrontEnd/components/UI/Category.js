@@ -39,7 +39,6 @@ export default function Category() {
     const handleClose = () => {
         setDisplay(false);
         setWidth(0);
-        // setDetails('');
     }
 
     const myCates = useSelector((state) => state.category);
