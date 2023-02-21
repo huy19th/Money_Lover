@@ -19,6 +19,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { walletActions } from "@/features/wallet/walletSlice";
 import { Checkbox } from "@mui/material";
+import {useState} from "react";
+import SnackBar from "@/components/shares/SnackBar";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -61,6 +63,12 @@ BootstrapDialogTitle.propTypes = {
 export default function WalletAddDiolog() {
   const wallets = useSelector(state => state.wallet.wallets)
   const [open, setOpen] = React.useState(wallets.length === 0 ? true : false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
+
+  const [snackbar, setSnackbar] = useState({
+    severity: "",
+    message: ""
+  })
 
   const dispatch = useDispatch();
   const handleClickOpen = () => {
@@ -83,14 +91,24 @@ export default function WalletAddDiolog() {
       console.log(values)
       axiosJWT
         .post("/wallet", values)
-        .then(async (response) => {
+        .then(async (res) => {
+          setSnackbar({
+            severity: "success",
+            message: res.data.message
+          })
+          setOpenSnackBar(true);
+          handleClose();
           axiosJWT.get("/wallet/info").then((res) => {
+            console.log(res.data)
             dispatch(walletActions.getWallets(res.data));
-            handleClose();
           });
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((err) => {
+          setSnackbar({
+            severity: "error",
+            message: err.response.data.message
+          });
+          setOpenSnackBar(true);
         });
     },
   });
@@ -182,6 +200,7 @@ export default function WalletAddDiolog() {
           </Button>
         </DialogActions>
       </BootstrapDialog>
+      <SnackBar open={openSnackBar} setOpen={setOpenSnackBar} severity={snackbar.severity} message={snackbar.message} />
     </form>
   );
 }
