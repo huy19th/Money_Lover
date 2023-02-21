@@ -47,6 +47,7 @@ class TransSubCateController extends BaseController {
     static async addDefaultSubCategoriesForUser(req: any, res: Response) {
         try {
             await TransSubCateServices.addDefaultSubCategoriesForUser(req.user.id);
+            res.status(200).json({message: "success"})
         }
         catch (err) {
             res.status(500).json({message: err.message})

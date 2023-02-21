@@ -7,6 +7,5 @@ TransSubCateRouter.get("/:transTypeId", TransSubCateController.getAllSubCatesByT
 TransSubCateRouter.post("/", TransSubCateController.add);
 TransSubCateRouter.post("/:subCateId", TransSubCateController.update);
 // TransSubCateRouter.delete("/:subCateId", TransSubCateController.delete)
-TransSubCateRouter.get("/subcate/add", TransSubCateController.addDefaultSubCategoriesForUser);
 
 export default TransSubCateRouter;
