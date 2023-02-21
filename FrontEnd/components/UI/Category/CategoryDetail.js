@@ -11,7 +11,6 @@ function SubCateDetailForm({data, close}) {
         close();
     }
     let {category, subCate, index} = data;
-
     return (
         <Card style={{width:'550px'}}>
             <Card.Header >
