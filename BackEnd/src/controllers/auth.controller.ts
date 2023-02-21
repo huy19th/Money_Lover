@@ -13,7 +13,8 @@ class AuthController extends BaseController {
     static async register(req: Request, res: Response) {
         try {
             await AuthServices.register(req.body);
-            res.status(200).json({ message: 'Registered successfully!' });
+            await AuthServices.sendEmailVerificationRequest(req.body.email);
+            res.status(200).json({ message: 'An email has been sent to your email. Please verify your email to continue' });
         }
         catch (err: any) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage })
@@ -39,11 +40,11 @@ class AuthController extends BaseController {
         res.status(200).json({ message: 'Logged out successfully!' });
     }
 
-    static async resetPassword(req: Request, res: Response) {
+    static async changePassword(req: Request, res: Response) {
         try {
             let { oldPassword, newPassword } = req.body;
-            await AuthServices.resetPassword(req.user, oldPassword, newPassword);
-            res.status(200).json({message: 'Reset password successfully!'})
+            await AuthServices.changePassword(req.user, oldPassword, newPassword);
+            res.status(200).json({ message: 'Reset password successfully!' })
         }
         catch (err) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage })
@@ -56,6 +57,7 @@ class AuthController extends BaseController {
             req.body.password = BaseController.getRandomString();
             req.body.image = req.body.picture;
             req.body.googleId = req.body.sub;
+            req.body.active = true;
             user = await AuthServices.register(req.body);
         }
         let accessToken = BaseServices.generateAccessToken(user);
@@ -68,6 +70,34 @@ class AuthController extends BaseController {
         });
     }
 
+    static async verifyEmail(req: Request, res: Response) {
+        try {
+            await AuthServices.verifyEmail(req.body);
+            res.status(200).json({ message: "Email verified" });
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
+    }
+
+    static async forgotPassword(req: Request, res: Response) {
+        try {
+            await AuthServices.sendEmailConfirmResetPassword(req.body);
+            res.status(200).json({message: "We have sent an email to confirm reset password"})
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
+    }
+
+    static async resetPassword(req: Request, res: Response) {
+        try {
+            await AuthServices.resetPasswordAndSendPasswordViaEmail(req.body);
+        }
+        catch (err) {
+            res.status(500).json({message: err.message || this.defaultErrorMessage});
+        }
+    }
 }
 
 export default AuthController;

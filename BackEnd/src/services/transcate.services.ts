@@ -10,6 +10,7 @@ class TransCateServices extends BaseServices {
     let result = await transCateRepo.find({
       relations: {
         subCategories: true,
+        transType: true,
       },
       where: {
         user: {
