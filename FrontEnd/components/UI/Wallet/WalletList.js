@@ -104,32 +104,25 @@ export default function WalletLists() {
                     />
                     : null
             }
-            {
-                showEdit ?
+
                     <WalletEditDialog wallet={selectedWallet}
                         data={wallets}
+                                      show={showEdit}
                         setShow={setShowEdit}
                         setSelectedWallet={setSelectedWallet}
                     />
-                    : null
-            }
-            {
-                showBalance ?
+
                     <AdjustBalanceDialog wallet={selectedWallet}
                         data={wallets}
+                                         show={showBalance}
                         setShow={setShowBalance}
                         setSelectedWallet={setSelectedWallet}
                     />
-                    : null
-            }
-            {
-                showDelete ?
                     <WalletDeleteDialog wallet={selectedWallet}
+                                        show={showDelete}
                         setShow={setShowDelete}
                         setShowDetail={setShowDetail}
                     />
-                    : null
-            }
 
         </Row>
     );

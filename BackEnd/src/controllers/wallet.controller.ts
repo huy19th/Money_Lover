@@ -50,7 +50,7 @@ class WalletController extends BaseController {
             let { walletId, balance } = req.body;
             await TransactionServices.addTransactionToAdjustBalance(walletId, balance);
             await WalletServices.updateBalance(walletId);
-            res.status(200).json("Adjusted balance succesfully!");
+            res.status(200).json({message: "Adjusted balance succesfully!"});
         }
         catch (err) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage });
@@ -95,7 +95,7 @@ class WalletController extends BaseController {
         try {
             await WalletServices.updateWallet(req.body);
             await WalletServices.updateBalance(req.body.walletId);
-            res.status(200).json("Update wallet successfully!");
+            res.status(200).json({message: "Update wallet successfully!"});
         }
         catch (err) {
             res.status(500).json({ message: err.message || this.defaultErrorMessage });
@@ -109,11 +109,11 @@ class WalletController extends BaseController {
         let initialBalance = req.body.initialBalance;
         let includeTotal = req.body.includeTotal;
         try{
-            let wallet =  await WalletServices.addWallet(userId,name,initialBalance,includeTotal)
-            res.status(200).json(wallet);
+            await WalletServices.addWallet(userId,name,initialBalance,includeTotal)
+            res.status(200).json({message: "Add wallet successfully"});
         }
         catch(err){
-            res.status(500).json(err)
+            res.status(500).json({message: err.message || this.defaultErrorMessage})
         }
     }
 
