@@ -45,7 +45,6 @@ export default function Category() {
     useEffect(() => {
         axiosJWT.get("/transaction-category").then((res) => {
             dispatch(categoryActions.getCates(res.data));
-            console.log(res.data);
         });
     }, []);
     useEffect(() => {
