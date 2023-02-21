@@ -32,6 +32,28 @@ class TransactionController extends BaseController {
             })
     }
 
+    static getTransactionsByTypeNameOfAllWallets(req: any, res: Response) {
+        let month = req.query.month;
+        let year = req.query.year;
+        let typeName = req.query.typeName
+        let userId = req.user.id;
+        TransactionServices.getTransactionsByTypeName(userId, month, year, typeName)
+            .then(transactions => {
+                res.json(transactions)
+            })
+    }
+
+    static getTransactionsByTypeNameOfOneWallet(req: Request, res: Response) {
+        let month = req.query.month;
+        let year = req.query.year;
+        let typeName = req.query.typeName
+        let walletId = req.params.walletId;
+        TransactionServices.getTransactionsByTypeNameOfWallet(walletId, month, year, typeName)
+            .then(transactions => {
+                res.json(transactions)
+            })
+    }
+
     static async addTransaction(req: Request, res: Response) {
         try {
             let { walletId, subcategoryId, money, date, image, note } = req.body
