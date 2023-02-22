@@ -70,8 +70,8 @@ export default function WalletLists() {
     }, [wallets])
 
     return (
-        <Row className="mt-5 pt-5 d-flex justify-content-center" style={{ "min-width": "80%" }}>
-            <Col xs={5}>
+        <Row className="mt-5 pt-5 d-flex justify-content-center" style={{ "min-width": "90%" }}>
+            <Col xs={6}>
                 <Card style={{ width: '100%' }}>
                     <Card.Header className="ps-4">Included In Total</Card.Header>
                     <ListItems
