@@ -36,25 +36,11 @@ export default function MyAvatar() {
     };
 
     const saveImage = () => {
-        if (user.image.length < 20) {
-            // Add Firebase
-            const storageRef = ref(storage, `/user-upload/${user.name}`)
-            // Upload ảnh
-            uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
-                // Lấy url firebase
-                let image = await getDownloadURL(storageRef)
-                // Thêm DB
-                await axiosJWT.post('/user/update', image.toString())
-                // Dispatch
-                dispatch(authActions.updateUser(image))
-                handleClose()
-            }).catch(err => {
-                console.log(err)
-            });
-        } else {
-            const desertRef = ref(storage, user.image);
-            deleteObject(desertRef).then(() => {
+        if (user !== '') {
+            if (user.image.length < 20) {
+                // Add Firebase
                 const storageRef = ref(storage, `/user-upload/${user.name}`)
+                // Upload ảnh
                 uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
                     // Lấy url firebase
                     let image = await getDownloadURL(storageRef)
@@ -63,31 +49,51 @@ export default function MyAvatar() {
                     // Dispatch
                     dispatch(authActions.updateUser(image))
                     handleClose()
+                }).catch(err => {
+                    console.log(err)
                 });
-            }).catch((error) => {
-                console.log('Error!!!')
-            });
+            } else {
+                const desertRef = ref(storage, user.image);
+                deleteObject(desertRef).then(() => {
+                    const storageRef = ref(storage, `/user-upload/${user.name}`)
+                    uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
+                        // Lấy url firebase
+                        let image = await getDownloadURL(storageRef)
+                        // Thêm DB
+                        await axiosJWT.post('/user/update', image.toString())
+                        // Dispatch
+                        dispatch(authActions.updateUser(image))
+                        handleClose()
+                    });
+                }).catch((error) => {
+                    console.log('Error!!!')
+                });
+            }
         }
     }
 
-    return (
-        <div>
-            <img
-                alt=""
-                src={!user.image && user.image.length < 20 ? 'https://gocbao.net/wp-content/uploads/2020/10/avatar-trang-4.jpg' : user.image}
-                style={{
-                    width: '120px',
-                    height: '120px',
-                    borderRadius: '50%',
-                    border: '1px solid black'
-                }}
-                onClick={handleClickOpen}
-            />
-            <Dialog onClose={handleClose} open={open}>
-                <DialogTitle>Update {user.name} image</DialogTitle>
-                <AvatarEdit width={400} height={300} onClose={onCLose} onCrop={onCrop} />
-                <Button type='button' onClick={saveImage}>Save</Button>
-            </Dialog>
-        </div>
-    );
+    if (user !== '') {
+        return (
+            <div>
+                <img
+                    alt=""
+                    src={!user.image && user.image.length < 20 ? 'https://gocbao.net/wp-content/uploads/2020/10/avatar-trang-4.jpg' : user.image}
+                    style={{
+                        width: '120px',
+                        height: '120px',
+                        borderRadius: '50%',
+                        border: '1px solid black'
+                    }}
+                    onClick={handleClickOpen}
+                />
+                <Dialog onClose={handleClose} open={open}>
+                    <DialogTitle>Update {user.name}'s image</DialogTitle>
+                    <AvatarEdit width={400} height={300} onClose={onCLose} onCrop={onCrop} />
+                    <Button type='button' onClick={saveImage}>Save</Button>
+                </Dialog>
+            </div>
+        );
+    } else {
+        return <></>
+    }
 }

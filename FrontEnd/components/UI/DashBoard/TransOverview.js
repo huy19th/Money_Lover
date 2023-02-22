@@ -9,7 +9,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { Slide, TableContainer } from "@mui/material";
 import TranDetail from "@/components/UI/DashBoard/TranDetail";
 import TransOverviewTabs from "@/components/UI/DashBoard/TransOverviewTabs";
@@ -18,12 +18,15 @@ import { transactionActions } from "@/features/transaction/transactionSlice";
 
 const TransOverview = () => {
   const dispatch = useDispatch();
+    const time = useSelector(state => state.time)
 
   // Add Transaction
 
   const myWallet = useSelector((state) => state.wallet.currentWallet);
   const myTrans = useSelector((state) => state.transaction.trans);
   const myWallets = useSelector((state) => state.wallet.wallets);
+
+    console.log(myTrans)
 
   let balance = 0;
   let inflow = 0;
@@ -75,6 +78,10 @@ const TransOverview = () => {
   };
 
   const containerRef = useRef(null);
+
+  useEffect(() => {
+      handleClose()
+  }, [myWallet, time])
 
   //
 
@@ -146,7 +153,7 @@ const TransOverview = () => {
                                                          {index !== myTrans.length - 1 && <div style={{height: '24px', backgroundColor: '#ccc', marginBottom: '12px'}}></div>}
                                                      </>
                                                  )
-                                             }) : <div style={{textAlign: "center"}}>Không có giao dịch nào</div>}
+                                             }) : <div style={{textAlign: "center"}}>There is no transactions</div>}
                                         </Container>
                                     </Card.Body>
                                 </Card>

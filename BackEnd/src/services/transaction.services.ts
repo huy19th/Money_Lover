@@ -14,8 +14,9 @@ const [OTHER_INCOME_ID, OTHER_EXPENSE_ID] = [34, 20];
 
 class TransactionServices extends BaseServices {
 
-    static async getTransactions(userId, month, year) {
-        return await transactionRepo.createQueryBuilder('trans')
+    static async getTransactions(userId,data) {
+        let myDate = ''
+        let query = await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
             .innerJoin('trans.subCategory', 'subCategory')
@@ -28,7 +29,25 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('user.id = :id', { id: userId })
-            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+        if (!data.startDate) {
+            if (data.date) {
+                if (data.date === '') {
+                    myDate = `${data.year}-${data.month}%`
+                } else {
+                    myDate = `${data.year}-${data.month}-${data.date}%`
+                }
+                query = query.andWhere('trans.date LIKE :date', {date: myDate})
+            } else {
+                myDate = `${data.year}-${data.month}%`
+                query = query.andWhere('trans.date LIKE :date', {date: myDate})
+            }
+        } else {
+            let start = data.startDate.split('/').reverse().join('-')
+            let end = data.endDate.split('/').reverse().join('-')
+            query = query.andWhere('trans.date >= :startDate', {startDate: start})
+                .andWhere('trans.date <= :endDate', {endDate: end})
+        }
+        return query
             .getRawMany()
             .then((trans) => {
                 let arr = [];
@@ -58,8 +77,9 @@ class TransactionServices extends BaseServices {
             })
     }
 
-    static async getTransactionsOfWallet(walletId, month, year) {
-        return await transactionRepo.createQueryBuilder('trans')
+    static async getTransactionsOfWallet(walletId, data) {
+        let myDate = ''
+        let query = await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
             .innerJoin('trans.subCategory', 'subCategory')
@@ -72,7 +92,25 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('wallet.id = :id', { id: walletId })
-            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
+        if (!data.startDate) {
+            if (data.date) {
+                if (data.date === '') {
+                    myDate = `${data.year}-${data.month}%`
+                } else {
+                    myDate = `${data.year}-${data.month}-${data.date}%`
+                }
+                query = query.andWhere('trans.date LIKE :date', {date: myDate})
+            } else {
+                myDate = `${data.year}-${data.month}%`
+                query = query.andWhere('trans.date LIKE :date', {date: myDate})
+            }
+        } else {
+            let start = data.startDate.split('/').reverse().join('-')
+            let end = data.endDate.split('/').reverse().join('-')
+            query = query.andWhere('trans.date >= :startDate', {startDate: start})
+                .andWhere('trans.date <= :endDate', {endDate: end})
+        }
+        return query
             .getRawMany()
             .then((trans) => {
                 let arr = [];
@@ -102,8 +140,9 @@ class TransactionServices extends BaseServices {
             })
     }
 
-    static async getTransactionsByTypeName(userId, month, year, typeName) {
-        return await transactionRepo.createQueryBuilder('trans')
+    static async getTransactionsByTypeName(userId, data) {
+        let myDate = ''
+        let query = await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
             .innerJoin('trans.subCategory', 'subCategory')
@@ -116,8 +155,21 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('user.id = :id', { id: userId })
-            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
-            .andWhere('type.name = :name', {name: typeName})
+        if (!data.startDate) {
+            if (data.date === '') {
+                myDate = `${data.year}-${data.month}%`
+            } else {
+                myDate = `${data.year}-${data.month}-${data.date}%`
+            }
+            query = query.andWhere('trans.date LIKE :date', {date: myDate})
+        } else {
+            let start = data.startDate.split('/').reverse().join('-')
+            let end = data.endDate.split('/').reverse().join('-')
+            query = query.andWhere('trans.date >= :startDate', {startDate: start})
+                .andWhere('trans.date <= :endDate', {endDate: end})
+        }
+        return query
+            .andWhere('type.name = :name', {name: data.typeName})
             .getRawMany()
             .then(trans => {
                 let arr = []
@@ -139,7 +191,7 @@ class TransactionServices extends BaseServices {
                         }
                     }
                     let newTrans = []
-                    let dates = obj.trans.map(tran => {return tran.date.toString().slice(0, 11)})
+                    let dates = obj.trans.map(tran => {return tran.date.toString()})
                     let uniqueDate = Array.from(new Set(dates))
                     for (let a = 0; a < uniqueDate.length; a++) {
                         let newObj = {
@@ -148,7 +200,7 @@ class TransactionServices extends BaseServices {
                             transOfDate: []
                         }
                         for (let b = 0; b < obj.trans.length; b++) {
-                            if (obj.trans[b].date.toString().slice(0, 11) === uniqueDate[a]) {
+                            if (obj.trans[b].date.toString() === uniqueDate[a]) {
                                 newObj.transOfDate.push(obj.trans[b])
                                 if (obj.trans[b].type_name === 'Income') {
                                     newObj.sum += obj.trans[b].money
@@ -168,8 +220,9 @@ class TransactionServices extends BaseServices {
             })
     }
 
-    static async getTransactionsByTypeNameOfWallet(walletId, month, year, typeName) {
-        return await transactionRepo.createQueryBuilder('trans')
+    static async getTransactionsByTypeNameOfWallet(walletId, data) {
+        let myDate = ''
+        let query = await transactionRepo.createQueryBuilder('trans')
             .innerJoin('trans.wallet', 'wallet')
             .innerJoin('wallet.user', 'user')
             .innerJoin('trans.subCategory', 'subCategory')
@@ -182,8 +235,21 @@ class TransactionServices extends BaseServices {
             .addSelect('subCategory.name', 'subCate_name')
             .addSelect('type.name', 'type_name')
             .where('wallet.id = :id', { id: walletId })
-            .andWhere('trans.date LIKE :date', {date: `${year}-${month}%`})
-            .andWhere('type.name = :name', {name: typeName})
+        if (!data.startDate) {
+            if (data.date === '') {
+                myDate = `${data.year}-${data.month}%`
+            } else {
+                myDate = `${data.year}-${data.month}-${data.date}%`
+            }
+            query = query.andWhere('trans.date LIKE :date', {date: myDate})
+        } else {
+            let start = data.startDate.split('/').reverse().join('-')
+            let end = data.endDate.split('/').reverse().join('-')
+            query = query.andWhere('trans.date >= :startDate', {startDate: start})
+                .andWhere('trans.date <= :endDate', {endDate: end})
+        }
+        return query
+            .andWhere('type.name = :name', {name: data.typeName})
             .getRawMany()
             .then(trans => {
                 let arr = []
@@ -205,7 +271,7 @@ class TransactionServices extends BaseServices {
                         }
                     }
                     let newTrans = []
-                    let dates = obj.trans.map(tran => {return tran.date.toString().slice(0, 11)})
+                    let dates = obj.trans.map(tran => {return tran.date.toString()})
                     let uniqueDate = Array.from(new Set(dates))
                     for (let a = 0; a < uniqueDate.length; a++) {
                         let newObj = {
@@ -214,7 +280,7 @@ class TransactionServices extends BaseServices {
                             transOfDate: []
                         }
                         for (let b = 0; b < obj.trans.length; b++) {
-                            if (obj.trans[b].date.toString().slice(0, 11) === uniqueDate[a]) {
+                            if (obj.trans[b].date.toString() === uniqueDate[a]) {
                                 newObj.transOfDate.push(obj.trans[b])
                                 if (obj.trans[b].type_name === 'Income') {
                                     newObj.sum += obj.trans[b].money
@@ -260,6 +326,7 @@ class TransactionServices extends BaseServices {
         transaction.date = typeof date == 'string' ? date.substring(0, 10) : date;
         transaction.image = image;
         transaction.note = note;
+        console.log(transaction.date)
 
         await transactionRepo.save(transaction);
     }
