@@ -44,7 +44,7 @@ const TransOverview = () => {
     let outflowByTime = 0;
     myTrans.map(trans => {
         trans.transOfDate.map(tran => {
-            if (tran.type_name === 'Expenese') {
+            if (tran.type_name === 'Expense') {
                 outflowByTime += tran.money
             } else {
                 inflowByTime += tran.money
@@ -140,7 +140,7 @@ const TransOverview = () => {
                                                                                  <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
                                                                                  <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>
                                                                              </div>
-                                                                             {tran.type_name === 'Expenese' ? (
+                                                                             {tran.type_name === 'Expense' ? (
                                                                                  <div style={{color: 'red'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
                                                                              ) : (
                                                                                  <div style={{color: "dodgerblue"}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>

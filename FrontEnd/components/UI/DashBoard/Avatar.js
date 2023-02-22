@@ -2,13 +2,18 @@ import * as React from 'react';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import {useState} from "react";
-import AvatarEdit from 'react-avatar-edit'
+// import AvatarEdit from 'react-avatar-edit'
 import Button from '@mui/material/Button';
 import storage from "@/configs/firebase";
 import {ref, deleteObject, uploadString, getDownloadURL } from "firebase/storage"
 import {useDispatch, useSelector} from "react-redux";
 import {authActions} from "@/features/auth/authSlice";
 import {axiosJWT} from "@/configs/axios";
+import dynamic from 'next/dynamic'
+
+const AvatarEdit = dynamic(() => import('../../../components/shares/Account/AvatarEdit'), {
+    ssr: false
+})
 
 export default function MyAvatar() {
 
@@ -35,9 +40,11 @@ export default function MyAvatar() {
         setOpen(false);
     };
 
+    console.log(user)
+
     const saveImage = () => {
         if (user !== '') {
-            if (user.image.length < 20) {
+            if (user.image === null || user.image === '') {
                 // Add Firebase
                 const storageRef = ref(storage, `/user-upload/${user.name}`)
                 // Upload ảnh
@@ -66,7 +73,7 @@ export default function MyAvatar() {
                         handleClose()
                     });
                 }).catch((error) => {
-                    console.log('Error!!!')
+                    console.log(error)
                 });
             }
         }
@@ -77,7 +84,7 @@ export default function MyAvatar() {
             <div>
                 <img
                     alt=""
-                    src={!user.image && user.image.length < 20 ? 'https://gocbao.net/wp-content/uploads/2020/10/avatar-trang-4.jpg' : user.image}
+                    src={user.image === null || user.image === '' ? 'https://gocbao.net/wp-content/uploads/2020/10/avatar-trang-4.jpg' : user.image}
                     style={{
                         width: '120px',
                         height: '120px',
@@ -88,7 +95,7 @@ export default function MyAvatar() {
                 />
                 <Dialog onClose={handleClose} open={open}>
                     <DialogTitle>Update {user.name}'s image</DialogTitle>
-                    <AvatarEdit width={400} height={300} onClose={onCLose} onCrop={onCrop} />
+                    <AvatarEdit onClose={onCLose} onCrop={onCrop} />
                     <Button type='button' onClick={saveImage}>Save</Button>
                 </Dialog>
             </div>

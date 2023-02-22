@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import Wallet from "./wallet.model";
-import TransCate from "./trans.cate.model";
+import TransSubCate from "./trans.subcate.model";
 
 @Entity()
 
@@ -38,16 +38,17 @@ export class User {
     })
     wallets: Wallet[];
 
-    @OneToMany(() => TransCate, transCate => transCate.user, {
+    @OneToMany(() => TransSubCate, transSubCate => transSubCate.user, {
         cascade: true
     })
         //@ts-ignore
-    transCates: TransCate[];
-
+    transSubCates: TransSubCate[];
 
     @Column({name: "refresh_token", type: "longtext", nullable: true})
     refreshToken: string;
 
+    @Column({name: "active", type: "boolean", nullable: false, default: false})
+    active: boolean
 }
 
 export default User;

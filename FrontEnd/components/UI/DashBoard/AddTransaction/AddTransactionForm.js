@@ -46,9 +46,9 @@ export default function AddTransactionForm({ handleClose, data }) {
             note: Yup.string().nullable()
         }),
         onSubmit: values => {
-            let date = new Date(values.date)
-            date.setDate(date.getDate() + 1)
-            values.date = date
+            // let date = new Date(values.date)
+            // date.setDate(date.getDate() + 1)
+            // values.date = date
             console.log(values.date)
             let payload = {
                 date: values.date,
@@ -71,7 +71,7 @@ export default function AddTransactionForm({ handleClose, data }) {
                         dispatch(transactionActions.getTrans(transactions))
                         dispatch(walletActions.changeWallets({
                             walletInfo: wallet,
-                            walletId: myWallet.id
+                            walletId: myWallet.id,
                         }))
                     } else if (myWallet.id === 'Total') {
                         let wallet = (await axiosJWT.get(`/wallet/info/${values.walletId}`)).data
@@ -99,6 +99,8 @@ export default function AddTransactionForm({ handleClose, data }) {
                         message: res.data.message
                     })
                     setOpen(true);
+                    handleClose();
+
                 })
                 .catch(err => {
                     setSnackbar({

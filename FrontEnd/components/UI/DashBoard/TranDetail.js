@@ -126,7 +126,7 @@ export default function TranDetail(props) {
                     <p style={{ opacity: 0.7 }}>{weekday[new Date(myCurrentTransaction.date).getDay()]}, {new Date(myCurrentTransaction.date).toLocaleDateString('en-GB')}</p>
                     <hr style={{ width: '200px' }} />
                     <p>{myCurrentTransaction.note}</p>
-                    {myCurrentTransaction.type_name === 'Expenese' ? (
+                    {myCurrentTransaction.type_name === 'Expense' ? (
                         <p style={{ color: 'red', fontSize: '36px' }}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myCurrentTransaction.money)}</p>
                     ) : (
                         <p style={{ color: "dodgerblue", fontSize: '36px' }}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(myCurrentTransaction.money)}</p>

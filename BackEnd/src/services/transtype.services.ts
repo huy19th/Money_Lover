@@ -5,11 +5,19 @@ import TransType from "../models/trans.type.model";
 let transTypeRepo = dataSource.getRepository(TransType)
 
 class TransTypeServices extends BaseServices {
-    static async getAll(): Promise<TransType[]> {
+    static async getAll(userId): Promise<TransType[]> {
         return await transTypeRepo.find({
             relations: {
                 transCates: {
                     subCategories: true
+                }
+            }, where: {
+                transCates: {
+                    subCategories: {
+                        user: {
+                            id: userId
+                        }
+                    }
                 }
             }
         })

@@ -39,7 +39,7 @@ export default function UserReport() {
                     params: {...params, typeName: 'Income'}
                 })).data
                 let expenseTransactions = (await axiosJWT.get(`/transaction/${myWallet.id}/detail`, {
-                    params: {...params, typeName: 'Expenese'}
+                    params: {...params, typeName: 'Expense'}
                 })).data
                 dispacth(transactionActions.getTrans(transactions))
                 dispacth(transactionActions.getIncomeTrans(incomeTransactions))
@@ -66,7 +66,7 @@ export default function UserReport() {
                     params: {...params, typeName: 'Income'}
                 })).data
                 let expenseTransactions = (await axiosJWT.get(`/transaction/type`, {
-                    params: {...params, typeName: 'Expenese'}
+                    params: {...params, typeName: 'Expense'}
                 })).data
                 dispacth(transactionActions.getTrans(transactions))
                 dispacth(transactionActions.getIncomeTrans(incomeTransactions))

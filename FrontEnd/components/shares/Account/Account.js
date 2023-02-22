@@ -65,6 +65,7 @@ export default function AccountUser() {
   const dispatch = useDispatch();
 
   const logOut = async () => {
+    router.push("/login");
     await axiosJWT.get("/auth/logout", {
       headers: {
         authorization: "Bearer " + localStorage.getItem("accessToken"),
@@ -97,12 +98,12 @@ export default function AccountUser() {
         open={open}
       >
 
-        <div style={{display: "flex", alignItems: "center", justifyContent: "space-between"}}>
-          <div style={{display: "flex", alignItems: "center", padding: '20px'}}>
-            <CloseIcon onClick={handleClose} style={{cursor: "pointer"}}/>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", padding: '20px' }}>
+            <CloseIcon onClick={handleClose} style={{ cursor: "pointer" }} />
             <h3 className='m-0 ms-2'>My account</h3>
           </div>
-          <div style={{padding: '20px'}}>
+          <div style={{ padding: '20px' }}>
             <Button color="success" onClick={logOut}>
               <b style={{ fontSize: "18px" }}>SIGN OUT</b>
             </Button>
@@ -115,9 +116,9 @@ export default function AccountUser() {
         >
           <div style={{ marginTop: "20px" }}>
 
-            <div style={{display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px'}}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly", marginBottom: '20px' }}>
               <div>
-                <MyAvatar/>
+                <MyAvatar />
               </div>
               <div>
                 <p className='m-0'>{user.name}</p>
@@ -132,7 +133,7 @@ export default function AccountUser() {
                   href="#"
                   onClick=""
                 >
-                  <ChangePassword/>
+                  <ChangePassword />
                 </Link>
               </Col>
             </Row>

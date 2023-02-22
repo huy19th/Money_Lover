@@ -9,16 +9,17 @@ import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { Col, Row } from "react-bootstrap";
+import FormControl from "@mui/material/FormControl";
+import { Select } from "@mui/material";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import MaskedTextField from "@/components/shares/MaskedTextField";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosJWT } from "@/configs/axios";
 import { categoryActions } from "@/features/category/categorySlice";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { walletActions } from "@/features/wallet/walletSlice";
-import { Checkbox } from "@mui/material";
 import {useState} from "react";
 import SnackBar from "@/components/shares/SnackBar";
 
@@ -60,17 +61,15 @@ BootstrapDialogTitle.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-export default function WalletAddDiolog() {
-  const wallets = useSelector(state => state.wallet.wallets)
-  const [open, setOpen] = React.useState(wallets.length === 0 ? true : false);
+export default function SubCateAddDiolog() {
+  const [open, setOpen] = React.useState(false);
   const [openSnackBar, setOpenSnackBar] = useState(false);
-
   const [snackbar, setSnackbar] = useState({
     severity: "",
     message: ""
   })
-
   const dispatch = useDispatch();
+  const myCates = useSelector((state) => state.category.categories);
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -79,18 +78,16 @@ export default function WalletAddDiolog() {
   };
   const formik = useFormik({
     initialValues: {
+      cateId: "",
       name: "",
-      initialBalance: "",
-      includeTotal: true
     },
     validationSchema: Yup.object({
+      cateId: Yup.string().required("Required"),
       name: Yup.string().required("Required"),
-      initialBalance: Yup.number().required("Required"),
     }),
     onSubmit: (values) => {
-      console.log(values)
       axiosJWT
-        .post("/wallet", values)
+        .post("/transaction-subcategory", values)
         .then(async (res) => {
           setSnackbar({
             severity: "success",
@@ -98,9 +95,9 @@ export default function WalletAddDiolog() {
           })
           setOpenSnackBar(true);
           handleClose();
-          axiosJWT.get("/wallet/info").then((res) => {
-            console.log(res.data)
-            dispatch(walletActions.getWallets(res.data));
+          axiosJWT.get("/transaction-category").then((res) => {
+            dispatch(categoryActions.getCates(res.data));
+            handleClose();
           });
         })
         .catch((err) => {
@@ -115,7 +112,7 @@ export default function WalletAddDiolog() {
   return (
     <form>
       <Button variant="contained" color="success" onClick={handleClickOpen}>
-        ADD WALLET
+        ADD SUBCATEGORY
       </Button>
       <BootstrapDialog
         onClose={handleClose}
@@ -126,10 +123,28 @@ export default function WalletAddDiolog() {
           id="customized-dialog-title"
           onClose={handleClose}
         >
-          Add wallet
+          Add SubCategory
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Row>
+            <Col>
+              <Box sx={{ minWidth: 120, marginTop: "10px" }}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Cate</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Cate"
+                    name="cateId"
+                    {...formik.getFieldProps("cateId")}
+                  >
+                    {myCates.map((cate) => (
+                      <MenuItem value={cate.id}>{cate.name}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Col>
             <Col>
               <Box
                 component="form"
@@ -152,40 +167,6 @@ export default function WalletAddDiolog() {
                 )}
               </Box>
             </Col>
-            <Col>
-              <Box
-                component="form"
-                sx={{
-                  "& > :not(style)": { m: 1, width: "25ch" },
-                }}
-                noValidate
-                autoComplete="off"
-              >
-                <MaskedTextField
-                  label="Initial balance"
-                  variant="outlined"
-                  name="initialBalance"
-                  type="number"
-                  onChange={formik.handleChange}
-                />
-                {formik.errors.initialBalance && formik.touched.initialBalance && (
-                  <p style={{ color: "red" }}>{formik.errors.initialBalance}</p>
-                )}
-              </Box>
-            </Col>
-          </Row>
-          <Row>
-            <div>
-              <Checkbox color="success" checked={!formik.values.includeTotal}
-                onChange={() => formik.setFieldValue("includeTotal", !formik.values.includeTotal)}
-              />
-              <div className="d-inline-flex flex-column ms-3">
-                <span>Excluded from Total</span>
-                <span className="text-secondary" style={{ "font-size": "12px" }}>
-                  Include this wallet and its balance in the "Total" mode.
-                </span>
-              </div>
-            </div>
           </Row>
         </DialogContent>
         <DialogActions>

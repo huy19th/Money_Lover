@@ -4,7 +4,8 @@ import TransTypeServices from "../services/transtype.services";
 
 class TransTypeController extends BaseController {
     async getAllTypes(req, res) {
-        TransTypeServices.getAll().then(types => {
+        let userId = req.user.id;
+        TransTypeServices.getAll(userId).then(types => {
             res.json(types)
         })
     }
