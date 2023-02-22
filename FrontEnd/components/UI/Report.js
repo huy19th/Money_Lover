@@ -28,6 +28,10 @@ import { BiCategory } from "react-icons/bi";
 import ReportOverview from "@/components/UI/Report/ReportOverview";
 import {useEffect} from "react";
 import TimeList from "@/components/UI/Report/TimeList";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import {Tooltip} from "@mui/material";
+import { CSVLink } from "react-csv";
+import moment from "moment";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -96,6 +100,8 @@ export default function MyHome(props) {
     const myWallet = useSelector((state) => state.wallet.currentWallet);
     const myWallets = useSelector((state) => state.wallet.wallets);
 
+    const myTrans = useSelector((state) => state.transaction.trans)
+
     useEffect(() => {
 
     }, [myWallet])
@@ -131,6 +137,46 @@ export default function MyHome(props) {
     }
 
     const IconSize = { fontSize: "25px" }
+
+    // CSV
+
+    let result = []
+    let dataCSV = []
+
+    myTrans.map((item) => {
+        item.transOfDate.map(tran => {
+            result.push(tran)
+        })
+    })
+
+    result = result.sort((a, b) => {return new Date(b.date).valueOf()- new Date(a.date).valueOf()})
+
+    result = result.map((tran, index) => {
+        let obj = {...tran}
+        obj.newDate = moment(obj.date).format('DD/MM/YYYY')
+        obj.newId = index+1
+        return obj
+    })
+
+    console.log(result)
+
+    const headers = [
+        { label: "#", key: "newId" },
+        { label: "Date", key: "newDate" },
+        { label: "Money", key: "money" },
+        { label: "Note", key: "note" },
+        { label: "Wallet", key: "wallet_name" },
+        { label: "Type", key: "type_name" },
+        { label: "Sub Category", key: "subCate_name" },
+    ];
+
+    const csvReport = {
+        data: result,
+        headers: headers,
+        filename: `${reportTime.value}.csv`
+    };
+
+    //
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -191,6 +237,13 @@ export default function MyHome(props) {
                                     <TimeList/>
                                 </div>
                                 <p style={{opacity: 0.7}} className='m-0'>{reportTime.value}</p>
+                            </div>
+                            <div style={{cursor: 'pointer'}}>
+                                <Tooltip title="Download CSV">
+                                    <IconButton>
+                                        <CSVLink {...csvReport}><FileDownloadIcon style={{color: 'gray'}}/></CSVLink>
+                                    </IconButton>
+                                </Tooltip>
                             </div>
                         </div>
                     </div>
