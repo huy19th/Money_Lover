@@ -153,7 +153,9 @@ const TransOverview = () => {
                                                          {index !== myTrans.length - 1 && <div style={{height: '24px', backgroundColor: '#f4f4f4', marginBottom: '12px'}}></div>}
                                                      </>
                                                  )
+
                                              }) : <div style={{textAlign: "center"}}>There is no transactions</div>}
+
                                         </Container>
                                     </Card.Body>
                                 </Card>
