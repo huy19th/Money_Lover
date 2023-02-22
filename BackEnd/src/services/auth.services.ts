@@ -3,7 +3,6 @@ import BaseServices from "./base.services";
 import dataSource from "../database/data-source";
 import User from "../models/user.model";
 import UserServices from "./user.services";
-import TransSubCateServices from "./transsubcate.services";
 import transporter from "../config/nodemailer.config";
 import jwt from "jsonwebtoken";
 require('dotenv').config();
@@ -133,6 +132,10 @@ class AuthServices extends BaseServices {
     }
 
     static async sendEmailConfirmResetPassword({ email }): Promise<void> {
+        let user = await UserServices.getUserByEmail(email);
+        if (!user) {
+            throw new Error('There is no account associated with this email');
+        }
         let token = this.generateTokenFromString(email);
         let options = {
             from: process.env.AUTH_EMAIL,
