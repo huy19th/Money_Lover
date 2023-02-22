@@ -288,7 +288,7 @@ function TransOverviewTabs() {
     return (
         <ListGroup horizontal>
             {timeRange.map((item, index) => {
-                return <ListGroup.Item className='col-lg-4 text-center' active={item.name === time.name ? true : false} style={{cursor: "pointer"}} onClick={() => handleCLick(index, item)}>{item.name}</ListGroup.Item>
+                return <ListGroup.Item className='col-lg-4 text-center' active={item.name === time.name ? true : false} style={{cursor: "pointer", backgroundColor: item.name === time.name ? '#2e7d32' : ''}} onClick={() => handleCLick(index, item)}>{item.name}</ListGroup.Item>
             })}
         </ListGroup>
     );
