@@ -24,7 +24,7 @@ function WalletDetailCard({wallet, setShowDetail, setShowEdit, setShowBalance, s
     useEffect(() => {}, [wallet]);
 
     return (
-        <Col xs={7}>
+        <Col xs={6}>
             <Card>
                 <Card.Header>
                     <div className="d-flex align-items-center justify-content-between">

@@ -26,10 +26,10 @@ import Wallets from "@/components/UI/DashBoard/WalletsList";
 import AccountUser from "@/components/shares/Account/Account";
 import { BiCategory } from "react-icons/bi";
 import ReportOverview from "@/components/UI/Report/ReportOverview";
-import {useEffect} from "react";
+import { useEffect } from "react";
 import TimeList from "@/components/UI/Report/TimeList";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import {Tooltip} from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { CSVLink } from "react-csv";
 import moment from "moment";
 
@@ -149,12 +149,12 @@ export default function MyHome(props) {
         })
     })
 
-    result = result.sort((a, b) => {return new Date(b.date).valueOf()- new Date(a.date).valueOf()})
+    result = result.sort((a, b) => { return new Date(b.date).valueOf() - new Date(a.date).valueOf() })
 
     result = result.map((tran, index) => {
-        let obj = {...tran}
+        let obj = { ...tran }
         obj.newDate = moment(obj.date).format('DD/MM/YYYY')
-        obj.newId = index+1
+        obj.newId = index + 1
         return obj
     })
 
@@ -183,68 +183,63 @@ export default function MyHome(props) {
             <CssBaseline />
             <AppBar sx={{ backgroundColor: "white" }} position="fixed" open={open}>
                 <Toolbar fullWidth>
-                    <div className="d-flex align-items-center col-6">
-                        <IconButton
-                            color="gray"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{
-                                marginRight: 5,
-                                ...(open && { display: "none" }),
+                    <div className="d-flex align-items-center justify-content-between col-12">
+                        <div
+                            style={{
+                                color: "black",
+                                display: "flex",
+                                alignItems: "center",
                             }}
                         >
-                            <MenuIcon />
-                        </IconButton>
-
-                        <div
-                            style={{ color: "black", display: "flex", alignItems: "center", width: '100%', justifyContent: "space-between" }}
-                        >
-                            <div
-                                style={{
-                                    color: "black",
-                                    display: "flex",
-                                    alignItems: "center",
+                            <IconButton
+                                color="gray"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: 5,
+                                    ...(open && { display: "none" }),
                                 }}
                             >
-                                <div>
-                                    <img
-                                        style={{ width: "45px", marginRight: "8px" }}
-                                        src="https://static.moneylover.me/img/icon/ic_category_all.png"
-                                        alt=""
-                                    />
-                                </div>
-                                <div>
-                                    <p className="m-0 fw-semibold" style={{fontSize: "14px"}}>
-                                        {myWallet.name === "" ? "Total" : myWallet.name}
-                                    </p>
-                                    <p className="m-0" style={{fontSize: "14px"}}>
-                                        {new Intl.NumberFormat("vi-VN", {
-                                            style: "currency",
-                                            currency: "VND",
-                                        }).format(
-                                            myWallet.balance === "" ? balance : myWallet.balance
-                                        )}
-                                    </p>
-                                </div>
-                                <div>
-                                    <Wallets />
-                                </div>
+                                <MenuIcon />
+                            </IconButton>
+                            <div>
+                                <img
+                                    style={{ width: "45px", marginRight: "8px" }}
+                                    src="https://static.moneylover.me/img/icon/ic_category_all.png"
+                                    alt=""
+                                />
                             </div>
-                            <div style={{fontSize: '14px'}}>
-                                <div style={{display: "flex", alignItems: "center"}}>
-                                    <p style={{fontWeight: "bold"}} className='m-0'>{reportTime.name}</p>
-                                    <TimeList/>
-                                </div>
-                                <p style={{opacity: 0.7}} className='m-0'>{reportTime.value}</p>
+                            <div>
+                                <p className="m-0 fw-semibold" style={{ fontSize: "14px" }}>
+                                    {myWallet.name === "" ? "Total" : myWallet.name}
+                                </p>
+                                <p className="m-0" style={{ fontSize: "14px" }}>
+                                    {new Intl.NumberFormat("vi-VN", {
+                                        style: "currency",
+                                        currency: "VND",
+                                    }).format(
+                                        myWallet.balance === "" ? balance : myWallet.balance
+                                    )}
+                                </p>
                             </div>
-                            <div style={{cursor: 'pointer'}}>
-                                <Tooltip title="Download CSV">
-                                    <IconButton>
-                                        <CSVLink {...csvReport}><FileDownloadIcon style={{color: 'gray'}}/></CSVLink>
-                                    </IconButton>
-                                </Tooltip>
+                            <div>
+                                <Wallets />
                             </div>
+                        </div>
+                        <div style={{ fontSize: '14px', marginLeft: "-95px" }}>
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                                <p style={{ fontWeight: "bold"}} className='m-0 text-dark'>{reportTime.name}</p>
+                                <TimeList />
+                            </div>
+                            <p style={{ opacity: 0.7 }} className='m-0 text-dark'>{reportTime.value}</p>
+                        </div>
+                        <div style={{ cursor: 'pointer' }}>
+                            <Tooltip title="Download CSV">
+                                <IconButton>
+                                    <CSVLink {...csvReport}><FileDownloadIcon style={{ color: 'gray' }} /></CSVLink>
+                                </IconButton>
+                            </Tooltip>
                         </div>
                     </div>
                 </Toolbar>
@@ -321,7 +316,7 @@ export default function MyHome(props) {
                 <div>
                     <Container>
                         <Row className="justify-content-md-center">
-                            <ReportOverview/>
+                            <ReportOverview />
                         </Row>
                     </Container>
                 </div>
