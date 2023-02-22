@@ -92,7 +92,7 @@ const TransOverview = () => {
                 <TableHead>
                     <TableRow>
                         <TableCell>
-                            <Card style={{width:'540px',marginTop:'20px', marginRight: "auto", marginLeft: "auto"}}>
+                            <Card style={{width:'540px', marginRight: "auto", marginLeft: "auto"}}>
                                      <Card.Header className='p-0'>
                                          <TransOverviewTabs/>
                                      </Card.Header>
@@ -150,10 +150,12 @@ const TransOverview = () => {
                                                                  })}
                                                              </div>
                                                          </div>
-                                                         {index !== myTrans.length - 1 && <div style={{height: '24px', backgroundColor: '#ccc', marginBottom: '12px'}}></div>}
+                                                         {index !== myTrans.length - 1 && <div style={{height: '24px', backgroundColor: '#f4f4f4', marginBottom: '12px'}}></div>}
                                                      </>
                                                  )
+
                                              }) : <div style={{textAlign: "center"}}>There is no transactions</div>}
+
                                         </Container>
                                     </Card.Body>
                                 </Card>
