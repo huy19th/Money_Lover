@@ -36,7 +36,7 @@ function SubCateDetailForm({data, close}) {
                     <Col>
                         <Card.Title><h4>{subCate.name}</h4></Card.Title>
                         <Card.Text>
-                            <Chip label={category.transType.name} color={category.transType.name==='Expenese' ? 'error' : 'success'} variant="contained" />
+                            <Chip label={category.transType.name} color={category.transType.name==='Expense' ? 'error' : 'success'} variant="contained" />
                             </Card.Text>
                     </Col>
                 </Row>

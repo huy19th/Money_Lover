@@ -13,42 +13,46 @@ const [INCOME, EXPENSE] = ["Income", "Expense"];
 class TransactionController extends BaseController {
 
     static getTransactions(req: any, res: Response) {
-        let month = req.query.month;
-        let year = req.query.year;
+        // let month = req.query.month;
+        // let year = req.query.year;
+        // let date = req.query.date
         let userId = req.user.id;
-        TransactionServices.getTransactions(userId, month, year)
+        TransactionServices.getTransactions(userId,req.query)
             .then(transactions => {
                 res.json(transactions);
             })
     }
 
     static getTransactionsOfOneWallet(req: Request, res: Response) {
-        let month = req.query.month;
-        let year = req.query.year;
+        // let month = req.query.month;
+        // let year = req.query.year;
+        // let date = req.query.date
         let walletId = req.params.walletId;
-        TransactionServices.getTransactionsOfWallet(walletId, month, year)
+        TransactionServices.getTransactionsOfWallet(walletId, req.query)
             .then(transactions => {
                 res.json(transactions);
             })
     }
 
     static getTransactionsByTypeNameOfAllWallets(req: any, res: Response) {
-        let month = req.query.month;
-        let year = req.query.year;
-        let typeName = req.query.typeName
+        // let month = req.query.month;
+        // let year = req.query.year;
+        // let date = req.query.date;
+        // let typeName = req.query.typeName
         let userId = req.user.id;
-        TransactionServices.getTransactionsByTypeName(userId, month, year, typeName)
+        TransactionServices.getTransactionsByTypeName(userId,req.query)
             .then(transactions => {
                 res.json(transactions)
             })
     }
 
     static getTransactionsByTypeNameOfOneWallet(req: Request, res: Response) {
-        let month = req.query.month;
-        let year = req.query.year;
-        let typeName = req.query.typeName
+        // let month = req.query.month;
+        // let year = req.query.year;
+        // let date = req.query.date;
+        // let typeName = req.query.typeName
         let walletId = req.params.walletId;
-        TransactionServices.getTransactionsByTypeNameOfWallet(walletId, month, year, typeName)
+        TransactionServices.getTransactionsByTypeNameOfWallet(walletId, req.query)
             .then(transactions => {
                 res.json(transactions)
             })

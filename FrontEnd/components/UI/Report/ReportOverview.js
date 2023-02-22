@@ -17,17 +17,22 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false })
 
 export default function ReportOverview() {
 
+    const reportTime = useSelector(state => state.reportTime)
+
     const myWallet = useSelector(state => state.wallet.currentWallet)
 
     useEffect(() => {
-
-    }, [myWallet])
+        handleCLoseSubCateRpDetail()
+        handleCloseRpDetail()
+    }, [myWallet, reportTime])
 
     let myTrans = useSelector(state => state.transaction.trans)
 
     let incomeTrans = useSelector(state => state.transaction.incomeTrans)
 
     let expenseTrans = useSelector(state => state.transaction.expenseTrans)
+
+    console.log(myTrans)
 
     let balance = 0
     myTrans.map(tran => {
@@ -51,7 +56,16 @@ export default function ReportOverview() {
         return Array.from({length: daysInMonth}, (v, k) => k + 1)
     };
 
-    let month = moment().format('YYYY-MM')
+    let month = ''
+    if (reportTime.name === 'Today') {
+        month = `${reportTime.value.split('/')[2]}-${reportTime.value.split('/')[1]}`
+    }
+    if (reportTime.name === 'Last Month') {
+        month = `${reportTime.value.split(' - ')[0].split('/')[2]}-${reportTime.value.split(' - ')[0].split('/')[1]}`
+    }
+    if (reportTime.name === 'This Month') {
+        month = moment().format('YYYY-MM')
+    }
 
     const days = getDaysByMonth(month)
 
@@ -80,6 +94,17 @@ export default function ReportOverview() {
         myDays.push(data.date)
         myNumberData.push(data.balance)
     })
+
+    if (reportTime.name === 'Custom') {
+        myDays = []
+        myNumberData = []
+        myTrans.map(item => {
+            myDays.push(moment(item.date).format('DD-MM-YYYY'))
+            myNumberData.push(item.sum)
+        })
+        myDays = myDays.reverse()
+        myNumberData = myNumberData.reverse()
+    }
 
     const containerRef = useRef(null);
 

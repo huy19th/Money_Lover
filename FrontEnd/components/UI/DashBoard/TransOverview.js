@@ -9,7 +9,7 @@ import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { Slide, TableContainer } from "@mui/material";
 import TranDetail from "@/components/UI/DashBoard/TranDetail";
 import TransOverviewTabs from "@/components/UI/DashBoard/TransOverviewTabs";
@@ -18,12 +18,15 @@ import { transactionActions } from "@/features/transaction/transactionSlice";
 
 const TransOverview = () => {
   const dispatch = useDispatch();
+    const time = useSelector(state => state.time)
 
   // Add Transaction
 
   const myWallet = useSelector((state) => state.wallet.currentWallet);
   const myTrans = useSelector((state) => state.transaction.trans);
   const myWallets = useSelector((state) => state.wallet.wallets);
+
+    console.log(myTrans)
 
   let balance = 0;
   let inflow = 0;
@@ -41,7 +44,7 @@ const TransOverview = () => {
     let outflowByTime = 0;
     myTrans.map(trans => {
         trans.transOfDate.map(tran => {
-            if (tran.type_name === 'Expenese') {
+            if (tran.type_name === 'Expense') {
                 outflowByTime += tran.money
             } else {
                 inflowByTime += tran.money
@@ -75,6 +78,10 @@ const TransOverview = () => {
   };
 
   const containerRef = useRef(null);
+
+  useEffect(() => {
+      handleClose()
+  }, [myWallet, time])
 
   //
 
@@ -133,7 +140,7 @@ const TransOverview = () => {
                                                                                  <p style={{fontWeight: "bold", marginBottom: 0}}>{tran.subCate_name}</p>
                                                                                  <p style={{opacity: 0.7, marginBottom: 0}}>{tran.note}</p>
                                                                              </div>
-                                                                             {tran.type_name === 'Expenese' ? (
+                                                                             {tran.type_name === 'Expense' ? (
                                                                                  <div style={{color: 'red'}}>-{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
                                                                              ) : (
                                                                                  <div style={{color: "dodgerblue"}}>+{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tran.money)}</div>
@@ -146,7 +153,9 @@ const TransOverview = () => {
                                                          {index !== myTrans.length - 1 && <div style={{height: '24px', backgroundColor: '#f4f4f4', marginBottom: '12px'}}></div>}
                                                      </>
                                                  )
-                                             }) : <div style={{textAlign: "center"}}>There is no transaction</div>}
+
+                                             }) : <div style={{textAlign: "center"}}>There is no transactions</div>}
+
                                         </Container>
                                     </Card.Body>
                                 </Card>

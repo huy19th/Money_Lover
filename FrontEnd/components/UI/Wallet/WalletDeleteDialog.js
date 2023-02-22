@@ -42,7 +42,6 @@ export default function WalletDeleteDialog({ wallet, setShow, setShowDetail, sho
             });
             setOpenSnackbar(true);
         }
-
         handleClose();
         setShowDetail(false);
     }

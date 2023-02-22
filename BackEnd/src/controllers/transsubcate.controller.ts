@@ -6,9 +6,10 @@ import WalletServices from "../services/wallet.services";
 
 class TransSubCateController extends BaseController {
 
-    static getAllSubCatesByType(req: Request, res: Response) {
+    static getAllSubCatesByType(req: any, res: Response) {
+        let userId = req.user.id
         let transTypeId = Number(req.params.transTypeId);
-        TransSubCateServices.getAllSubCatesByType(transTypeId)
+        TransSubCateServices.getAllSubCatesByType(userId, transTypeId)
             .then((transSubCates) => {
                 res.status(200).json(transSubCates);
             })

@@ -27,6 +27,7 @@ import AccountUser from "@/components/shares/Account/Account";
 import { BiCategory } from "react-icons/bi";
 import ReportOverview from "@/components/UI/Report/ReportOverview";
 import {useEffect} from "react";
+import TimeList from "@/components/UI/Report/TimeList";
 
 const drawerWidth = 240;
 const openedMixin = (theme) => ({
@@ -88,7 +89,9 @@ const Drawer = styled(MuiDrawer, {
         "& .MuiDrawer-paper": closedMixin(theme),
     }),
 }));
-export default function MyHome() {
+export default function MyHome(props) {
+
+    const reportTime = useSelector(state => state.reportTime);
 
     const myWallet = useSelector((state) => state.wallet.currentWallet);
     const myWallets = useSelector((state) => state.wallet.wallets);
@@ -149,7 +152,7 @@ export default function MyHome() {
                         </IconButton>
 
                         <div
-                            style={{ color: "black", display: "flex", alignItems: "center" }}
+                            style={{ color: "black", display: "flex", alignItems: "center", width: '100%', justifyContent: "space-between" }}
                         >
                             <div
                                 style={{
@@ -181,6 +184,13 @@ export default function MyHome() {
                                 <div>
                                     <Wallets />
                                 </div>
+                            </div>
+                            <div style={{fontSize: '14px'}}>
+                                <div style={{display: "flex", alignItems: "center"}}>
+                                    <p style={{fontWeight: "bold"}} className='m-0'>{reportTime.name}</p>
+                                    <TimeList/>
+                                </div>
+                                <p style={{opacity: 0.7}} className='m-0'>{reportTime.value}</p>
                             </div>
                         </div>
                     </div>

@@ -19,6 +19,10 @@ import { transactionActions } from "@/features/transaction/transactionSlice";
 
 export default function EditTransactionForm(props) {
 
+    const time = useSelector(state => state.time)
+
+    const myCurrentTransaction = useSelector(state => state.transaction.currentTransaction)
+
     const dispatch = useDispatch()
 
     const myWallet = useSelector(state => state.wallet.currentWallet)

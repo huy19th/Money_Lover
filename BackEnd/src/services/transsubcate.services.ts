@@ -9,7 +9,7 @@ let transSubCateRepo = dataSource.getRepository(TransSubCate);
 let tranCateRepo = dataSource.getRepository(TransCate);
 
 class TransSubCateServices extends BaseServices {
-  static async getAllSubCatesByType(typeId: number): Promise<TransSubCate[]> {
+  static async getAllSubCatesByType(userId, typeId: number): Promise<TransSubCate[]> {
     let transSubCates = await transSubCateRepo.find({
       relations: {
         category: {
@@ -22,6 +22,9 @@ class TransSubCateServices extends BaseServices {
             id: typeId,
           },
         },
+        user: {
+          id: userId
+        }
       },
     });
 

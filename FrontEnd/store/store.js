@@ -8,12 +8,13 @@ import walletSlice from "@/features/wallet/walletSlice";
 import transactionSlice from "@/features/transaction/transactionSlice";
 import timeSlice from "@/features/time/timeSlice";
 import categorySlice from "@/features/category/categorySlice";
+import reportTimeSlice from "@/features/reportTime/reportTimeSLice";
 
 const persistConfig = {
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
-    blacklist: ['time']
+    blacklist: ['time', 'reportTime']
 }
 
 const reducer = combineReducers({
@@ -21,7 +22,8 @@ const reducer = combineReducers({
     wallet: walletSlice.reducer,
     transaction: transactionSlice.reducer,
     time: timeSlice.reducer,
-    category: categorySlice.reducer
+    category: categorySlice.reducer,
+    reportTime: reportTimeSlice.reducer,
 })
 
 const persistedReducer = persistReducer(persistConfig, reducer)

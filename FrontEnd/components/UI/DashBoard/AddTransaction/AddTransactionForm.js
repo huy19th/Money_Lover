@@ -46,9 +46,10 @@ export default function AddTransactionForm({ handleClose, data }) {
             note: Yup.string().nullable()
         }),
         onSubmit: values => {
-            let date = new Date(values.date)
-            date.setDate(date.getDate() + 1)
-            values.date = date
+            // let date = new Date(values.date)
+            // date.setDate(date.getDate() + 1)
+            // values.date = date
+            console.log(values.date)
             let payload = {
                 date: values.date,
                 money: values.money,

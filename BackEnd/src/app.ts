@@ -56,6 +56,18 @@ class App {
       })
     );
 
+    // Test
+
+    this.app.use('/test', async (req, res) => {
+      let transactionRepo = dataSource.getRepository(Transaction)
+      let result = await transactionRepo.createQueryBuilder('trans')
+          .where('trans.date >= :startDate', {startDate: '2023-02-22'})
+          .getMany()
+      res.json(result)
+    })
+
+    //
+
     this.app.use("/api/auth", AuthRouter);
     this.app.use(AuthMiddleware.checkAuthentication);
     this.app.use("/api/wallet", WalletRouter);

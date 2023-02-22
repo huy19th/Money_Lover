@@ -5,7 +5,6 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { FaUserCircle } from "react-icons/fa";
@@ -19,13 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
-import Avatar from "@mui/material/Avatar";
-import { timeActions } from "@/features/time/timeSlice";
+import {timeActions} from "@/features/time/timeSlice";
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
-
-
-
-
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -83,7 +77,8 @@ export default function AccountUser() {
     dispatch(walletActions.resetWallet());
     dispatch(transactionActions.resetTrans());
     dispatch(categoryActions.getCates([]));
-    dispatch(timeActions.resetTime());
+    // dispatch(timeActions.resetTime())
+    router.push("/login");
   };
   const [open, setOpen] = React.useState(false);
 

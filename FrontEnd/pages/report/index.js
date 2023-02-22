@@ -14,53 +14,59 @@ export default function UserReport() {
 
     const myWallet = useSelector(state => state.wallet.currentWallet)
 
+    const reportTime = useSelector(state => state.reportTime)
+
     useEffect(() => {
         async function fetchData() {
             if (myWallet.id !== 'Total') {
-                let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0]
+                let params = ''
+                if (reportTime.name !== 'Custom') {
+                    params = {
+                        year: reportTime.name !== 'Today' ? reportTime.value.split(' - ')[0].split('/')[2] : reportTime.value.split('/')[2],
+                        month: reportTime.name !== 'Today' ? reportTime.value.split(' - ')[0].split('/')[1] : reportTime.value.split('/')[1],
+                        date: reportTime.name !== 'Today' ? '' : reportTime.value.split('/')[0]
                     }
+                } else {
+                    params = {
+                        startDate: reportTime.value.split(' - ')[0],
+                        endDate: reportTime.value.split(' - ')[1]
+                    }
+                }
+                let transactions = (await axiosJWT.get(`/transaction/${myWallet.id}`, {
+                    params: params
                 })).data
                 let incomeTransactions = (await axiosJWT.get(`/transaction/${myWallet.id}/detail`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0],
-                        typeName: 'Income'
-                    }
+                    params: {...params, typeName: 'Income'}
                 })).data
                 let expenseTransactions = (await axiosJWT.get(`/transaction/${myWallet.id}/detail`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0],
-                        typeName: 'Expenese'
-                    }
+                    params: {...params, typeName: 'Expense'}
                 })).data
                 dispacth(transactionActions.getTrans(transactions))
                 dispacth(transactionActions.getIncomeTrans(incomeTransactions))
                 dispacth(transactionActions.getExpenseTrans(expenseTransactions))
                 setChild(<Report/>)
             } else {
-                let transactions = (await axiosJWT.get(`/transaction`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0]
+                let params = ''
+                if (reportTime.name !== 'Custom') {
+                    params = {
+                        year: reportTime.name !== 'Today' ? reportTime.value.split(' - ')[0].split('/')[2] : reportTime.value.split('/')[2],
+                        month: reportTime.name !== 'Today' ? reportTime.value.split(' - ')[0].split('/')[1] : reportTime.value.split('/')[1],
+                        date: reportTime.name !== 'Today' ? '' : reportTime.value.split('/')[0]
                     }
+                } else {
+                    params = {
+                        startDate: reportTime.value.split(' - ')[0],
+                        endDate: reportTime.value.split(' - ')[1]
+                    }
+                }
+                let transactions = (await axiosJWT.get(`/transaction`, {
+                    params: params
                 })).data
                 let incomeTransactions = (await axiosJWT.get(`/transaction/type`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0],
-                        typeName: 'Income'
-                    }
+                    params: {...params, typeName: 'Income'}
                 })).data
                 let expenseTransactions = (await axiosJWT.get(`/transaction/type`, {
-                    params: {
-                        year: moment().format('MM/YYYY').split('/')[1],
-                        month: moment().format('MM/YYYY').split('/')[0],
-                        typeName: 'Expenese'
-                    }
+                    params: {...params, typeName: 'Expense'}
                 })).data
                 dispacth(transactionActions.getTrans(transactions))
                 dispacth(transactionActions.getIncomeTrans(incomeTransactions))
@@ -69,7 +75,7 @@ export default function UserReport() {
             }
         }
         fetchData()
-    }, [myWallet.id])
+    }, [myWallet.id, reportTime])
 
     return (
         <>
