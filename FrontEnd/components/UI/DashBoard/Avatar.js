@@ -11,7 +11,7 @@ import {authActions} from "@/features/auth/authSlice";
 import {axiosJWT} from "@/configs/axios";
 import dynamic from 'next/dynamic'
 
-const AvatarEdit = dynamic(() => import('../../../components/shares/Account/AvatarEdit'), {
+const MyAvatarEdit = dynamic(() => import('../../../components/shares/Account/AvatarEdit'), {
     ssr: false
 })
 
@@ -41,12 +41,15 @@ export default function MyAvatar() {
     };
 
     console.log(user)
+    console.log(user.image)
+    console.log(imageCrop)
 
     const saveImage = () => {
         if (user !== '') {
             if (user.image === null || user.image === '') {
                 // Add Firebase
                 const storageRef = ref(storage, `/user-upload/${user.name}`)
+                console.log(imageCrop)
                 // Upload ảnh
                 uploadString(storageRef, imageCrop, 'data_url').then(async (snapshot) => {
                     // Lấy url firebase
@@ -95,7 +98,7 @@ export default function MyAvatar() {
                 />
                 <Dialog onClose={handleClose} open={open}>
                     <DialogTitle>Update {user.name}'s image</DialogTitle>
-                    <AvatarEdit onClose={onCLose} onCrop={onCrop} />
+                    <MyAvatarEdit onClose={onCLose} onCrop={onCrop} />
                     <Button type='button' onClick={saveImage}>Save</Button>
                 </Dialog>
             </div>

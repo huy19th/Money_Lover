@@ -11,9 +11,11 @@ import FormControl from '@mui/material/FormControl';
 import CancelButton from '@/components/shares/CancelButton';
 import {Checkbox} from '@mui/material';
 import WalletService from '@/services/wallet.service';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {walletActions} from '@/features/wallet/walletSlice';
 import SnackBar from "@/components/shares/SnackBar";
+import {axiosJWT} from "@/configs/axios";
+import {transactionActions} from "@/features/transaction/transactionSlice";
 
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 export default function WalletEditDialog({data, wallet, show, setShow, setSelectedWallet}) {
@@ -24,6 +26,8 @@ export default function WalletEditDialog({data, wallet, show, setShow, setSelect
     const dispatch = useDispatch();
     const handleClose = () => setShow(false);
     const [isValidated, setIsValidated] = useState(false);
+    const myWallet = useSelector(state => state.wallet.currentWallet)
+    const time = useSelector(state => state.time)
 
     useEffect(() => {
         setValues({
@@ -78,10 +82,37 @@ export default function WalletEditDialog({data, wallet, show, setShow, setSelect
                 setOpenSnackbar(true);
                 handleClose();
                 WalletService.getAllWalletsOfUser()
-                    .then(res => {
-                        let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
-                        setSelectedWallet(selectedWallet);
-                        dispatch(walletActions.getWallets(res.data));
+                    .then(async res => {
+                        if (myWallet.id !== 'Total') {
+                            if (myWallet.id === wallet.id) {
+                                let transactions = (await axiosJWT.get(`/transaction/${wallet.id}`, {
+                                    params: {
+                                        year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                        month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                                    }
+                                })).data
+                                let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                                setSelectedWallet(selectedWallet);
+                                dispatch(walletActions.changeCurrentWallet(selectedWallet))
+                                dispatch(walletActions.getWallets(res.data));
+                                dispatch(transactionActions.getTrans(transactions))
+                            } else {
+                                let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                                setSelectedWallet(selectedWallet);
+                                dispatch(walletActions.getWallets(res.data));
+                            }
+                        } else {
+                            let transactions = (await axiosJWT.get('/transaction', {
+                                params: {
+                                    year: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[1] : time.name.split('/')[1],
+                                    month: time.name === 'Last Month' || time.name === 'This Month' || time.name === 'Future' ? time.value.format('MM/YYYY').split('/')[0] : time.name.split('/')[0]
+                                }
+                            })).data
+                            let selectedWallet = res.data.filter(item => item.id == wallet.id)[0];
+                            setSelectedWallet(selectedWallet);
+                            dispatch(walletActions.getWallets(res.data));
+                            dispatch(transactionActions.getTrans(transactions))
+                        }
                     })
             }).catch(err => {
             setSnackbar({

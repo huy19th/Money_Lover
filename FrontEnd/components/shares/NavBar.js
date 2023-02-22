@@ -3,8 +3,6 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import CssBaseline from '@mui/material/CssBaseline';
-import useScrollTrigger from '@mui/material/useScrollTrigger';
-import WestIcon from '@mui/icons-material/West';
 import { useRouter } from 'next/router';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
