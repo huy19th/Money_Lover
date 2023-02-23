@@ -16,6 +16,7 @@ export default function UserReport() {
 
     const reportTime = useSelector(state => state.reportTime)
 
+
     useEffect(() => {
         async function fetchData() {
             if (myWallet.id !== 'Total') {

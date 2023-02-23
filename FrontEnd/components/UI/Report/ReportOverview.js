@@ -175,6 +175,7 @@ export default function ReportOverview() {
                                     </div>
                                     <div style={{marginTop: '12px'}}>
                                         {types.map(type => {
+                                            console.log(type.value)
                                             return (
                                                 <div style={{display: "inline-block"}} className={styles.div} onClick={() => handleOpenRpDetail(type)}>
                                                     <div style={{textAlign: "center", opacity: 0.7}}>{type.name}</div>
