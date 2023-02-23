@@ -33,6 +33,8 @@ export default function ReportOverview() {
     let expenseTrans = useSelector(state => state.transaction.expenseTrans)
 
     console.log(myTrans)
+    console.log(incomeTrans)
+    console.log(expenseTrans)
 
     let balance = 0
     myTrans.map(tran => {
@@ -41,12 +43,11 @@ export default function ReportOverview() {
 
     let inflowByTime = 0;
     let outflowByTime = 0;
-    myTrans.map(tran => {
-        if (tran.sum > 0) {
-            inflowByTime += tran.sum
-        } else {
-            outflowByTime += tran.sum
-        }
+    incomeTrans.map(item => {
+        inflowByTime += item.sum
+    })
+    expenseTrans.map(item => {
+        outflowByTime += item.sum
     })
 
     let myData = []
@@ -174,6 +175,7 @@ export default function ReportOverview() {
                                     </div>
                                     <div style={{marginTop: '12px'}}>
                                         {types.map(type => {
+                                            console.log(type.value)
                                             return (
                                                 <div style={{display: "inline-block"}} className={styles.div} onClick={() => handleOpenRpDetail(type)}>
                                                     <div style={{textAlign: "center", opacity: 0.7}}>{type.name}</div>

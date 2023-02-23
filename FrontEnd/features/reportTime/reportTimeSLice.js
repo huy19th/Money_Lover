@@ -13,6 +13,10 @@ export const reportTimeSlice = createSlice({
         changeReportTime(state, action) {
             state = action.payload;
             return state
+        },
+        resetReportTime(state, action) {
+            state = initialState
+            return state
         }
     }
 })

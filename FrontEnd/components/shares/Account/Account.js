@@ -20,6 +20,7 @@ import ChangePassword from "./ChangePassWord";
 import { categoryActions } from "@/features/category/categorySlice";
 import {timeActions} from "@/features/time/timeSlice";
 import MyAvatar from "@/components/UI/DashBoard/Avatar";
+import {reportTimeActions} from "@/features/reportTime/reportTimeSLice";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -77,7 +78,8 @@ export default function AccountUser() {
     dispatch(walletActions.resetWallet());
     dispatch(transactionActions.resetTrans());
     dispatch(categoryActions.getCates([]));
-    // dispatch(timeActions.resetTime())
+    dispatch(timeActions.resetTime())
+    dispatch(reportTimeActions.resetReportTime())
     router.push("/login");
   };
   const [open, setOpen] = React.useState(false);
