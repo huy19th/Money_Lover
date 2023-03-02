@@ -1,7 +1,7 @@
 
 # Money Lover
 
-Full stack Money Lover clone, a web for personal finance management
+Full stack Money Lover clone, a web app for personal finance management
 
 
 
